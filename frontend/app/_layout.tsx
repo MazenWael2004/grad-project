@@ -7,6 +7,14 @@ export default function RootLayout() {
         name="index"
         options={{headerShown: false}}
        />
+      <Stack.Screen
+        name="onboarding/index"
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="authentication/login"
+        options={{headerShown: false}}
+      />
     </Stack>
   );
 }
