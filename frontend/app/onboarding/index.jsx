@@ -19,7 +19,7 @@ export default function Index() {
   const slides = [
     {
       key: "1",
-      title: "Intelligent Trip Planning with Historai",
+      title: "Intelligent Trip Planning",
       text: "Let our AI plan a detailed trip to your preferences. Easy planning for your unforgettable experience.",
       image: require("../../assets/images/choosing-travelling.jpg"),
     },
@@ -33,18 +33,39 @@ export default function Index() {
       key: "3",
       title: "Get Started",
       text: "Embark on your adventure through Egypt’s timeless heritage — let’s begin!",
-      image: require("../../assets/images/Pyramids.jpg"),
+      image: require("../../assets/images/People ready for travelling.jpg"),
     },
   ];
    
-
+  const skipButton = () =>{
+    return(
+       <View
+        style={{
+          paddingVertical: 10,
+          paddingHorizontal: 25,
+          backgroundColor: "#cef6e1ff",
+          borderRadius: 25,
+        }}
+      >
+        <Text
+          style={{
+            color: "#3CB371",
+            fontSize: 16,
+            fontFamily: "Poppins-Medium",
+          }}
+        >
+          Skip
+        </Text>
+      </View>
+    );
+  }
   const buttonLabel = (text) => {
     return (
       <View
         style={{
           paddingVertical: 10,
           paddingHorizontal: 25,
-          backgroundColor: "rgba(201, 124, 29, 1)",
+          backgroundColor: "#3CB371",
           borderRadius: 25,
         }}
       >
@@ -115,7 +136,7 @@ export default function Index() {
           </View>
         )}
         activeDotStyle={{
-          backgroundColor: "rgba(201, 124, 29, 1)",
+          backgroundColor: "#3CB371",
           width: 30,
         }}
         dotStyle={{
@@ -124,6 +145,8 @@ export default function Index() {
         onDone={() => {router.push("/authentication/login")}}
         renderDoneButton={() => buttonLabel("Get Started")}
         renderNextButton={() => buttonLabel("Next")}
+        renderSkipButton={() => skipButton()}
+        showSkipButton={true}
       />
     );
   }

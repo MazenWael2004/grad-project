@@ -8,9 +8,14 @@ import {
 } from "react-native";
 import React, { use, useState } from "react";
 import { hide } from "expo-splash-screen";
+import {useRouter} from "expo-router";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
+  const [isPasswordCorrect,setIsPasswordCorrect] = useState(false);
+  const router = useRouter();
   return (
     <View
       style={{
@@ -49,7 +54,7 @@ const Login = () => {
               borderColor: "#ccc",
               borderWidth: 1,
               paddingHorizontal: 10,
-              borderRadius: 5,
+              borderRadius: 10,
               fontFamily: "Poppins-Regular",
             }}
           />
@@ -61,7 +66,6 @@ const Login = () => {
               fontFamily: "Poppins-Medium",
               fontSize: 16,
               color: "#333",
-              marginBottom: 10,
             }}
           >
             Password
@@ -69,16 +73,21 @@ const Login = () => {
           <View>
             <TextInput
               placeholder="Enter your password"
-              style={{
+              style={
+                [{
                 height: 50,
                 borderColor: "#ccc",
                 borderWidth: 1,
                 paddingHorizontal: 10,
-                borderRadius: 5,
+                borderRadius: 10,
+                marginBottom: 10,
                 fontFamily: "Poppins-Regular",
                 position: "relative",
-              }}
-              secureTextEntry={hidePassword?true:false}
+              },
+              !isPasswordCorrect && styles.errorInput
+              
+           ] }
+              secureTextEntry={hidePassword ? true : false}
             />
             <TouchableOpacity
               onPress={() => setHidePassword(!hidePassword)}
@@ -91,7 +100,11 @@ const Login = () => {
               }}
             >
               <Image
-                source={hidePassword?require("../../assets/images/hide.png"):require("../../assets/images/show.png")}
+                source={
+                  hidePassword
+                    ? require("../../assets/images/hide.png")
+                    : require("../../assets/images/show.png")
+                }
                 style={{
                   width: 20,
                   height: 20,
@@ -100,7 +113,112 @@ const Login = () => {
               />
             </TouchableOpacity>
           </View>
+           {!isPasswordCorrect && (
+          <Text style={{color:"red",fontFamily:"Poppins-Medium",fontSize:13}}>Incorrect Password. Please check your password.</Text>
+        )}
         </View>
+       
+        <TouchableOpacity onPress={() => console.log("Forgot Password")}>
+          <Text
+            style={{
+              fontFamily: "Poppins-Medium",
+              fontSize: 16,
+              color: "#007BFF",
+              textAlign: "right",
+              marginBottom: 20,
+            }}
+          >
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#3CB371",
+            paddingVertical: 15,
+            borderRadius: 25,
+            alignItems: "center",
+          }}
+          onPress={() => {
+            console.log("Login button pressed");
+          }}
+        >
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 18,
+              fontFamily: "Poppins-Medium",
+            }}
+          >
+            Login
+          </Text>
+        </TouchableOpacity>
+        <View>
+          <Text
+            style={{
+              fontFamily: "Poppins-Medium",
+              fontSize: 14,
+              color: "#333",
+              textAlign: "center",
+              marginTop: 10,
+            }}
+          >
+            Don't have an account?{" "}
+            <Text
+              style={{
+                color: "#007BFF",
+                textDecorationLine: "underline",
+              }}
+              onPress={() => router.push("authentication/register")}
+            >
+              Sign Up
+            </Text>
+          </Text>
+        </View>
+      </View>
+      <View style={styles.googleLoginWrapper}>
+        <Text
+          style={{
+            color: "rgba(102, 98, 98, 1)",
+            fontFamily: "Poppins-Medium",
+            marginBottom: 10,
+          }}
+        >
+          or login with
+        </Text>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 25,
+            backgroundColor: "#fff",
+            width:"90%"
+          }}
+          onPress={() => console.log("Google Login")}
+        >
+          <Image
+            source={require("../../assets/images/google.png")}
+            style={{
+              width: 20,
+              height: 20,
+              marginRight: 10,
+              resizeMode: "contain",
+            }}
+          />
+          <Text
+            style={{
+              fontFamily: "Poppins-Medium",
+              fontSize: 16,
+              color: "#333",
+            }}
+          >
+            Continue with Google
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -111,11 +229,25 @@ export default Login;
 const styles = {
   loginWrapper: {
     width: "100%",
-    height: 400,
+    height: 500,
     padding: 20,
     flexDirection: "column",
   },
   inputWrapper: {
     marginBottom: 20,
   },
+  googleLoginWrapper: {
+    width: "90%",
+    height: 150,
+    backgroundColor: "#fff",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 100,
+  },
+  errorInput:{
+    borderColor: "red",
+    borderWidth: 1,
+    borderRadius: 10,
+  }
 };

@@ -15,6 +15,14 @@ export default function RootLayout() {
         name="authentication/login"
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="authentication/register"
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="personalization/travelPreferences"
+        options={{headerShown: false}}
+      />
     </Stack>
   );
 }
