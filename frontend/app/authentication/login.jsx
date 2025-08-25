@@ -133,7 +133,7 @@ const Login = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            backgroundColor: "#3CB371",
+            backgroundColor: "#2B6CB0",
             paddingVertical: 15,
             borderRadius: 25,
             alignItems: "center",

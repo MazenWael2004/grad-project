@@ -3,11 +3,45 @@ import React,{useState} from "react";
 import * as Progress from "react-native-progress";
 import { useRouter } from "expo-router"; 
 import PreferenceItem from "../../components/PreferenceItem";
+import preferences from "../../src/preferences";
 
 const TravelPreferences = () => {
   const router = useRouter();
   const [preferenceCount,setPreferenceCount] = useState(0);
-  const [progressBar,setProgressBar] = useState(0.25);
+  // const [progressBar,setProgressBar] = useState(0.75);
+  const [selectedPreferences, setSelectedPreferences] = useState([]);
+  const [isContinueButtonPressed,setIsContinueButtonPressed] = useState(false);
+  
+  const togglePreference = (id) => {
+  setSelectedPreferences((prev) =>{
+    if(prev.includes(id)){ 
+      setPreferenceCount((prev)=> prev-1);
+       return prev.filter((p) => p !== id);
+     }
+     else{
+      if(preferenceCount >= 5){
+        return prev;
+      }
+
+      setPreferenceCount((prev)=> prev+1);
+      return [...prev, id]    
+     } 
+       
+             }         
+  );
+};
+
+const handleContinueButton = ()=>{
+    if(preferenceCount === 0){
+      console.log("You must select at least one!");
+    }
+    else{
+    
+    router.push("successMessage/signUpCompleted");
+    }
+  
+}
+  
 
   return (
     <View style={styles.container}>
@@ -23,7 +57,7 @@ const TravelPreferences = () => {
           />
         </TouchableOpacity>
 
-        {/* Progress Bar */}
+        {/* Progress Bar
         <Progress.Bar
           progress={progressBar}
           width={220} 
@@ -33,7 +67,7 @@ const TravelPreferences = () => {
           height={17}
           borderRadius={30}
           unfilledColor="#ccc"
-        />
+        /> */}
       </View>
       <View style={styles.travelPreferencesTitleAndDescriptionWrapper}>
         <View style={styles.travelPreferencesTitleWrapper}>
@@ -49,28 +83,16 @@ const TravelPreferences = () => {
       </View>
 
       <View style={styles.preferencesContainer}>
-      {/* <TouchableOpacity style={styles.preferenceItem}>
-        <Text style={styles.preferenceItemText}>
-        Historical Sites 🏺
-        </Text>
-      </TouchableOpacity> */}
-      <PreferenceItem title="Historical Sites 🏺" onPress={()=>console.log("Pressed")} key={1} />
-      <PreferenceItem title="City Breaks 🌇" onPress={()=>console.log("Pressed")} />
-      <PreferenceItem title="Religious Tourism ✝️☪️✡️" onPress={()=>console.log("Pressed")} />
-      <PreferenceItem title="Glamping ⛺" onPress={()=>console.log("Pressed")} />
-      <PreferenceItem title="Beach Vacations 🏖️" onPress={()=>console.log("Pressed")} />
-      <PreferenceItem title=" Nature Escapes🌿" onPress={()=>console.log("Pressed")} />
-      <PreferenceItem title="Festivals & Events 🎉" onPress={()=>console.log("Pressed")} />
-      <PreferenceItem title="Road Trips 🚗" onPress={()=>console.log("Pressed")} />
-      <PreferenceItem title="Food Tourism 🍔" onPress={()=>console.log("Pressed")}  />
-      <PreferenceItem title="Backpacking 🎒" onPress={()=>console.log("Pressed")}  />
-      <PreferenceItem title="Cruise Vacations 🛥️" onPress={()=>console.log("Pressed")}  />
-      <PreferenceItem title=" Art Galleries 🎨" onPress={()=>console.log("Pressed")}  />
-      <PreferenceItem title="Cultural Exploration 🏛️" onPress={()=>console.log("Pressed")}  />
+      {preferences.map((item,index)=>{
+        return(
+          <PreferenceItem key = {index} title={item.title} isSelected={selectedPreferences.includes(index)}
+      onPress={() => togglePreference(index)} /> 
+        );
+      })}
       </View>
 
-      <TouchableOpacity style={{width:"90%",borderRadius:20,backgroundColor:"#3CB371",justifyContent:"center",alignItems:"center",margin:"auto",padding:14}}
-      onPress={()=>{setProgressBar(progressBar+0.25)}}
+      <TouchableOpacity style={{width:"90%",borderRadius:20,backgroundColor:"#D4AF37",justifyContent:"center",alignItems:"center",margin:"auto",padding:14}}
+      onPress={handleContinueButton}
       
       >
         <Text style={{fontFamily:"Poppins-Medium",color:"white",fontSize:17}}>
@@ -79,6 +101,8 @@ const TravelPreferences = () => {
       </TouchableOpacity>
     </View>
   );
+
+
 };
 
 export default TravelPreferences;

@@ -3,8 +3,8 @@ import React from 'react'
 
 const PreferenceItem = (props) => {
   return (
-    <TouchableOpacity style={styles.preferenceItem} onPress={props.onPress}>
-            <Text style={styles.preferenceItemText}>
+    <TouchableOpacity style={[styles.preferenceItem,props.isSelected && styles.selected]} onPress={props.onPress}>
+            <Text style={[styles.preferenceItemText,props.isSelected && styles.selectedText]}>
              {props.title}
             </Text>
   </TouchableOpacity>
@@ -26,5 +26,12 @@ const styles = StyleSheet.create({
   preferenceItemText:{
     fontFamily:"Poppins-Medium",
     fontSize:12.5,
-  }
+  },
+   selected: {
+    backgroundColor: "#FFA500",
+    borderColor: "#FFA500",
+  },
+  selectedText: {
+    color: "#fff",
+  },
 })

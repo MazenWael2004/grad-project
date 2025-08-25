@@ -43,13 +43,13 @@ export default function Index() {
         style={{
           paddingVertical: 10,
           paddingHorizontal: 25,
-          backgroundColor: "#cef6e1ff",
+          backgroundColor: "#fce7a1ff",
           borderRadius: 25,
         }}
       >
         <Text
           style={{
-            color: "#3CB371",
+            color: "#D4AF37",
             fontSize: 16,
             fontFamily: "Poppins-Medium",
           }}
@@ -65,7 +65,7 @@ export default function Index() {
         style={{
           paddingVertical: 10,
           paddingHorizontal: 25,
-          backgroundColor: "#3CB371",
+          backgroundColor: "#D4AF37",
           borderRadius: 25,
         }}
       >
@@ -136,7 +136,7 @@ export default function Index() {
           </View>
         )}
         activeDotStyle={{
-          backgroundColor: "#3CB371",
+          backgroundColor: "#E07A5F",
           width: 30,
         }}
         dotStyle={{

@@ -23,6 +23,10 @@ export default function RootLayout() {
         name="personalization/travelPreferences"
         options={{headerShown: false}}
       />
+       <Stack.Screen
+        name="successMessage/signUpCompleted"
+        options={{headerShown: false}}
+      />
     </Stack>
   );
 }
