@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity } from 'react-native'
 import React from 'react'
 import LottieView from 'lottie-react-native';
+import {useRouter} from 'expo-router';
 
 
 const SignUpCompleted = () => {
+  const router=useRouter();
   return (
     <View style={styles.container}>
       <LottieView
@@ -20,7 +22,7 @@ const SignUpCompleted = () => {
       </Text>
 
       <TouchableOpacity style={{width:"90%",borderRadius:50,backgroundColor:"#D4AF37",justifyContent:"center",alignItems:"center",padding:14,position:"absolute",top:760}}
-      
+      onPress={()=>router.push('/main')}
             
       >
        <Text style={{fontFamily:"Poppins-Medium",color:"white",fontSize:17}}>

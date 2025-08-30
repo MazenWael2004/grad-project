@@ -27,6 +27,18 @@ export default function RootLayout() {
         name="successMessage/signUpCompleted"
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="main/index"
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="main"
+        options={{headerShown: false}}
+      />
+
+
+
     </Stack>
   );
 }
