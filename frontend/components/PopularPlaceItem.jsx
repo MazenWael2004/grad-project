@@ -5,8 +5,9 @@ const PopularPlaceItem = (props) => {
   return (
     <TouchableOpacity onPress={props.onPress} style={{ marginBottom: 20 }}>
       <ImageBackground
+
         source={props.image}
-        style={styles.image}
+        style={[styles.image,{height:props.imageHeight,width:props.imageWidth}]}
         imageStyle={{ borderRadius: 15 }}
       >
         {/* Floating Save Button */}
@@ -32,6 +33,7 @@ const PopularPlaceItem = (props) => {
         />
         <Text style={styles.locationText}>{props.governorateName}</Text>
       </View>
+  
     </TouchableOpacity>
   );
 };
@@ -40,8 +42,8 @@ export default PopularPlaceItem;
 
 const styles = StyleSheet.create({
   image: {
-    width: 280,
-    height: 180,
+    // width: 280,
+    // height: 180,
     marginRight: 15,
     resizeMode: "cover",
     justifyContent: "flex-start",

@@ -1,35 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import {
   StyleSheet,
   Text,
   View,
   BackHandler,
-  Alert,
-  SafeAreaView,
   Image,
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from "react-native";
-import { SearchBar } from "react-native-screens";
-import { CountryPicker } from "react-native-country-codes-picker";
+import { useFocusEffect } from "@react-navigation/native"; // 👈 add this
 import PopularPlaceItem from "../../components/PopularPlaceItem";
+import { router } from "expo-router";
 
 const Home = () => {
-  useEffect(() => {
-    const backAction = () => {
-      // Exit the app directly
-      BackHandler.exitApp();
-      return true; // prevent default behavior
-    };
+  const width  = 280
+  const height = 180;
+  useFocusEffect(
+    useCallback(() => {
+      if (Platform.OS !== "android") return; // only matters on Android
 
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
+      const onBackPress = () => {
+        // Exit the app directly (only for this screen)
+        BackHandler.exitApp();
+        return true; // prevent default behavior
+      };
 
-    return () => backHandler.remove(); // cleanup
-  }, []);
+      const sub = BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      return () => sub.remove();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -49,6 +50,7 @@ const Home = () => {
           Historai
         </Text>
       </View>
+
       <View style={styles.searchBarWrapper}>
         <TextInput
           style={styles.searchBar}
@@ -56,12 +58,12 @@ const Home = () => {
           placeholderTextColor="#888"
           textAlignVertical="center"
         />
-
         <Image
           source={require("../../assets/images/magnifying-glass.png")}
           style={styles.searchIcon}
         />
       </View>
+
       <View style={styles.popularPlacesAndPopularArtclesWrapper}>
         <View style={styles.popularPlacesWrapper}>
           <View style={styles.popularPlacesTitleAndViewAllWrapper}>
@@ -74,9 +76,7 @@ const Home = () => {
             >
               Popular Places
             </Text>
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
-            >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
               <Text
                 style={{
                   fontFamily: "Poppins-Medium",
@@ -86,7 +86,7 @@ const Home = () => {
               >
                 View All
               </Text>
-              <TouchableOpacity onPress={() => console.log("Image pressed!")}>
+              <TouchableOpacity onPress={() => router.push("viewAll/popularPlaces")}>
                 <Image
                   source={require("../../assets/images/ancient.png")}
                   style={{ width: 35, height: 35, resizeMode: "contain" }}
@@ -95,7 +95,16 @@ const Home = () => {
             </View>
           </View>
         </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{paddingRight:30,fkexDirection:"row",alignItems:"center" }}> 
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingRight: 30,
+            flexDirection: "row", // 👈 fixed typo: fkexDirection -> flexDirection
+            alignItems: "center",
+          }}
+        >
           {/* Popular Places Cards */}
           <PopularPlaceItem
             key={1}
@@ -103,10 +112,12 @@ const Home = () => {
             title="Pyramids of Giza"
             governorateImage={require("../../assets/images/giza-governorate.png")}
             governorateName="Giza"
-            onPress={() => console.log("Pyramids of Giza pressed!")}
+            onPress={() => router.push(`/tripDetails/1`)}
             onSave={() => console.log("Saved Pyramids of Giza")}
+            imageWidth = {width}
+            imageHeight = {height}
           />
-          
+
           <PopularPlaceItem
             key={2}
             image={require("../../assets/images/abu-simbel-temple.webp")}
@@ -115,6 +126,8 @@ const Home = () => {
             governorateName="Aswan"
             onPress={() => console.log("Abu Simbel Temples pressed!")}
             onSave={() => console.log("Saved Abu Simbel Temples")}
+            imageWidth = {width}
+            imageHeight = {height}
           />
 
           <PopularPlaceItem
@@ -125,16 +138,17 @@ const Home = () => {
             governorateName="Giza"
             onPress={() => console.log("Grand Egyptian Museum pressed!")}
             onSave={() => console.log("Saved Grand Egyptian Museum")}
+            imageWidth = {width}
+            imageHeight = {height}
           />
-
-          
-          </ScrollView>
+        </ScrollView>
       </View>
     </View>
   );
 };
 
 export default Home;
+
 
 const styles = StyleSheet.create({
   container: {
