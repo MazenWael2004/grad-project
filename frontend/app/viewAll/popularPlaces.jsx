@@ -1,38 +1,25 @@
 import { StyleSheet, Text, View,Image,TouchableOpacity,ScrollView} from 'react-native'
 import React from 'react'
 import { router } from "expo-router";
-import PopularPlaceItem from '../../components/PopularPlaceItem';
+import PopularPlaceItem from '../../components/PopularItem';
 const PopularPlaces = () => {
   return (
     <View style={styles.container}>
-<View style={styles.logoandTitleWrapper}>
-        <TouchableOpacity style={styles.button} onPress={()=>router.back()}>
-         <Image
-          source={require("../../assets/images/back.png")}
-          style={{ width: 30, height:30, resizeMode: "contain" }}
-        />
-        </TouchableOpacity>
-        
-        <Text
-          style={{
-            fontFamily: "Poppins-SemiBold",
-            fontSize: 25,
-            color: "#000000ff",
-            margin: "auto",
-          }}
-        >
-          Popular Places
-        </Text>
-      </View>
-      <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{
-        paddingBottom:30,
-        flexDirection:"column",
-        alignItems:"center",
-      }}
-        >
-            <PopularPlaceItem
+  <View style={styles.logoandTitleWrapper}>
+    <TouchableOpacity style={styles.button} onPress={() => router.back()}>
+      <Image
+        source={require("../../assets/images/back.png")}
+        style={{ width: 24, height: 24, resizeMode: "contain" }}
+      />
+    </TouchableOpacity>
+    <Text style={styles.title}>Popular Places</Text>
+  </View>
+  <ScrollView
+    showsVerticalScrollIndicator={false}
+    contentContainerStyle={styles.scrollContent}
+  >
+    {/* ...your PopularPlaceItem components */}
+    <PopularPlaceItem
             key={1}
             image={require("../../assets/images/giza.jpg")}
             title="Pyramids of Giza"
@@ -40,41 +27,62 @@ const PopularPlaces = () => {
             governorateName="Giza"
             onPress={() => router.push(`/tripDetails/1`)}
             onSave={() => console.log("Saved Pyramids of Giza")}
-            imageWidth = {310}
-            imageHeight = {290}
+            imageWidth = {350}
+            imageHeight = {200}
           />
+  </ScrollView>
+</View>
 
-        </ScrollView>
-      
-    </View>
   )
 }
 
 export default PopularPlaces
 
 const styles = StyleSheet.create({
-container: {
+  container: {
     flex: 1,
-    paddingTop: 70,
-    paddingHorizontal: 30,
-    flexDirection:"column",
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    backgroundColor: "#F8F9FB", // Soft background
   },
 
-   logoandTitleWrapper: {
+  logoandTitleWrapper: {
     flexDirection: "row",
-    justifyContent:"center",
     alignItems: "center",
-    width: "95%",
-    marginBottom:20,
+    marginBottom: 25,
+    width: "100%",
+    justifyContent: "flex-start",
+    position: "relative",
   },
 
   button: {
-    borderRadius: 45,
-    padding: 4,
+    borderRadius: 20,
+    padding: 8,
+    backgroundColor: "#fff",
+    elevation: 3, // Android shadow
+    shadowColor: "#000", // iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    marginRight: 10,
+    width: 40,
+    height: 40,
     justifyContent: "center",
     alignItems: "center",
-    width: "40",
-    height: "40",
   },
 
-})
+  title: {
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 24,
+    color: "#22223B",
+    flex: 1,
+    textAlign: "center",
+    marginRight: 40, // To offset the back button
+  },
+
+  scrollContent: {
+    paddingBottom: 30,
+    flexDirection: "column",
+    alignItems: "center",
+  },
+});

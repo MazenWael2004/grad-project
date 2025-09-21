@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from "react-native";
 import React from "react";
 
-const PopularPlaceItem = (props) => {
+const PopularItem = (props) => {
   return (
     <TouchableOpacity onPress={props.onPress} style={{ marginBottom: 20 }}>
       <ImageBackground
@@ -10,16 +10,20 @@ const PopularPlaceItem = (props) => {
         style={[styles.image,{height:props.imageHeight,width:props.imageWidth}]}
         imageStyle={{ borderRadius: 15 }}
       >
-        {/* Floating Save Button */}
+        {
+          !props.isArticle && (
         <TouchableOpacity
           style={styles.saveButton}
           onPress={props.onSave}
         >
+         
           <Image
             source={require("../assets/images/save.png")}
             style={{ width: 20, height: 20, resizeMode: "contain",tintColor:"#c84c1fff" }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity>)
+        }
+        
       </ImageBackground>
 
       {/* Title */}
@@ -27,18 +31,23 @@ const PopularPlaceItem = (props) => {
 
       {/* Governorate Info */}
       <View style={styles.locationRow}>
-        <Image
+         {
+            !props.isArticle && (
+               <Image
           source={props.governorateImage}
           style={{ width: 40, height: 40 }}
         />
-        <Text style={styles.locationText}>{props.governorateName}</Text>
+            )
+          }
+       
+        <Text style={styles.locationText}>{props.smallDescription}</Text>
       </View>
   
     </TouchableOpacity>
   );
 };
 
-export default PopularPlaceItem;
+export default PopularItem;
 
 const styles = StyleSheet.create({
   image: {
@@ -58,15 +67,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Poppins-SemiBold",
-    fontSize: 18,
+    fontSize: 16,
     color: "#333",
-    marginTop: 15,
+    marginTop: 15.5,
+    width:"100%",
   },
   locationRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
     marginTop: 10,
+    
   },
   locationText: {
     fontFamily: "Poppins-Regular",

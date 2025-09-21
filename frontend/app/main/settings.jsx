@@ -90,11 +90,41 @@ const Settings = () => {
 
          <TouchableOpacity style={styles.settingItem}>
           <Image
+          source={require("../../assets/images/exchange.png")}
+          style={{width:25,height:25}}
+          />
+          <Text style={{fontFamily:"Poppins-SemiBold",fontSize:15}}>
+           Live Currency Converter
+          </Text>
+          <Image
+          source={require("../../assets/images/right-arrow.png")}
+          style={{width:25,height:25,position:"absolute",right:1}}
+          />
+
+         </TouchableOpacity>
+
+         <TouchableOpacity style={styles.settingItem} onPress={()=>{router.push("settings/paymentMethods")}}>
+          <Image
           source={require("../../assets/images/credit-card.png")}
           style={{width:25,height:25}}
           />
           <Text style={{fontFamily:"Poppins-SemiBold",fontSize:15}}>
            Payment Methods
+          </Text>
+          <Image
+          source={require("../../assets/images/right-arrow.png")}
+          style={{width:25,height:25,position:"absolute",right:1}}
+          />
+
+         </TouchableOpacity>
+
+          <TouchableOpacity style={styles.settingItem} onPress={()=>{router.push("settings/emergencySupport")}}>
+          <Image
+          source={require("../../assets/images/call.png")}
+          style={{width:25,height:25}}
+          />
+          <Text style={{fontFamily:"Poppins-SemiBold",fontSize:15}}>
+           Emergency Support
           </Text>
           <Image
           source={require("../../assets/images/right-arrow.png")}

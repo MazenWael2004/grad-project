@@ -60,6 +60,30 @@ export default function RootLayout() {
       options={{headerShown:false}}
 
       />
+
+      <Stack.Screen
+      name="settings/paymentMethods"
+      options={{headerShown:false}}
+
+      />
+
+      <Stack.Screen
+      name="viewAll/popularArticles"
+      options={{headerShown:false}}
+      />
+
+      <Stack.Screen
+      name="settings/emergencySupport"
+      options={{headerShown:false}}
+
+      />
+
+      <Stack.Screen
+      name="addPaymentMethod/index"
+      options={{headerShown:false}}
+      
+      />
+
      
     </Stack>
   );

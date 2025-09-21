@@ -139,7 +139,7 @@ const Login = () => {
             alignItems: "center",
           }}
           onPress={() => {
-            console.log("Login button pressed");
+            router.push("main");
           }}
         >
           <Text
@@ -162,7 +162,7 @@ const Login = () => {
               marginTop: 10,
             }}
           >
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Text
               style={{
                 color: "#007BFF",
