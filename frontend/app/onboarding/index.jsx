@@ -38,6 +38,7 @@ export default function Index() {
   ];
    
   const skipButton = () =>{
+    
     return(
        <View
         style={{

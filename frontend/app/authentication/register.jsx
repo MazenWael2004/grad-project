@@ -143,7 +143,7 @@ const Register = () => {
           </Text>
           <View>
             <TextInput
-              placeholder="Enter your email"
+              placeholder="Enter your Country"
               style={
                 [{
                 height: 50,
