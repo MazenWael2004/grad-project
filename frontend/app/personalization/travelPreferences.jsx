@@ -3,7 +3,7 @@ import React,{useState} from "react";
 
 import { useRouter } from "expo-router"; 
 import PreferenceItem from "../../components/PreferenceItem";
-import preferences from "../../src/preferences";
+import preferences from "../../constants/preferences";
 
 const TravelPreferences = () => {
   const router = useRouter();

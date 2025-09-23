@@ -1,22 +1,28 @@
-import { StyleSheet, Text, View,Style,TouchableOpacity,Image } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View,TouchableOpacity,Image } from 'react-native'
+import {useContext} from 'react'
 import { router } from 'expo-router'
+import { ThemeContext } from "../../theme/ThemeContext";
+import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
+import emergencies from '../../constants/emergencies';
+import EmergencyItem from '../../components/emergencyItem';
 
 const Emergency = () => {
+   const { theme } = useContext(ThemeContext);
+   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
      <View style={styles.backAndPersonalInfoTitle}>
              <TouchableOpacity onPress={() => router.back()}>
                <Image
                  source={require("../../assets/images/back.png")}
-                 style={{ width: 30, height: 30 }}
+                 style={{ width: 30, height: 30,tintColor:currentTheme.iconColor }}
                />
              </TouchableOpacity>
              <Text
                style={{
                  fontFamily: "Poppins-SemiBold",
                  fontSize: 20,
-                 color: "#000000ff",
+                 color: currentTheme.text,
                  margin: "auto",
                }}
              >
@@ -25,32 +31,11 @@ const Emergency = () => {
            </View>
 
            <View style ={styles.emergencyWrapper}>
-            <View style={styles.emergencyItem}>
-             <Image
-                source={require("../../assets/images/policeman.png")}
-                style={{ width: 100, height: 100 }}
-             />
-                <Text style={{fontFamily:"Poppins-SemiBold",fontSize:18}}>Police</Text>
-                <Text style={{fontFamily:"Poppins-Regular",fontSize:16}}>122</Text>
-            </View>
-
-            <View style={styles.emergencyItem}>
-               <Image
-                source={require("../../assets/images/ambulance.png")}
-                style={{ width: 100, height: 100 }}
-             />
-                <Text style={{fontFamily:"Poppins-SemiBold",fontSize:18}}>Ambulance</Text>
-                <Text style={{fontFamily:"Poppins-Regular",fontSize:16}}>123</Text>
-            </View>
-
-            <View style={styles.emergencyItem}>
-               <Image
-                source={require("../../assets/images/fire-station.png")}
-                style={{ width: 100, height: 100 }}
-             />
-                <Text style={{fontFamily:"Poppins-SemiBold",fontSize:18}}>Fire Dept.</Text>
-                <Text style={{fontFamily:"Poppins-Regular",fontSize:16}}>180</Text>
-            </View>
+            {emergencies.map((item)=>{
+              return(
+                <EmergencyItem key={item.id} name={item.name} image={item.image} contact={item.contact} />
+              )
+            })}
            </View>
     </View>
   )
@@ -64,7 +49,7 @@ const styles = StyleSheet.create({
     paddingTop: 70, 
     paddingHorizontal: 30,
     flexDirection: "column",
-    backgroundColor:"#fff",
+    // backgroundColor:"#fff",
     },
      backAndPersonalInfoTitle: {
     flexDirection: "row",

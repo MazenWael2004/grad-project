@@ -1,6 +1,4 @@
 import { Stack } from "expo-router";
-import { DarkTheme, DefaultTheme } from "@react-navigation/native";
-import { Slot } from "expo-router";
 import { ThemeProvider } from "../theme/ThemeContext";
 
 
@@ -99,6 +97,12 @@ export default function RootLayout() {
 
       <Stack.Screen
       name="appAppearance/index"
+      options={{headerShown:false}}
+
+      />
+
+      <Stack.Screen
+      name="startTripQuestions/reviewSummary"
       options={{headerShown:false}}
 
       />

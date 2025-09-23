@@ -1,4 +1,4 @@
-import React, { useCallback,useContext, useEffect } from "react";
+import React, { useCallback,useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,7 +17,7 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 
 const Home = () => {
-  const {theme,toggleTheme,setTheme} = useContext(ThemeContext);
+  const {theme} = useContext(ThemeContext);
   
   // useEffect(()=>{
   //   toggleTheme();

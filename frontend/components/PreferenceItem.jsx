@@ -1,10 +1,14 @@
-import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text,TouchableOpacity } from 'react-native'
+import React,{useContext} from 'react'
+import { ThemeContext } from "../theme/ThemeContext";
+import { LIGHT_THEME, DARK_THEME } from "../constants/themes";
 
 const PreferenceItem = (props) => {
+  const { theme } = useContext(ThemeContext);
+  const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   return (
-    <TouchableOpacity style={[styles.preferenceItem,props.isSelected && styles.selected]} onPress={props.onPress}>
-            <Text style={[styles.preferenceItemText,props.isSelected && styles.selectedText]}>
+    <TouchableOpacity style={[styles.preferenceItem,props.isSelected && styles.selected,{borderColor:currentTheme.text}]} onPress={props.onPress}>
+            <Text style={[styles.preferenceItemText,{color:currentTheme.text},props.isSelected && styles.selectedText]}>
              {props.title}
             </Text>
   </TouchableOpacity>

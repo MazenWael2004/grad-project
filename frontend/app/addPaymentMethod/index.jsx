@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,8 @@ import {
   TextInput,
 } from "react-native";
 import { router } from "expo-router";
+import { ThemeContext } from "../../theme/ThemeContext";
+import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 
 const AddPaymentMethod = () => {
   const [cardNumber, setCardNumber] = useState("");
@@ -15,6 +17,8 @@ const AddPaymentMethod = () => {
   const [expMonth, setExpMonth] = useState("");
   const [expYear, setExpYear] = useState("");
   const [cvv, setCvv] = useState("");
+  const {theme} = useContext(ThemeContext);
+  const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
   const handleReset = () => {
     setCardNumber("");
@@ -25,7 +29,7 @@ const AddPaymentMethod = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
       {/* Header */}
       <View style={styles.headerRow}>
         <TouchableOpacity
@@ -34,12 +38,12 @@ const AddPaymentMethod = () => {
         >
           <Image
             source={require("../../assets/images/back.png")}
-            style={styles.backIcon}
+            style={[styles.backIcon,{tintColor:currentTheme.iconColor}]}
             resizeMode="contain"
           />
         </TouchableOpacity>
 
-        <Text style={styles.title}>Add New Payment</Text>
+        <Text style={[styles.title,{color:currentTheme.text}]}>Add New Payment</Text>
 
         <TouchableOpacity onPress={handleReset}>
           <Text style={styles.resetText}>RESET</Text>
@@ -50,13 +54,13 @@ const AddPaymentMethod = () => {
       <View style={styles.form}>
         {/* Card Number */}
         <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Card Number</Text>
+          <Text style={[styles.label,{color:currentTheme.text}]}>Card Number</Text>
           <TextInput
             value={cardNumber}
             onChangeText={setCardNumber}
             placeholder="Ex: 2640 1234 5678 9012"
             placeholderTextColor="#6b6b6b"
-            style={styles.input}
+            style={[styles.input,{backgroundColor:currentTheme.searchBackground}]}
             keyboardType="number-pad"
             maxLength={19} // 16 digits + 3 spaces if you later format xxxx xxxx xxxx xxxx
           />
@@ -64,13 +68,13 @@ const AddPaymentMethod = () => {
 
         {/* Account Holder Name */}
         <View style={styles.inputWrapper}>
-          <Text style={styles.label}>Account Holder Name</Text>
+          <Text style={[styles.label,{color:currentTheme.text}]}>Account Holder Name</Text>
           <TextInput
             value={accountHolderName}
             onChangeText={setAccountHolderName}
             placeholder="John Doe"
             placeholderTextColor="#6b6b6b"
-            style={styles.input}
+            style={[styles.input,{backgroundColor:currentTheme.searchBackground}]}
             autoCapitalize="words"
             autoCorrect={false}
           />
@@ -80,8 +84,8 @@ const AddPaymentMethod = () => {
         <View style={styles.twoCols}>
           {/* Expiry */}
           <View style={styles.col}>
-            <Text style={styles.label}>Expiry Date</Text>
-            <View style={styles.expiryField}>
+            <Text style={[styles.label,{color:currentTheme.text}]}>Expiry Date</Text>
+            <View style={[styles.expiryField,{backgroundColor:currentTheme.searchBackground}]}>
               <TextInput
                 value={expMonth}
                 onChangeText={setExpMonth}
@@ -112,7 +116,7 @@ const AddPaymentMethod = () => {
               onChangeText={setCvv}
               placeholder="123"
               placeholderTextColor="#6b6b6b"
-              style={styles.input}
+              style={[styles.input,{backgroundColor:currentTheme.searchBackground}]}
               keyboardType="number-pad"
               secureTextEntry
               maxLength={4}
@@ -129,7 +133,7 @@ const AddPaymentMethod = () => {
         }}
       />
       <View style={styles.supportedPaymentsWrapper}>
-        <Text style={{ fontSize: 16, fontFamily: "Poppins-Medium" }}>
+        <Text style={{ fontSize: 16, fontFamily: "Poppins-Medium",color:currentTheme.text }}>
           Supported Payments:
         </Text>
         <View
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 70,
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
     position: "relative",
   },
 
@@ -216,12 +220,12 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "Poppins-SemiBold",
     fontSize: 20,
-    color: "#000000",
+    // color: "#000000",
   },
   resetText: {
     fontFamily: "Poppins-Regular",
     fontSize: 16,
-    color: "#d91212",
+    color: "#e24646ff",
     textTransform: "uppercase",
     letterSpacing: 1.5,
   },
@@ -238,14 +242,14 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: "Poppins-SemiBold",
     fontSize: 14,
-    color: "#222222",
+    // color: "#222222",
     marginBottom: 6,
   },
   input: {
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 10,
-    backgroundColor: "#ECE8E8",
+    // backgroundColor: "#ECE8E8",
     fontFamily: "Poppins-SemiBold",
     fontSize: 16,
     color: "#000000",
@@ -267,12 +271,12 @@ const styles = StyleSheet.create({
 
   /* Expiry composite field */
   expiryField: {
-    backgroundColor: "#ECE8E8",
+    // backgroundColor: "#ECE8E8",
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
-    height: 50,
+    height: 55,
   },
   expiryInput: {
     fontFamily: "Poppins-SemiBold",

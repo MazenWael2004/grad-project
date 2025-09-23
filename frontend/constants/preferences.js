@@ -1,15 +1,15 @@
 const preferences = [
     {
         id:1,
-        title:"Historical Sites 🏺",
+        title:"Nile Cruise 🛳️",
     },
     {
         id:2,
-        title:"City Breaks 🌇",
+        title:"Photograhing 📸",
     },
     {
         id:3,
-        title:"Religious Tourism ✝️☪️✡️"
+        title:"Reading 📕"
     },
 
     {
@@ -18,11 +18,11 @@ const preferences = [
     },
     {
         id:5,
-        title:"Beach Vacations 🏖️"
+        title:"Camel Riding 🐫"
     },
     {
         id:6,
-        title:"Nature Escapes🌿",
+        title:"Nature Escapes 🌿",
     },
     {
         id:7,
@@ -39,10 +39,6 @@ const preferences = [
     {
         id:10,
         title:"Backpacking 🎒"
-    },
-    {
-        id:11,
-        title:"Cruise Vacations 🛥️",
     },
     {
         id:12,

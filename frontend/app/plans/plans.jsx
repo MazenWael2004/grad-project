@@ -6,24 +6,28 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import {useContext} from "react";
 import { router } from "expo-router";
+import { ThemeContext } from "../../theme/ThemeContext";
+import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 
 const Plans = () => {
+   const { theme } = useContext(ThemeContext);
+    const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
       <View style={styles.logoAndSettingsTitle}>
         <TouchableOpacity onPress={() => router.back()}>
           <Image
             source={require("../../assets/images/back.png")}
-            style={{ width: 35, height: 35, resizeMode: "contain" }}
+            style={{ width: 35, height: 35, resizeMode: "contain",tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
         <Text
           style={{
             fontFamily: "Poppins-SemiBold",
             fontSize: 20,
-            color: "#000000ff",
+            color: currentTheme.text,
             marginLeft: 60,
           }}
         >
@@ -39,9 +43,9 @@ const Plans = () => {
           width: 320,
         }}
       >
-        <View style={styles.subscriptionWrapper}>
+        <View style={[styles.subscriptionWrapper,{backgroundColor:currentTheme.searchBackground}]}>
             <View style={{width:"100%",justifyContent:"center",alignItems:"center"}}>
-          <Text style={{ fontFamily: "Poppins-SemiBold", marginBottom: 10,marginTop:19 }}>
+          <Text style={{ fontFamily: "Poppins-SemiBold", marginBottom: 10,marginTop:19,color:currentTheme.text }}>
             Basic Explorer
           </Text>
 
@@ -50,6 +54,7 @@ const Plans = () => {
               fontFamily: "Poppins-SemiBold",
               marginBottom: 10,
               fontSize: 35,
+              color:currentTheme.text,
             }}
           >
             Free
@@ -58,7 +63,7 @@ const Plans = () => {
 
           <View
             style={{
-              borderBottomColor: "#d2d2d2ff",
+              borderBottomColor: currentTheme.borderBottomColor,
               borderBottomWidth: 1,
               width: "100%",
               height: 10,
@@ -68,10 +73,10 @@ const Plans = () => {
             <View style={{flexDirection:"row",alignItems:'center',gap:10}}>
            <Image
            source={require("../../assets/images/check.png")}
-           style={{width:15,height:15}}
+           style={{width:15,height:15,tintColor:currentTheme.iconColor}}
            />
 
-           <Text style={{fontFamily:"Poppins-Medium",fontSize:13}}>
+           <Text style={{fontFamily:"Poppins-Medium",fontSize:13,color:currentTheme.text}}>
             Access to personalized travel recommendations.
            </Text>
            </View>
@@ -79,10 +84,10 @@ const Plans = () => {
             <View style={{flexDirection:"row",alignItems:'center',gap:10}}>
            <Image
            source={require("../../assets/images/check.png")}
-           style={{width:15,height:15}}
+           style={{width:15,height:15,tintColor:currentTheme.iconColor}}
            />
 
-           <Text style={{fontFamily:"Poppins-Medium",fontSize:13}}>
+           <Text style={{fontFamily:"Poppins-Medium",fontSize:13,color:currentTheme.text,width:250}}>
             Save limited destinations in your &quot;Saved List.&quot;
            </Text>
            </View>
@@ -90,10 +95,10 @@ const Plans = () => {
             <View style={{flexDirection:"row",alignItems:'center',gap:10}}>
            <Image
            source={require("../../assets/images/check.png")}
-           style={{width:15,height:15}}
+           style={{width:15,height:15,tintColor:currentTheme.iconColor}}
            />
 
-           <Text style={{fontFamily:"Poppins-Medium",fontSize:13}}>
+           <Text style={{fontFamily:"Poppins-Medium",fontSize:13,color:currentTheme.text}}>
             Basic AI-generated trip itineraries.
            </Text>
            </View>
@@ -101,17 +106,17 @@ const Plans = () => {
             <View style={{flexDirection:"row",alignItems:'center',gap:10}}>
            <Image
            source={require("../../assets/images/check.png")}
-           style={{width:15,height:15}}
+           style={{width:15,height:15,tintColor:currentTheme.iconColor}}
            />
 
-           <Text style={{fontFamily:"Poppins-Medium",fontSize:13}}>
+           <Text style={{fontFamily:"Poppins-Medium",fontSize:13,color:currentTheme.text}}>
             Ad-supported experience.
            </Text>
            </View>
 
            <View
             style={{
-              borderBottomColor: "#d2d2d2ff",
+              borderBottomColor: currentTheme.borderBottomColor,
               borderBottomWidth: 1,
               width: "100%",
               height: 10,
