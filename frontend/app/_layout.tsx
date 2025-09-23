@@ -83,6 +83,11 @@ export default function RootLayout() {
       options={{headerShown:false}}
       
       />
+      <Stack.Screen
+      name="startTripQuestions/startTripQuestions"
+      options={{headerShown:false}}
+
+      />
 
      
     </Stack>

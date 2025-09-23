@@ -318,7 +318,7 @@ const Plans = () => {
            </Text>
            </View>
 
-            <View style={{flexDirection:"row",alignItems:'center',gap:10}}>
+            {/* <View style={{flexDirection:"row",alignItems:'center',gap:10}}>
            <Image
            source={require("../../assets/images/check.png")}
            style={{width:15,height:15}}
@@ -327,7 +327,7 @@ const Plans = () => {
            <Text style={{fontFamily:"Poppins-Medium",fontSize:13}}>
             Access to premium travel content, including immersive VR experiences. 
            </Text>
-           </View>
+           </View> */}
 
             <View style={{flexDirection:"row",alignItems:'center',gap:10}}>
            <Image

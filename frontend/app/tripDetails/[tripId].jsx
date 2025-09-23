@@ -204,7 +204,7 @@ const TripDetails = () => {
         </View>
       </ScrollView>
       <View style={{backgroundColor:"#fff",padding:20,justifyContent:"center",alignItems:"center"}}>
-      <TouchableOpacity style={{borderRadius:30,backgroundColor:"#D4AF37",width:"100%",justifyContent:"center",alignItems:"center",padding:12,}} onPress={()=>{console.log("Started a trip pressed!")}}>
+      <TouchableOpacity style={{borderRadius:30,backgroundColor:"#D4AF37",width:"100%",justifyContent:"center",alignItems:"center",padding:12,}} onPress={()=>{router.push(`/startTripQuestions/startTripQuestions`)}}>
         <Text style={{fontFamily:"Poppins-Medium",color:"white",fontSize:15}}>
           Start a trip
         </Text>

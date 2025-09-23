@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React,{useState} from "react";
-import * as Progress from "react-native-progress";
+
 import { useRouter } from "expo-router"; 
 import PreferenceItem from "../../components/PreferenceItem";
 import preferences from "../../src/preferences";
@@ -8,7 +8,7 @@ import preferences from "../../src/preferences";
 const TravelPreferences = () => {
   const router = useRouter();
   const [preferenceCount,setPreferenceCount] = useState(0);
-  // const [progressBar,setProgressBar] = useState(0.75);
+ 
   const [selectedPreferences, setSelectedPreferences] = useState([]);
   const [isContinueButtonPressed,setIsContinueButtonPressed] = useState(false);
   
@@ -57,8 +57,8 @@ const handleContinueButton = ()=>{
           />
         </TouchableOpacity>
 
-        {/* Progress Bar
-        <Progress.Bar
+        {/* Progress Bar */}
+        {/* <Progress.Bar
           progress={progressBar}
           width={220} 
           style={styles.progressBar}
@@ -77,7 +77,7 @@ const handleContinueButton = ()=>{
         </View>
          <View style={styles.travelPreferencesDescriptionWrapper}>
          <Text style={styles.travelPreferencesDescription}>
-          Tell us your travel preferences and we'll tailor recommendations to your style. Don't worry,you can always change it later in the settings.
+          Tell us your travel preferences and we&apos;ll tailor recommendations to your style. Don&apos;t worry,you can always change it later in the settings.
          </Text>
         </View>
       </View>
