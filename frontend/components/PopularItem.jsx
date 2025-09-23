@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from "react-native";
-import React from "react";
+import {useContext} from "react";
+import { ThemeContext } from "../theme/ThemeContext";
+import { LIGHT_THEME,DARK_THEME } from "../constants/themes";
 
 const PopularItem = (props) => {
+  const {theme,toggleTheme,setTheme} = useContext(ThemeContext);
+  const currentTheme = theme === "Light"? LIGHT_THEME: DARK_THEME;
   return (
     <TouchableOpacity onPress={props.onPress} style={{ marginBottom: 20 }}>
       <ImageBackground
@@ -27,7 +31,7 @@ const PopularItem = (props) => {
       </ImageBackground>
 
       {/* Title */}
-      <Text style={styles.title}>{props.title}</Text>
+      <Text style={[styles.title,{color:currentTheme.text}]}>{props.title}</Text>
 
       {/* Governorate Info */}
       <View style={styles.locationRow}>
@@ -40,7 +44,7 @@ const PopularItem = (props) => {
             )
           }
        
-        <Text style={styles.locationText}>{props.smallDescription}</Text>
+        <Text style={[styles.locationText,{color:currentTheme.text}]}>{props.smallDescription}</Text>
       </View>
   
     </TouchableOpacity>
@@ -68,7 +72,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "Poppins-SemiBold",
     fontSize: 16,
-    color: "#333",
+    // color: "#333",
     marginTop: 15.5,
     width:"100%",
   },
@@ -82,6 +86,6 @@ const styles = StyleSheet.create({
   locationText: {
     fontFamily: "Poppins-Regular",
     fontSize: 16,
-    color: "#666",
+    // color: "#666",
   },
 });

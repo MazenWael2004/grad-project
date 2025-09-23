@@ -1,24 +1,28 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useRef } from "react";
+import React, { useRef,useContext } from "react";
 import { router } from "expo-router";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { ThemeContext } from "../../theme/ThemeContext";
+import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 
 const Settings = () => {
+  const {theme} = useContext(ThemeContext);
+  const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   // If you're using TypeScript, prefer: const refRBSheet = useRef<RBSheet | null>(null);
   const refRBSheet = useRef();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
       <View style={styles.logoAndSettingsTitle}>
         <Image
           source={require("../../assets/images/Pyramids.png")}
-          style={{ width: 55, height: 55, resizeMode: "contain" }}
+          style={{ width: 55, height: 55, resizeMode: "contain",tintColor:currentTheme.appIconColor }}
         />
         <Text
           style={{
             fontFamily: "Poppins-SemiBold",
             fontSize: 20,
-            color: "#000000ff",
+            color: currentTheme.text,
             // margin: "auto", // ❌ not valid in RN
             flex: 1,
             textAlign: "center", // centers the title within the row
@@ -34,10 +38,10 @@ const Settings = () => {
       >
         <Image source={require("../../assets/images/badge.png")} style={{ width: 55, height: 55 }} />
         <View style={{ flexDirection: "column" }}>
-          <Text style={{ fontFamily: "Poppins-SemiBold", color: "white" }}>
+          <Text style={{ fontFamily: "Poppins-SemiBold", color: "white",fontSize:13 }}>
             Upgrade Plan to Unlock More!
           </Text>
-          <Text style={{ fontFamily: "Poppins-Regular", color: "white", fontSize: 8 }}>
+          <Text style={{ fontFamily: "Poppins-Regular", color: "white", fontSize: 8.5 }}>
             Enjoy all benefits and explore more possibilities
           </Text>
         </View>
@@ -46,41 +50,41 @@ const Settings = () => {
 
       <View style={styles.acutalSettingsWrapper}>
         <TouchableOpacity
-          style={styles.settingItem}
+          style={[styles.settingItem]}
           onPress={() => router.push("settings/personalInfo")}
         >
-          <Image source={require("../../assets/images/user.png")} style={{ width: 25, height: 25 }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15 }}>Personal Info</Text>
+          <Image source={require("../../assets/images/user.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15,color:currentTheme.text }}>Personal Info</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1 }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.settingItem}>
-          <Image source={require("../../assets/images/crown.png")} style={{ width: 25, height: 25 }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15 }}>Billing & Subscriptions</Text>
+          <Image source={require("../../assets/images/crown.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Billing & Subscriptions</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1 }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.settingItem}>
-          <Image source={require("../../assets/images/security.png")} style={{ width: 25, height: 25 }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15 }}>Account & Security</Text>
+          <Image source={require("../../assets/images/security.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Account & Security</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1 }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.settingItem}>
-          <Image source={require("../../assets/images/exchange.png")} style={{ width: 25, height: 25 }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15 }}>Live Currency Converter</Text>
+          <Image source={require("../../assets/images/exchange.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Live Currency Converter</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1 }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
@@ -90,11 +94,11 @@ const Settings = () => {
             router.push("settings/paymentMethods");
           }}
         >
-          <Image source={require("../../assets/images/credit-card.png")} style={{ width: 25, height: 25 }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15 }}>Payment Methods</Text>
+          <Image source={require("../../assets/images/credit-card.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Payment Methods</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1 }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
@@ -104,29 +108,29 @@ const Settings = () => {
             router.push("settings/emergencySupport");
           }}
         >
-          <Image source={require("../../assets/images/call.png")} style={{ width: 25, height: 25 }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15 }}>Emergency Support</Text>
+          <Image source={require("../../assets/images/call.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Emergency Support</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1 }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.settingItem}>
-          <Image source={require("../../assets/images/eye.png")} style={{ width: 25, height: 25 }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15 }}>App Appearance</Text>
+        <TouchableOpacity style={styles.settingItem} onPress={()=>{router.push("/appAppearance")}}>
+          <Image source={require("../../assets/images/eye.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>App Appearance</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1 }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.settingItem} onPress={() => refRBSheet.current.open()}>
           <Image
             source={require("../../assets/images/logout.png")}
-            style={{ width: 25, height: 25, tintColor: "red" }}
+            style={{ width: 25, height: 25, tintColor: "#e24646ff" }}
           />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15, color: "red" }}>Logout</Text>
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16, color: "#e24646ff" }}>Logout</Text>
         </TouchableOpacity>
 
         <RBSheet
@@ -142,17 +146,18 @@ const Settings = () => {
               borderTopLeftRadius: 27,
               borderTopRightRadius: 27,
               padding: 16,
-              backgroundColor: "#fff",
+              backgroundColor: currentTheme.background,
               flexDirection: "column",
+              height:250,
             },
             draggableIcon: { backgroundColor: "#aaa" },
           }}
         >
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 20, textAlign: "center",color:"red" }}>
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 20, textAlign: "center",color:"#e24646ff",marginBottom:20 }}>
             Logout
           </Text>
           <View style={{ borderWidth:0.25,borderColor:"#c5c2c2ff",marginBottom:20, }} />
-          <Text style={{ fontFamily: "Poppins-Medium", fontSize: 20, textAlign: "center", color: "#000000ff" }}>
+          <Text style={{ fontFamily: "Poppins-Medium", fontSize: 20, textAlign: "center", color: currentTheme.text }}>
             Are you sure you want to log out?
           </Text>
           <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 30 }}>
@@ -165,7 +170,7 @@ const Settings = () => {
                 borderRadius: 20,
                 alignItems: "center",
                 width: "40%",
-                backgroundColor: "#ffffffff",
+                backgroundColor: currentTheme.background,
               }}
               onPress={() => refRBSheet.current.close()}
             >
@@ -173,7 +178,7 @@ const Settings = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={{
-                backgroundColor: "#cd2121ff",
+                backgroundColor: "#e24646ff",
                 paddingVertical: 12,
                 paddingHorizontal: 25,
                 borderRadius: 20,

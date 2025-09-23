@@ -1,11 +1,16 @@
 import { Text, View, StyleSheet, Image, Animated } from "react-native";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useContext } from "react";
 import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import LottieView from 'lottie-react-native';
+import { ThemeContext } from "../theme/ThemeContext";
+import {LIGHT_THEME,DARK_THEME} from '../constants/themes'
+
 
 export default function Index() {
   const router = useRouter();
+   const {theme} = useContext(ThemeContext);
+   const currentTheme = theme === "Light"?LIGHT_THEME:DARK_THEME;
 
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../assets/fonts/Poppins/Poppins-Bold.ttf"),

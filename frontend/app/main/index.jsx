@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback,useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,8 +13,19 @@ import {
 import { useFocusEffect } from "@react-navigation/native"; // 👈 add this
 import PopularItem from "../../components/PopularItem";
 import { router } from "expo-router";
+import { ThemeContext } from "../../theme/ThemeContext";
+import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 
 const Home = () => {
+  const {theme,toggleTheme,setTheme} = useContext(ThemeContext);
+  
+  // useEffect(()=>{
+  //   toggleTheme();
+  // },[])
+
+
+  const currentTheme = theme === "Light"? LIGHT_THEME: DARK_THEME;
+  console.log(currentTheme);
   const width = 200;
   const height = 140;
   useFocusEffect(
@@ -36,11 +47,11 @@ const Home = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
       <View style={styles.logoandTitleWrapper}>
         <Image
           source={require("../../assets/images/Pyramids.png")}
-          style={{ width: 55, height: 55, resizeMode: "contain" }}
+          style={{ width: 55, height: 55, resizeMode: "contain",tintColor:currentTheme.appIconColor }}
         />
         <Text
           style={{
@@ -56,7 +67,7 @@ const Home = () => {
 
       <View style={styles.searchBarWrapper}>
         <TextInput
-          style={styles.searchBar}
+          style={[styles.searchBar,{backgroundColor:currentTheme.searchBackground}]}
           placeholder="Search Governorates..."
           placeholderTextColor="#888"
           textAlignVertical="center"
@@ -74,7 +85,7 @@ const Home = () => {
               style={{
                 fontFamily: "Poppins-SemiBold",
                 fontSize: 20,
-                color: "#333",
+                color: currentTheme.text,
               }}
             >
               Popular Places
@@ -158,7 +169,7 @@ const Home = () => {
               style={{
                 fontFamily: "Poppins-SemiBold",
                 fontSize: 20,
-                color: "#333",
+                color: currentTheme.text,
               }}
             >
               Popular Articles
@@ -234,7 +245,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   searchBar: {
-    backgroundColor: "#e5e4e4ff",
+    // backgroundColor: "#e5e4e4ff",
     flex: 1,
     height: 65,
     borderRadius: 15,

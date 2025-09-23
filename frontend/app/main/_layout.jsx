@@ -1,8 +1,13 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
+import { ThemeContext } from "../../theme/ThemeContext";
+import { useContext } from "react";
+import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 
 export default function Layout() {
+  const {theme} = useContext(ThemeContext);
+  const currentTheme = theme === "Light"?LIGHT_THEME:DARK_THEME;
   return (
     <Tabs
       screenOptions={{
@@ -18,7 +23,7 @@ export default function Layout() {
         tabBarStyle: {
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          backgroundColor: "#fff",
+          backgroundColor: currentTheme.background,
           position: "absolute",
           shadowColor: "#000",
           shadowOpacity: 0.1,
