@@ -19,4 +19,5 @@ export const LIGHT_THEME = {
     appIconColor:"",
     searchBackground:"#e5e4e4ff",
     borderBottomColor:"#e2e2e2d2",
+    
 }

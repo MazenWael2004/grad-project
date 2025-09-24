@@ -7,7 +7,7 @@ const PreferenceItem = (props) => {
   const { theme } = useContext(ThemeContext);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   return (
-    <TouchableOpacity style={[styles.preferenceItem,props.isSelected && styles.selected,{borderColor:currentTheme.text}]} onPress={props.onPress}>
+    <TouchableOpacity style={[styles.preferenceItem,props.isSelected && styles.selected,{borderColor:currentTheme.description}]} onPress={props.onPress}>
             <Text style={[styles.preferenceItemText,{color:currentTheme.text},props.isSelected && styles.selectedText]}>
              {props.title}
             </Text>
@@ -19,17 +19,18 @@ export default PreferenceItem
 
 const styles = StyleSheet.create({
     preferenceItem:{
-    borderWidth:1,
+    borderWidth:0.45,
     width:"auto",
     paddingHorizontal:11,
     paddingVertical:5,
     borderRadius:20,
+  
 
   },
 
   preferenceItemText:{
-    fontFamily:"Poppins-Medium",
-    fontSize:12.5,
+    fontFamily:"Poppins-SemiBold",
+    fontSize:13,
   },
    selected: {
     backgroundColor: "#FFA500",

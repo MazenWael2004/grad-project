@@ -7,13 +7,19 @@ import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import CalendarPicker from "react-native-calendar-picker";
 import preferences from "../../constants/preferences";
 import PreferenceItem from "../../components/PreferenceItem";
+import PartyItem from "../../components/partyItem";
+import partyOptions from "../../constants/partyOptions";
+import budgetOptions from "../../constants/budgetOptions";
+import BudgetItem from "../../components/budgetItem";
 
 
 const StartTripQuestions = () => {
   const [progressBar, setProgressBar] = useState(0.25);
   const [preferenceCount,setPreferenceCount] = useState(0);
-   const [selectedPreferences, setSelectedPreferences] = useState([]);
-  const { theme} = useContext(ThemeContext);
+  const [selectedPreferences, setSelectedPreferences] = useState([]);
+  const [selectedPartyOption,setSelectedPartyOption] = useState(null);
+  const [selectedBudgetOption,setSelectedBudgetOption] = useState(null);
+  const {theme} = useContext(ThemeContext);
   const [date,setDate] = useState(null);
 
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
@@ -66,7 +72,60 @@ const StartTripQuestions = () => {
              }         
   );
 };
-  
+
+const togglePartyOption = (id) => {
+  setSelectedPartyOption((prevOption) => {
+    return prevOption === id ? null : id;
+  });
+
+  console.log("ID: "+id);
+};
+
+const toggleBudgetOption = (id) => {
+  setSelectedBudgetOption((prevOption) => {
+    return prevOption === id ? null : id;
+  });
+
+  console.log("ID: "+id);
+};
+
+const handleContinueButton = ()=>{
+  // Handle Party Options Validation
+  if(progressBar === 0.25){
+    if(!selectedPartyOption) {
+    console.log("You must select an option!");
+    return;
+  }
+  else{
+   setProgressBar((prev) => prev + 0.25);
+  }
+  }
+  // Handle Trip Date Validation
+  else if(progressBar === 0.5){
+    setProgressBar((prev) => prev + 0.25);
+  }
+  // Handle Interets Options
+  else if(progressBar === 0.75){
+    if(selectedPreferences.length === 0){
+       console.log("You must select an option!");
+       return;
+    }
+    else{
+       setProgressBar((prev) => prev + 0.25);
+    }
+  }
+  else if(progressBar === 1){
+    if(!selectedBudgetOption){
+      console.log("You must select an option!");
+       return;
+    }
+    else{
+      router.push('startTripQuestions/reviewSummary')
+    }
+  }
+ 
+}
+
   // Everytime the progress bar is changed,check if reached to 0 that way we go to the previous screen,
   useEffect(()=>{
     if(progressBar === 0){
@@ -85,113 +144,11 @@ const StartTripQuestions = () => {
         title: "Who is going? 🧳",
         description:
           "Let's start with the basics. Who's joining you on this adventure?",
-        content: (
-          <View style={{ flexDirection: "column", gap: 15 }}>
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#dcdbd9ff",
-                padding: 15,
-                borderRadius: 10,
-                width: "100%",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>
-                Only Me 🚶
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 14,
-                   color:currentTheme.description,
-                }}
-              >
-                Travelling solo, just you.
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#dcdbd9ff",
-                padding: 15,
-                borderRadius: 10,
-                width: "100%",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>
-                Spouse ❤️
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 14,
-                  color:currentTheme.description
-                }}
-              >
-                A romantic adventure for you and your wife.
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#dcdbd9ff",
-                padding: 15,
-                borderRadius: 10,
-                width: "100%",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>
-                Family 👨‍👩‍👧{" "}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 14,
-                  color: currentTheme.description,
-                }}
-              >
-                Quality time with your closest ones.
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#dcdbd9ff",
-                padding: 15,
-                borderRadius: 10,
-                width: "100%",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>
-                Friends 🤝
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 14,
-                  color: currentTheme.description,
-                }}
-              >
-                Fun time with your pals.
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ),
+        content:partyOptions.map((option,index)=>{
+          return (
+            <PartyItem key={index} title={option.title} description={option.description} onPress={()=>{togglePartyOption(index+1)}} isSelected={selectedPartyOption===index+1?true:false}  />
+          )
+        })
       };
     if (progressBar === 0.5)
       return {
@@ -248,113 +205,11 @@ const StartTripQuestions = () => {
       return{
        title:"Set your trip budget 💰",
        description:"Let us know your budget preference and we'll craft an itinerary that suits your financial confort.",
-       content:(
-          <View style={{ flexDirection: "column", gap: 15 }}>
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#dcdbd9ff",
-                padding: 15,
-                borderRadius: 10,
-                width: "100%",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>
-                Cheap 💰
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 14,
-                   color:currentTheme.description,
-                }}
-              >
-                Budget Friendly, economical travel.
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#dcdbd9ff",
-                padding: 15,
-                borderRadius: 10,
-                width: "100%",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>
-                Balanced 💼
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 14,
-                  color:currentTheme.description
-                }}
-              >
-                Moderate spending for a balanced trip.
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#dcdbd9ff",
-                padding: 15,
-                borderRadius: 10,
-                width: "100%",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>
-                Luxury 💎
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 14,
-                  color: currentTheme.description,
-                }}
-              >
-                High-end, indulgent experiences.
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderColor: "#dcdbd9ff",
-                padding: 15,
-                borderRadius: 10,
-                width: "100%",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 5,
-              }}
-            >
-              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>
-                Flexible 🤝
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Regular",
-                  fontSize: 14,
-                  color: currentTheme.description,
-                }}
-              >
-                No budget restrictions.
-              </Text>
-            </TouchableOpacity>
-          </View>
-       )
+       content:budgetOptions.map((option,index)=>{
+          return (
+            <BudgetItem key={index} title={option.title} description={option.description} onPress={()=>{toggleBudgetOption(index+1)}} isSelected={selectedBudgetOption===index+1?true:false}  />
+          )
+        })
     };
     return "";
   };
@@ -419,9 +274,7 @@ const StartTripQuestions = () => {
           padding: 14,
           margin: "auto",
         }}
-        onPress={() => {
-          setProgressBar((prev) => prev + 0.25);
-        }}
+        onPress={handleContinueButton}
       >
         <Text
           style={{ fontFamily: "Poppins-Medium", color: "white", fontSize: 17 }}

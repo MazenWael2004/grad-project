@@ -107,6 +107,18 @@ export default function RootLayout() {
 
       />
 
+      <Stack.Screen
+      name="chatbot/index"
+      options={{headerShown:false}}
+
+      />
+
+      <Stack.Screen
+      name="generatingTripLoading/index"
+      options={{headerShown:false}}
+
+      />
+
      
     </Stack>
   

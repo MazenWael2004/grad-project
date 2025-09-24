@@ -63,6 +63,12 @@ const Home = () => {
         >
           Historai
         </Text>
+        <TouchableOpacity style={{backgroundColor:currentTheme.searchBackground,padding:6,borderRadius:30,justifyContent:"center",alignItems:"center"}} onPress={()=>router.push('/chatbot')}>
+          <Image
+          source={require("../../assets/images/robot.png")}
+          style={{width:45,height:45}}
+          />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.searchBarWrapper}>
@@ -236,7 +242,8 @@ const styles = StyleSheet.create({
   logoandTitleWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    width: "82%",
+    justifyContent:"space-between",
+    width: "100%",
   },
   searchBarWrapper: {
     marginTop: 20,

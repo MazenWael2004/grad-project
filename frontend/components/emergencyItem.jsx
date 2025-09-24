@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { useContext } from "react";
 import { ThemeContext } from "../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../constants/themes";
