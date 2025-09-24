@@ -8,6 +8,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { useState, useContext, useRef, useEffect } from "react";
 import { router } from "expo-router";
@@ -20,6 +21,7 @@ const ChatBot = () => {
   const [prompt, setPrompt] = useState(""); // User input
   const [messagesList, setMessagesList] = useState(messages); // All messages
   const [isPromptSubmitted, setIsPromptSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
 
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const scrollViewRef = useRef(null);
@@ -33,6 +35,7 @@ const ChatBot = () => {
     if (!prompt.trim()) return;
 
     setIsPromptSubmitted(true);
+    setLoading(true);
 
     // Add user message
     setMessagesList((prev) => [
@@ -96,6 +99,8 @@ const ChatBot = () => {
           photo: require("../../assets/images/chatbot.png"),
         },
       ]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -214,6 +219,12 @@ const ChatBot = () => {
                 </View>
               );
             })}
+            {loading && (
+              <View style={styles.loaderWrapper}>
+                <ActivityIndicator size="large" color="#D4AF37" />
+                <Text style={{ color: currentTheme.text, marginTop: 5 }}>EgyBot is typing...</Text>
+              </View>
+            )}
           </ScrollView>
         )}
 
@@ -259,6 +270,11 @@ const styles = StyleSheet.create({
     paddingTop: 70,
     paddingHorizontal: 20,
   },
+  loaderWrapper: {
+  marginVertical: 10,
+  alignItems: "center",
+  justifyContent: "center",
+ },
   backAndPersonalInfoTitle: {
     flexDirection: "row",
     alignItems: "center",
