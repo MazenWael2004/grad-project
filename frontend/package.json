@@ -34,7 +34,7 @@
     "react-dom": "19.0.0",
     "react-native": "0.79.5",
     "react-native-app-intro-slider": "^4.0.4",
-    "react-native-calendar-picker": "^8.0.2",
+    "react-native-calendar-picker": "^8.0.5",
     "react-native-country-codes-picker": "^2.3.5",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-linear-gradient": "^2.8.3",

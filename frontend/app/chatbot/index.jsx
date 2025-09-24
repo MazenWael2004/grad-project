@@ -17,46 +17,100 @@ import messages from "../../constants/messages";
 
 const ChatBot = () => {
   const { theme } = useContext(ThemeContext);
-  const [prompt, setPrompt] = useState(""); // Actual prompt input by user
-  const [messagesList,setMessagesList] = useState(messages); // List of messages exchanged
-  const [isPromptSubmitted, setIsPromptSubmitted] = useState(false); // To track if user has submitted a prompt
+  const [prompt, setPrompt] = useState(""); // User input
+  const [messagesList, setMessagesList] = useState(messages); // All messages
+  const [isPromptSubmitted, setIsPromptSubmitted] = useState(false);
 
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const scrollViewRef = useRef(null);
- 
-  // Function to handle prompt input change
-  const handlePromptChange = (text) => {
-    setPrompt(text);
-  };
- 
-  // Function to handle sending the prompt
-  const handleSendButton = () =>{
-    setIsPromptSubmitted(true);
-    setMessagesList((prevMessagesList)=>{
-        return [
-            ...prevMessagesList,
-            {
-                id:prevMessagesList.length+1,
-                text:prompt,
-                role:"user",
-                photo:require("../../assets/images/avatar.png"),
-            }
-        ]
-    })
-    setPrompt(""); // Clear input field after sending
-  }
 
-  // Auto-scroll to bottom when new message is sent
+  // API Config
+  const API_URL = "https://713c114d737a.ngrok-free.app/generate";
+  const API_KEY = "secret123";
+
+  // Function to send prompt to backend
+  const handleSendButton = async () => {
+    if (!prompt.trim()) return;
+
+    setIsPromptSubmitted(true);
+
+    // Add user message
+    setMessagesList((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        text: prompt,
+        role: "user",
+        photo: require("../../assets/images/avatar.png"),
+      },
+    ]);
+
+    const userMessage = prompt;
+    setPrompt(""); // Clear input
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: userMessage,
+          max_length: 400,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const botReply = data.response || "Sorry, I didn’t understand that.";
+
+        // Add bot message
+        setMessagesList((prev) => [
+          ...prev,
+          {
+            id: prev.length + 1,
+            text: botReply,
+            role: "bot",
+            photo: require("../../assets/images/chatbot.png"),
+          },
+        ]);
+      } else {
+        setMessagesList((prev) => [
+          ...prev,
+          {
+            id: prev.length + 1,
+            text: "Error connecting to EgyBot API.",
+            role: "bot",
+            photo: require("../../assets/images/chatbot.png"),
+          },
+        ]);
+      }
+    } catch (err) {
+      setMessagesList((prev) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          text: "Network error. Please try again.",
+          role: "bot",
+          photo: require("../../assets/images/chatbot.png"),
+        },
+      ]);
+    }
+  };
+
+  // Auto scroll to bottom
   useEffect(() => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
-  }, [isPromptSubmitted]);
+  }, [messagesList]);
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
     >
       <View
         style={[styles.container, { backgroundColor: currentTheme.background }]}
@@ -127,45 +181,49 @@ const ChatBot = () => {
             style={{ flex: 1 }}
             contentContainerStyle={styles.answersWrapper}
             showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
-            {/* User message */}
-            
-            {messagesList.map((messageItem,index)=>{
-                return (
-                   <View style={styles.answer} key={index}>
-              <View style={styles.whoAnsweredWrapper}>
-                <Image
-                  source={messageItem.photo}
-                  style={{ width: 40, height: 40 }}
-                />
-                <Text
-                  style={{
-                    fontFamily: "Poppins-Medium",
-                    fontSize: 18,
-                    color: currentTheme.text,
-                  }}
-                >
-                  {messageItem.role==="user"?"Mazen Wael":"EgyBot"}
-                </Text>
-              </View>
-              <Text
-                style={{
-                  fontFamily: "Poppins-Medium",
-                  fontSize: 15,
-                  color: currentTheme.text,
-                  marginTop: 5,
-                }}
-              >
-                {messageItem.text}
-              </Text>
-            </View> 
-                )
+            {messagesList.map((messageItem, index) => {
+              return (
+                <View style={styles.answer} key={index}>
+                  <View style={styles.whoAnsweredWrapper}>
+                    <Image
+                      source={messageItem.photo}
+                      style={{ width: 40, height: 40 }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: "Poppins-Medium",
+                        fontSize: 18,
+                        color: currentTheme.text,
+                      }}
+                    >
+                      {messageItem.role === "user" ? "Mazen Wael" : "EgyBot"}
+                    </Text>
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "Poppins-Medium",
+                      fontSize: 15,
+                      color: currentTheme.text,
+                      marginTop: 5,
+                    }}
+                  >
+                    {messageItem.text}
+                  </Text>
+                </View>
+              );
             })}
           </ScrollView>
         )}
 
         {/* Input bar */}
-        <View style={[styles.promptWrapper,{backgroundColor:currentTheme.background}]}>
+        <View
+          style={[
+            styles.promptWrapper,
+            { backgroundColor: currentTheme.background },
+          ]}
+        >
           <TextInput
             style={[
               styles.textInput,
@@ -178,14 +236,10 @@ const ChatBot = () => {
             placeholder="Ask me anything about Egypt..."
             placeholderTextColor={currentTheme.description}
             multiline
-            onSubmitEditing={() => setIsPromptSubmitted(true)}
-            onChangeText={handlePromptChange}
+            onChangeText={(text) => setPrompt(text)}
             value={prompt}
           />
-          <TouchableOpacity
-            onPress={handleSendButton}
-            style={styles.sendButton}
-          >
+          <TouchableOpacity onPress={handleSendButton} style={styles.sendButton}>
             <Image
               source={require("../../assets/images/send.png")}
               style={[styles.sendIcon, { tintColor: currentTheme.background }]}
@@ -233,7 +287,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 10,
-    backgroundColor: "white",
     borderTopWidth: 1,
     borderColor: "#ddd",
   },
@@ -243,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 12,
     borderRadius: 20,
-    maxHeight: 120, // keeps input from growing too tall
+    maxHeight: 120,
   },
   sendButton: {
     marginLeft: 10,
