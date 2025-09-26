@@ -9,6 +9,11 @@ import {
 import React, { use, useState } from "react";
 import { hide } from "expo-splash-screen";
 import { useRouter } from "expo-router";
+import axios from "axios";
+import Constants from "expo-constants";
+import { Alert } from "react-native";
+const { API_BASE_URL } = Constants.expoConfig.extra;
+console.log(`${API_BASE_URL}/register/`);
 
 const Register = () => {
   // States...
@@ -68,7 +73,7 @@ const Register = () => {
     console.log("Confirm Password: " + text);
   };
 
-  const handleSubmitButton = () => {
+  const handleSubmitButton = async () => {
     // First Validate Email:
     let regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if(regex.test(email)){
@@ -109,8 +114,23 @@ const Register = () => {
       setIsPasswordValidated(false);
       console.log("Password must be at least 8 characters.");
     }
+    try {
+      const response = await axios.post(`${API_BASE_URL}/register/`, {
+        first_name: fullName.firstName,
+        last_name: fullName.lastName,
+        email,
+        password,
+      });
 
-   
+      if (response.status === 201) {
+        Alert.alert("Success", "Account created successfully!");
+        router.push("/authentication/login");
+      }
+   } 
+      catch (error) {
+        console.error(error.response?.data || error.message);
+        Alert.alert("Error", "Registration failed. Try again.");
+      }
 
 
   };
