@@ -19,6 +19,11 @@ export default function Index() {
     "Poppins-Regular": require("../assets/fonts/Poppins/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("../assets/fonts/Poppins/Poppins-SemiBold.ttf"),
     "Poppins-ExtraBold": require("../assets/fonts/Poppins/Poppins-ExtraBold.ttf"),
+    "Beiruti-Bold": require("../assets/fonts/Beiruti/static/Beiruti-Bold.ttf"),
+    "Beiruti-Medium": require("../assets/fonts/Beiruti/static/Beiruti-Medium.ttf"),
+    "Beiruti-Regular": require("../assets/fonts/Beiruti/static/Beiruti-Regular.ttf"),
+    "Beiruti-SemiBold": require("../assets/fonts/Beiruti/static/Beiruti-SemiBold.ttf"),
+    "Beiruti-ExtraBold": require("../assets/fonts/Beiruti/static/Beiruti-ExtraBold.ttf"),
   });
 
   

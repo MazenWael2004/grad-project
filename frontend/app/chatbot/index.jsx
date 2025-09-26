@@ -27,7 +27,7 @@ const ChatBot = () => {
   const scrollViewRef = useRef(null);
 
   // API Config
-  const API_URL = "https://713c114d737a.ngrok-free.app/generate";
+  const API_URL = "https://713c114d737a.ngrok-free.app";
   const API_KEY = "secret123";
 
   // Function to send prompt to backend

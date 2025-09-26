@@ -3,8 +3,11 @@ import { useState } from "react";
 import AppIntroSlider from "react-native-app-intro-slider";
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
+import { useArabicLanguage } from "../contexts/arabicLanguageContext";
 
 export default function Index() {
+  const {isArabicLanguageOn} = useArabicLanguage();
+
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("../../assets/fonts/Poppins/Poppins-Bold.ttf"),
     "Poppins-Medium": require("../../assets/fonts/Poppins/Poppins-Medium.ttf"),
@@ -113,8 +116,8 @@ export default function Index() {
             )}
             <Text
               style={{
-                fontSize: 28,
-                fontFamily: "Poppins-SemiBold",
+                fontSize: isArabicLanguageOn?35:28,
+                fontFamily: isArabicLanguageOn?"Beiruti-SemiBold":"Poppins-SemiBold",
                 textAlign: "center",
                 color: "rgba(33, 33, 33, 1)",
                 marginBottom: 15,
@@ -124,8 +127,8 @@ export default function Index() {
             </Text>
             <Text
               style={{
-                fontSize: 16,
-                fontFamily: "Poppins-Regular",
+                fontSize: isArabicLanguageOn?21:16,
+                fontFamily: isArabicLanguageOn?"Beiruti-Regular":"Poppins-Regular",
                 color: "rgba(102, 98, 98, 1)",
                 textAlign: "center",
                 paddingHorizontal: 20,

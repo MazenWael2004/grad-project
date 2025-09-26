@@ -11,6 +11,7 @@ import PartyItem from "../../components/partyItem";
 import partyOptions from "../../constants/partyOptions";
 import budgetOptions from "../../constants/budgetOptions";
 import BudgetItem from "../../components/budgetItem";
+import { useUserTravelPreferences } from "../contexts/userTravelPreferencesContext";
 
 
 const StartTripQuestions = () => {
@@ -21,6 +22,7 @@ const StartTripQuestions = () => {
   const [selectedBudgetOption,setSelectedBudgetOption] = useState(null);
   const {theme} = useContext(ThemeContext);
   const [date,setDate] = useState(null);
+  const {userTravelPreferences,addPartyId,addStartTripDate,addEndTripDate,addInterests,addBudgetId} = useUserTravelPreferences();
 
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const minDate = new Date(); // Today
@@ -40,6 +42,11 @@ const StartTripQuestions = () => {
         selectedEndDate: date
       };
     })
+    
+
+    addEndTripDate(date);
+    
+    
   }
   else{
      setDate((prevDate)=>{
@@ -48,6 +55,8 @@ const StartTripQuestions = () => {
         selectedStartDate: date
       };
     })
+
+    addStartTripDate(date);
   }
     
   }
@@ -58,14 +67,17 @@ const StartTripQuestions = () => {
   setSelectedPreferences((prev) =>{
     if(prev.includes(id)){ 
       setPreferenceCount((prev)=> prev-1);
+      addInterests(prev.filter((p) => p !== id));
        return prev.filter((p) => p !== id);
      }
      else{
       if(preferenceCount >= 5){
+        addInterests(prev);
         return prev;
       }
 
       setPreferenceCount((prev)=> prev+1);
+      addInterests([...prev, id]);
       return [...prev, id]    
      } 
        
@@ -75,7 +87,10 @@ const StartTripQuestions = () => {
 
 const togglePartyOption = (id) => {
   setSelectedPartyOption((prevOption) => {
+    addPartyId(id);
     return prevOption === id ? null : id;
+
+
   });
 
   console.log("ID: "+id);
@@ -83,6 +98,7 @@ const togglePartyOption = (id) => {
 
 const toggleBudgetOption = (id) => {
   setSelectedBudgetOption((prevOption) => {
+    addBudgetId(id);
     return prevOption === id ? null : id;
   });
 
@@ -102,7 +118,17 @@ const handleContinueButton = ()=>{
   }
   // Handle Trip Date Validation
   else if(progressBar === 0.5){
+    if(!date){
+      console.log("You must pick both start and end dates!")
+      return;
+    }
+    if(date.selectedEndDate === undefined || date.selectedEndDate === null ){
+      console.log("Where is the end date broo!!!!!");
+      return;
+    }
+    console.log(date.selectedEndDate)
     setProgressBar((prev) => prev + 0.25);
+    
   }
   // Handle Interets Options
   else if(progressBar === 0.75){
@@ -123,6 +149,9 @@ const handleContinueButton = ()=>{
       router.push('startTripQuestions/reviewSummary')
     }
   }
+
+  // console.log(userTravelPreferences);
+  // console.log(date);
  
 }
 
@@ -173,6 +202,7 @@ const handleContinueButton = ()=>{
           selectedRangeStartTextStyle={{color:"white"}}
           selectedRangeEndTextStyle={{color:"white"}}
           selectedRangeTextStyle={{color:"white"}}
+  
           
  customDayHeaderStyles={() => ({
     textStyle: {        

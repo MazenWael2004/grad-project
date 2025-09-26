@@ -5,7 +5,7 @@ const preferences = [
     },
     {
         id:2,
-        title:"Photograhing 📸",
+        title:"Photographing 📸",
     },
     {
         id:3,

@@ -1,12 +1,15 @@
 import { Stack } from "expo-router";
 import { ThemeProvider } from "../theme/ThemeContext";
-
+import {UserTravelPreferencesProvider} from "./contexts/userTravelPreferencesContext"
+import {ArabicLanguageProvider} from "./contexts/arabicLanguageContext"
+ 
 
 
 export default function RootLayout() {
 
   return (
-   
+    <ArabicLanguageProvider>
+   <UserTravelPreferencesProvider>
     <ThemeProvider>
      <Stack>
       <Stack.Screen
@@ -123,6 +126,8 @@ export default function RootLayout() {
     </Stack>
   
      </ThemeProvider>
+     </UserTravelPreferencesProvider>
+     </ArabicLanguageProvider>
   );
 }
     
