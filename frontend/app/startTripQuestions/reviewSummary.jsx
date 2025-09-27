@@ -15,10 +15,12 @@ import partyOptions from "../../constants/partyOptions";
 import budgetOptions from "../../constants/budgetOptions";
 import { useUserTravelPreferences } from "../contexts/userTravelPreferencesContext";
 import preferences from "../../constants/preferences";
+import { useItinerary } from "../contexts/itineraryContext";
 
 const ReviewSummary = () => {
   const { theme } = useContext(ThemeContext);
   const {userTravelPreferences} = useUserTravelPreferences();
+  const {itineraryItems,addToItineraryList} = useItinerary();
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const startDate = userTravelPreferences['startTripDate'];
   const endDate = userTravelPreferences['endTripDate'];
@@ -55,10 +57,22 @@ const getMonthAndDay = (date) => {
     console.log(userTravelPreferences);
   },[]);
 
+  const handleBuildItineraryButton = () =>{
+    addToItineraryList({
+      userPreferences:userTravelPreferences
+    })
+
+    router.push('generatingTripLoading')
+  }
+
   return (
     <View
       style={[styles.container, { backgroundColor: currentTheme.background }]}
     >
+      <ScrollView
+       contentContainerStyle={{ paddingBottom: 120 }} // extra space so button doesn’t overlap
+      showsVerticalScrollIndicator={false}
+      >
       <View style={styles.backAndPersonalInfoTitle}>
         <TouchableOpacity onPress={() => router.back()}>
           <Image
@@ -282,7 +296,9 @@ const getMonthAndDay = (date) => {
           }}
         ></View>
       </View>
-      <TouchableOpacity
+     
+      </ScrollView>
+       <TouchableOpacity
         style={{
           borderRadius: 20,
           backgroundColor: "#D4AF37",
@@ -290,10 +306,13 @@ const getMonthAndDay = (date) => {
           alignItems: "center",
           padding: 14,
           width:'100%',
-          marginTop:20,
+          position: "absolute",
+          bottom: 30,
+          left: 30,
+        
         }}
 
-        onPress={()=>router.push("/generatingTripLoading")}
+        onPress={handleBuildItineraryButton}
       >
         <Text
           style={{ fontFamily: "Poppins-Medium", color: "white", fontSize: 17 }}
@@ -313,6 +332,7 @@ const styles = StyleSheet.create({
     paddingTop: 70,
     paddingHorizontal: 30,
     flexDirection: "column",
+    position: "relative",
     // backgroundColor:"#fff",
   },
   backAndPersonalInfoTitle: {

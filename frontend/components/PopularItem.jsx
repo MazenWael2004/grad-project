@@ -44,7 +44,7 @@ const PopularItem = (props) => {
             )
           }
        
-        <Text style={[styles.locationText,{color:currentTheme.text}]}>{props.smallDescription}</Text>
+        <Text style={[styles.locationText,{color:currentTheme.description}]}>{props.smallDescription}</Text>
       </View>
   
     </TouchableOpacity>

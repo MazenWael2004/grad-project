@@ -4,14 +4,16 @@ import { router } from "expo-router";
 import PopularPlaceItem from '../../components/PopularItem';
 import { ThemeContext } from "../../theme/ThemeContext";
 import {LIGHT_THEME,DARK_THEME} from '../../constants/themes'
+import governorates from '../../constants/governorates';
+import PopularItem from '../../components/PopularItem';
 
 const PopularPlaces = () => {
   const {theme} = useContext(ThemeContext);
-  const currentTheme = theme === "light"?LIGHT_THEME:DARK_THEME;
+  const currentTheme = theme === "Light"?LIGHT_THEME:DARK_THEME;
   return (
     <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
   <View style={styles.logoandTitleWrapper}>
-    <TouchableOpacity style={[styles.button,{backgroundColor:currentTheme.backBackground}]} onPress={() => router.back()}>
+    <TouchableOpacity style={[styles.button,{backgroundColor:currentTheme.searchBackground}]} onPress={() => router.back()}>
       <Image
         source={require("../../assets/images/back.png")}
         style={{ width: 24, height: 24, resizeMode: "contain" }}
@@ -24,17 +26,20 @@ const PopularPlaces = () => {
     contentContainerStyle={styles.scrollContent}
   >
     {/* ...your PopularPlaceItem components */}
-    <PopularPlaceItem
-            key={1}
-            image={require("../../assets/images/giza.jpg")}
-            title="Pyramids of Giza"
-            governorateImage={require("../../assets/images/giza-governorate.png")}
-            governorateName="Giza"
-            onPress={() => router.push(`/tripDetails/1`)}
+    {governorates.map((item,index)=>{
+      return (
+    <PopularItem
+            key={index+1}
+            image={item.image1}
+            title={item.name}
+            onPress={() => router.push(`/tripDetails/${item.id}`)}
             onSave={() => console.log("Saved Pyramids of Giza")}
-            imageWidth = {350}
+            imageWidth = {"100%"}
             imageHeight = {200}
           />
+      )
+    })}
+    
   </ScrollView>
 </View>
 
@@ -51,43 +56,43 @@ const styles = StyleSheet.create({
     // backgroundColor: "#F8F9FB", // Soft background
   },
 
-  logoandTitleWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 25,
-    width: "100%",
-    justifyContent: "flex-start",
-    position: "relative",
-  },
+ logoandTitleWrapper: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginBottom: 25,
+  width: "100%",
+  justifyContent: "center", // center contents
+  position: "relative",
+},
 
-  button: {
-    borderRadius: 20,
-    padding: 8,
-    // backgroundColor: "#fff",
-    elevation: 3, // Android shadow
-    shadowColor: "#000", // iOS shadow
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    marginRight: 10,
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+button: {
+  position: "absolute", // fixes alignment issue
+  left: 0,
+  borderRadius: 20,
+  padding: 8,
+  elevation: 3,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.08,
+  shadowRadius: 4,
+  width: 40,
+  height: 40,
+  justifyContent: "center",
+  alignItems: "center",
+},
 
-  title: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 24,
-    // color: "#22223B",
-    flex: 1,
-    textAlign: "center",
-    marginRight: 40, // To offset the back button
-  },
+title: {
+  fontFamily: "Poppins-SemiBold",
+  fontSize: 24,
+  textAlign: "center",
+  color: "#222", // fallback if theme text missing
+},
 
   scrollContent: {
-    paddingBottom: 30,
-    flexDirection: "column",
-    alignItems: "center",
-  },
+  paddingBottom: 30,
+  flexDirection: "column",
+  // remove alignItems: "center"
+  // this lets items expand full width
+},
+
 });

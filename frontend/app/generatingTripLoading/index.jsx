@@ -20,7 +20,7 @@ const GeneratingTripLoader = () => {
   },[]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
          <LottieView
         source={require('../../assets/images/trip.json')}
         autoPlay

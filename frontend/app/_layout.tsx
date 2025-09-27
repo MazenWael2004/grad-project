@@ -2,12 +2,14 @@ import { Stack } from "expo-router";
 import { ThemeProvider } from "../theme/ThemeContext";
 import {UserTravelPreferencesProvider} from "./contexts/userTravelPreferencesContext"
 import {ArabicLanguageProvider} from "./contexts/arabicLanguageContext"
+import {ItineraryProvider} from "./contexts/itineraryContext"
  
 
 
 export default function RootLayout() {
 
   return (
+    <ItineraryProvider>
     <ArabicLanguageProvider>
    <UserTravelPreferencesProvider>
     <ThemeProvider>
@@ -47,7 +49,7 @@ export default function RootLayout() {
       />
       
       <Stack.Screen
-        name="tripDetails/[tripId]"
+        name="governorateDetails/[governorateId]"
         options={{headerShown:false}}
       
       />
@@ -122,12 +124,18 @@ export default function RootLayout() {
 
       />
 
+      <Stack.Screen
+      name="itineraryDetails/[itineraryId]"
+      options={{headerShown:false}}
+
+      />
      
     </Stack>
   
      </ThemeProvider>
      </UserTravelPreferencesProvider>
      </ArabicLanguageProvider>
+     </ItineraryProvider>
   );
 }
     

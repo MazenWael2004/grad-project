@@ -1,4 +1,4 @@
-import React, { useCallback,useContext } from "react";
+import React, { useCallback,useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,13 +15,37 @@ import PopularItem from "../../components/PopularItem";
 import { router } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
+import governorates from "../../constants/governorates";
 
 const Home = () => {
   const {theme} = useContext(ThemeContext);
+  const [input,setInput] = useState("");
+  const [isInputEmpty,setIsInputEmpty] = useState(false);
+  const [filteredGovernorates,setFilteredGovernorates] = useState([]);
   
+
+
+  const handleGovernorateInput = (text)=>{
+    setInput(text);
+    console.log(text);
+  }
   // useEffect(()=>{
   //   toggleTheme();
   // },[])
+
+  useEffect(()=>{
+    if(input === ''){
+      setIsInputEmpty(true);
+    }
+    else{
+      setIsInputEmpty(false);
+      setFilteredGovernorates(governorates.filter((item) =>
+      item.name.toLowerCase().includes(input.toLowerCase()))
+     
+);
+
+    }
+  },[input])
 
 
   const currentTheme = theme === "Light"? LIGHT_THEME: DARK_THEME;
@@ -73,17 +97,20 @@ const Home = () => {
 
       <View style={styles.searchBarWrapper}>
         <TextInput
-          style={[styles.searchBar,{backgroundColor:currentTheme.searchBackground}]}
+          style={[styles.searchBar,{backgroundColor:currentTheme.searchBackground,color:currentTheme.text}]}
           placeholder="Search Governorates..."
           placeholderTextColor="#888"
           textAlignVertical="center"
+          onChangeText={handleGovernorateInput}
         />
         <Image
           source={require("../../assets/images/magnifying-glass.png")}
           style={styles.searchIcon}
         />
       </View>
-      <ScrollView contentContainerStyle={{ paddingBottom: 14 }} showsVerticalScrollIndicator={false}>
+      {
+        isInputEmpty?(
+                <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
       <View style={styles.popularPlacesAndPopularArtclesWrapper}>
         <View style={styles.popularPlacesWrapper}>
           <View style={styles.popularPlacesTitleAndViewAllWrapper}>
@@ -127,28 +154,40 @@ const Home = () => {
             paddingRight: 30,
             flexDirection: "row", // 👈 fixed typo: fkexDirection -> flexDirection
             alignItems: "center",
+            marginTop:1,
+            gap:15,
           }}
         >
           {/* Popular Places Cards */}
-          <PopularItem
+          {governorates.map((item,index)=>{
+            return(
+              <PopularItem
+              key = {index+1}
+              image = {item.image1}
+              title = {item.name}
+              onPress = {()=> router.push(`/governorateDetails/${item.id}`)}
+              onSave = {()=>console.log("Saved!")}
+              imageWidth={width}
+              imageHeight={height}
+              isArticle = {false}
+              />
+            )
+          })}
+          {/* <PopularItem
             key={1}
             image={require("../../assets/images/giza.jpg")}
-            title="Pyramids of Giza"
-            governorateImage={require("../../assets/images/giza-governorate.png")}
-            smallDescription="Giza"
-            onPress={() => router.push(`/tripDetails/1`)}
+            title="Giza Governorate"
+            onPress={() => router.push(`/governorateDetails/1`)}
             onSave={() => console.log("Saved Pyramids of Giza")}
             imageWidth={width}
             imageHeight={height}
             isArticle={false}
-          />
+          /> */}
 
-          <PopularItem
+          {/* <PopularItem
             key={2}
-            image={require("../../assets/images/abu-simbel-temple.webp")}
-            title="Abu Simbel Temples"
-            governorateImage={require("../../assets/images/aswan-governorate.png")}
-            smallDescription="Aswan"
+            image={require("../../assets/images/cairo1.webp")}
+            title="Cairo Governorate"
             onPress={() => console.log("Abu Simbel Temples pressed!")}
             onSave={() => console.log("Saved Abu Simbel Temples")}
             imageWidth={width}
@@ -167,8 +206,9 @@ const Home = () => {
             imageWidth={width}
             imageHeight={height}
             isArticle={false}
-          />
+          /> */}
         </ScrollView>
+        
         <View style={styles.popularArticlesContainer}>
           <View style={styles.popularPlacesTitleAndViewAllWrapper}>
             <Text
@@ -226,6 +266,33 @@ const Home = () => {
         </View>
       </View>
       </ScrollView>
+        ):(
+          <>
+          <Text style={{fontFamily:"Poppins-SemiBold",marginTop:20,color:currentTheme.text,fontSize:19,marginBottom:20}}>
+            Search Results: {filteredGovernorates.length}
+          </Text>
+
+          <ScrollView horizontal={false} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom:45,flexDirection:"column"}}>
+            {filteredGovernorates.map((item,index)=>{
+            return(
+              <PopularItem
+              key = {index+1}
+              image = {item.image1}
+              title = {item.name}
+              onPress = {()=> router.push(`/governorateDetails/${item.id}`)}
+              onSave = {()=>console.log("Saved!")}
+              imageWidth={"100%"}
+              imageHeight={250}
+              isArticle = {false}
+              />
+            )
+          })}
+
+          </ScrollView>
+          </>
+        )
+      }
+
     </View>
   );
 };
@@ -273,6 +340,7 @@ const styles = StyleSheet.create({
   popularPlacesAndPopularArtclesWrapper: {
     flexDirection: "column",
     marginTop: 30,
+    
   },
   popularPlacesWrapper: {
     flexDirection: "column",
@@ -284,6 +352,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   popularArticlesContainer: {
-    paddingBottom: 100,
-  },
+  marginTop: -30, // controls spacing between Governorates & Articles
+}
+
 });
