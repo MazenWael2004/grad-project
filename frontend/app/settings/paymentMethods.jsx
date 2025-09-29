@@ -15,7 +15,7 @@ const PaymentMethods = () => {
               <TouchableOpacity onPress={() => router.back()}>
                 <Image
                   source={require("../../assets/images/back.png")}
-                  style={{ width: 30, height: 30 }}
+                  style={{ width: 30, height: 30,tintColor:currentTheme.iconColor }}
                 />
               </TouchableOpacity>
               <Text

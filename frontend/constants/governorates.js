@@ -1,6 +1,7 @@
 const governorates =  [
     {
      id:1,
+     isSaved:false,
      name:"Cairo Governorate",
      logo:require("../assets/images/cairo-governorate.png"),
      description:"Cairo (Arabic: Muhafazah Al Kahera) is one of the 27 governorates of Egypt. It is formed of the city of Cairo, both the national capital of Egypt and the governorate's, in addition to six satellite cities: the New Administrative Capital - which became the official seat of national government in April 2024,[5] New Cairo, El Shorouk, Badr, Capital Gardens, and 15th of May.[citation needed] These cities form almost half of the Greater Cairo metropolitan area by population.",
@@ -14,6 +15,7 @@ const governorates =  [
     },
     {
         id:2,
+        isSaved:false,
         name:"Giza Governorate",
         logo:require("../assets/images/giza-governorate.png"),
         description:"Giza (Arabic:  Muḥāfaẓah Al Gizah) is one of the governorates of Egypt. It is in the center of the country, situated mostly on the west bank of the Nile River opposite Cairo. Its capital is the city of Giza. It includes a stretch of the left bank of the Nile Valley around Giza, as well as a relatively small portion of the east bank (such as Ghammāzah al Kubrá and El-Saf). Giza acquired a large stretch of Egypt's Western Desert, including Bahariya Oasis when the 6th of October Governorate was merged into it on 14 April 2011. The Giza Governorate is also home to the Great Sphinx and the Pyramids of Giza.",
@@ -25,6 +27,7 @@ const governorates =  [
     },
     {
         id:3,
+        isSaved:false,
         name:"Alexandria Governorate",
         logo:require("../assets/images/alexandria-governorate.png"),
         image1:require("../assets/images/alex1.jpg"),
@@ -37,6 +40,7 @@ const governorates =  [
 
     },{
         id:4,
+        isSaved:false,
         name:"Luxor Governorate",
         logo:require("../assets/images/aswan-governorate.png"),
         image1:require("../assets/images/luxor1.webp"),

@@ -40,7 +40,7 @@ const TripDetails = () => {
               />
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[styles.button,{backgroundColor:currentTheme.searchBackground}]}
               onPress={() => {
                 console.log("Save Pressed!");
@@ -50,7 +50,7 @@ const TripDetails = () => {
                 source={require("../../assets/images/save.png")}
                 style={{ width: 20, height: 20,tintColor:currentTheme.iconColor  }}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </ImageBackground>
 

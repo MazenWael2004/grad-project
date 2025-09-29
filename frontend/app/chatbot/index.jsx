@@ -21,6 +21,7 @@ const ChatBot = () => {
   const [prompt, setPrompt] = useState(""); // User input
   const [messagesList, setMessagesList] = useState(messages); // All messages
   const [isPromptSubmitted, setIsPromptSubmitted] = useState(false);
+  const [isPromptEmpty, setIsPromptEmpty] = useState(true);
     const [loading, setLoading] = useState(false);
 
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
@@ -104,13 +105,31 @@ const ChatBot = () => {
     }
   };
 
+  const handleRecordButton = () =>{
+    // Future implementation for voice input
+    console.log("Record button pressed");
+  }
+
   // Auto scroll to bottom
   useEffect(() => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
-  }, [messagesList]);
 
+    if(prompt.trim() !== ""){
+      setIsPromptEmpty(false);
+      
+    }
+    else{
+      setIsPromptEmpty(true);
+    }
+
+
+  // console.log(isPromptEmpty);
+     
+  }, [messagesList, prompt]);
+
+  
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -250,9 +269,9 @@ const ChatBot = () => {
             onChangeText={(text) => setPrompt(text)}
             value={prompt}
           />
-          <TouchableOpacity onPress={handleSendButton} style={styles.sendButton}>
+          <TouchableOpacity onPress={!isPromptEmpty?handleSendButton:handleRecordButton} style={styles.sendButton}>
             <Image
-              source={require("../../assets/images/send.png")}
+              source={!isPromptEmpty?require("../../assets/images/send.png"):require("../../assets/images/voice.png")}
               style={[styles.sendIcon, { tintColor: currentTheme.background }]}
             />
           </TouchableOpacity>

@@ -16,12 +16,14 @@ import { router } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 import governorates from "../../constants/governorates";
+import {useSavedList} from "../contexts/savedListContext"
 
 const Home = () => {
   const {theme} = useContext(ThemeContext);
   const [input,setInput] = useState("");
   const [isInputEmpty,setIsInputEmpty] = useState(false);
   const [filteredGovernorates,setFilteredGovernorates] = useState([]);
+  const {savedList,addToSavedList,removeFromSavedList} = useSavedList();
   
 
 
@@ -29,9 +31,9 @@ const Home = () => {
     setInput(text);
     console.log(text);
   }
-  // useEffect(()=>{
-  //   toggleTheme();
-  // },[])
+  useEffect(()=>{
+      console.log(savedList)
+  },[savedList])
 
   useEffect(()=>{
     if(input === ''){
@@ -69,6 +71,17 @@ const Home = () => {
       return () => sub.remove();
     }, [])
   );
+
+  const toggleSaveButton = (item)=>{
+    if(item.isSaved){
+      removeFromSavedList(item.id)
+      item.isSaved = false;
+    }
+    else{
+    addToSavedList(item);
+    item.isSaved = true;
+    }
+  };
 
   return (
     <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
@@ -166,47 +179,14 @@ const Home = () => {
               image = {item.image1}
               title = {item.name}
               onPress = {()=> router.push(`/governorateDetails/${item.id}`)}
-              onSave = {()=>console.log("Saved!")}
+              onSave = {()=>{toggleSaveButton(item)}}
               imageWidth={width}
               imageHeight={height}
               isArticle = {false}
+              isSaved = {item.isSaved}
               />
             )
           })}
-          {/* <PopularItem
-            key={1}
-            image={require("../../assets/images/giza.jpg")}
-            title="Giza Governorate"
-            onPress={() => router.push(`/governorateDetails/1`)}
-            onSave={() => console.log("Saved Pyramids of Giza")}
-            imageWidth={width}
-            imageHeight={height}
-            isArticle={false}
-          /> */}
-
-          {/* <PopularItem
-            key={2}
-            image={require("../../assets/images/cairo1.webp")}
-            title="Cairo Governorate"
-            onPress={() => console.log("Abu Simbel Temples pressed!")}
-            onSave={() => console.log("Saved Abu Simbel Temples")}
-            imageWidth={width}
-            imageHeight={height}
-            isArticle={false}
-          />
-
-          <PopularItem
-            key={3}
-            image={require("../../assets/images/grand-egyptian-museum.jpg")}
-            title="Grand Egyptian Museum"
-            governorateImage={require("../../assets/images/giza-governorate.png")}
-            smallDescription="Giza"
-            onPress={() => console.log("Grand Egyptian Museum pressed!")}
-            onSave={() => console.log("Saved Grand Egyptian Museum")}
-            imageWidth={width}
-            imageHeight={height}
-            isArticle={false}
-          /> */}
         </ScrollView>
         
         <View style={styles.popularArticlesContainer}>

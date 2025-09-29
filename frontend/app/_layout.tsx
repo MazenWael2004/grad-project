@@ -3,12 +3,14 @@ import { ThemeProvider } from "../theme/ThemeContext";
 import {UserTravelPreferencesProvider} from "./contexts/userTravelPreferencesContext"
 import {ArabicLanguageProvider} from "./contexts/arabicLanguageContext"
 import {ItineraryProvider} from "./contexts/itineraryContext"
+import {SavedListProvider} from "./contexts/savedListContext"
  
 
 
 export default function RootLayout() {
 
   return (
+    <SavedListProvider>
     <ItineraryProvider>
     <ArabicLanguageProvider>
    <UserTravelPreferencesProvider>
@@ -136,6 +138,7 @@ export default function RootLayout() {
      </UserTravelPreferencesProvider>
      </ArabicLanguageProvider>
      </ItineraryProvider>
+     </SavedListProvider>
   );
 }
     

@@ -22,7 +22,7 @@ const PopularItem = (props) => {
         >
          
           <Image
-            source={require("../assets/images/save.png")}
+            source={!props.isSaved?require("../assets/images/save.png"):require("../assets/images/bookmark2.png")}
             style={{ width: 20, height: 20, resizeMode: "contain",tintColor:"#c84c1fff" }}
           />
         </TouchableOpacity>)

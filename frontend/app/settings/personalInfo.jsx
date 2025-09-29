@@ -7,12 +7,17 @@ import {
   TextInput,
   ScrollView
 } from "react-native";
-import {useState,useRef} from "react";
+import {useState,useRef,useContext} from "react";
 import { router } from "expo-router";
 import PhoneInput from "react-native-phone-number-input";
+import { ThemeContext } from "../../theme/ThemeContext";
+import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
+
+
 
 const PersonalInfo = () => {
-    const [value, setValue] = useState("");
+  const {theme} = useContext(ThemeContext);
+  const [value, setValue] = useState("");
   const [formattedValue, setFormattedValue] = useState("");
   const [valid, setValid] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
