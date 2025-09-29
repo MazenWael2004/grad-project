@@ -24,6 +24,7 @@ const governorates =  [
         image2:require("../assets/images/giza2.jpeg"),
         image3:require("../assets/images/Pharaonic-Village2.jpg"),
         image4:require("../assets/images/giza-zoo.jpg"),
+        experiences:"Stand in awe before the iconic Giza Pyramids, including the mighty Great Pyramid of Khufu, the last surviving wonder of the ancient world.Meet the mysterious Sphinx of Giza, a timeless guardian shrouded in legend and myth. Wander through the vast Necropolis, where ancient tombs and temples whisper stories of Egypt’s majestic past. Step inside the Solar Boat Museum and see the impressive, reconstructed royal barque once used in pharaohs’ ceremonial journeys. Hike across the stunning Giza Plateau, discovering lesser-known ruins and panoramic views that go far beyond the usual tourist trail.",
     },
     {
         id:3,
