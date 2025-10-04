@@ -11,7 +11,7 @@ export const ItineraryProvider = ({ children }) => {
         ...prev,
         {
           id: prev.length + 1,
-          //governorate_id:
+          governorate_id:item.governorateId,
           userPreferences: item.userPreferences,
           // place_to_visit_id:
         },

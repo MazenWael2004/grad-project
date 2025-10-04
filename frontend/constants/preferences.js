@@ -9,12 +9,12 @@ const preferences = [
     },
     {
         id:3,
-        title:"Reading 📕"
+        title:"Eco Tourism 🌿"
     },
 
     {
         id:4,
-        title:"Glamping ⛺"
+        title:"Cultural Tourism 🏛️"
     },
     {
         id:5,
@@ -22,30 +22,26 @@ const preferences = [
     },
     {
         id:6,
-        title:"Nature Escapes 🌿",
-    },
-    {
-        id:7,
         title:"Festivals & Events 🎉",
     },
     {
-        id:8,
+        id:7,
         title:"Road Trips 🚗",
     },
     {
-        id:9,
+        id:8,
         title:"Food Tourism 🍔",
     },
     {
-        id:10,
+        id:9,
         title:"Backpacking 🎒"
     },
     {
-        id:12,
+        id:10,
         title:"Art Galleries 🎨"
     },
      {
-        id:13,
+        id:11,
         title:"Cultural Exploration 🏛️"
     },
 

@@ -4,12 +4,16 @@ import {UserTravelPreferencesProvider} from "./contexts/userTravelPreferencesCon
 import {ArabicLanguageProvider} from "./contexts/arabicLanguageContext"
 import {ItineraryProvider} from "./contexts/itineraryContext"
 import {SavedListProvider} from "./contexts/savedListContext"
+import { RegisterFormProvider} from './contexts/registerFormContext'
+import {UserProvider} from './contexts/userContext';
  
 
 
 export default function RootLayout() {
 
   return (
+    <UserProvider>
+    <RegisterFormProvider>
     <SavedListProvider>
     <ItineraryProvider>
     <ArabicLanguageProvider>
@@ -131,6 +135,36 @@ export default function RootLayout() {
       options={{headerShown:false}}
 
       />
+
+      <Stack.Screen
+      name="countryPicker/index"
+      options={{headerShown:false}}
+      />
+
+      <Stack.Screen
+      name="articleDetails/[articleId]"
+      options={{headerShown:false}}
+      />
+
+      <Stack.Screen
+      name="settings/billingSubscriptions"
+      options={{headerShown:false}}
+      />
+
+       <Stack.Screen
+      name="paymentProcess/selectPayment"
+      options={{headerShown:false}}
+      />
+
+       <Stack.Screen
+      name="paymentProcess/reviewSummary"
+      options={{headerShown:false}}
+      />
+
+        <Stack.Screen
+      name="successMessage/paymentCompleted"
+      options={{headerShown:false}}
+      />
      
     </Stack>
   
@@ -139,6 +173,8 @@ export default function RootLayout() {
      </ArabicLanguageProvider>
      </ItineraryProvider>
      </SavedListProvider>
+     </RegisterFormProvider>
+     </UserProvider>
   );
 }
     

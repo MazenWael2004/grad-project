@@ -17,14 +17,22 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 import governorates from "../../constants/governorates";
 import {useSavedList} from "../contexts/savedListContext"
+import { useUserTravelPreferences } from "../contexts/userTravelPreferencesContext";
+import articles from "../../constants/articles";
 
 const Home = () => {
   const {theme} = useContext(ThemeContext);
+  const {addGovernorateId} = useUserTravelPreferences();
   const [input,setInput] = useState("");
   const [isInputEmpty,setIsInputEmpty] = useState(false);
   const [filteredGovernorates,setFilteredGovernorates] = useState([]);
   const {savedList,addToSavedList,removeFromSavedList} = useSavedList();
   
+
+  const handleGovernoratePress = (id)=>{
+    addGovernorateId(id);
+    router.push(`/governorateDetails/${id}`);
+  }
 
 
   const handleGovernorateInput = (text)=>{
@@ -32,7 +40,7 @@ const Home = () => {
     console.log(text);
   }
   useEffect(()=>{
-      console.log(savedList)
+      console.log("Saved List",savedList)
   },[savedList])
 
   useEffect(()=>{
@@ -51,7 +59,7 @@ const Home = () => {
 
 
   const currentTheme = theme === "Light"? LIGHT_THEME: DARK_THEME;
-  console.log(currentTheme);
+
   const width = 200;
   const height = 140;
   useFocusEffect(
@@ -178,7 +186,7 @@ const Home = () => {
               key = {index+1}
               image = {item.image1}
               title = {item.name}
-              onPress = {()=> router.push(`/governorateDetails/${item.id}`)}
+              onPress = {()=> handleGovernoratePress(item.id)}
               onSave = {()=>{toggleSaveButton(item)}}
               imageWidth={width}
               imageHeight={height}
@@ -223,25 +231,29 @@ const Home = () => {
             </View>
           </View>
           <ScrollView
-            horizontal
+            horizontal={false}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
-              paddingRight: 30,
-              flexDirection: "row", // 👈 fixed typo: fkexDirection -> flexDirection
-              alignItems: "center",
+              // paddingRight: 30,
+              flexDirection: "column", // 👈 fixed typo: fkexDirection -> flexDirection
+  
             }}
           >
-            <PopularItem
-              key={1}
-              image={require("../../assets/images/tourism1.jpg")}
-              title="Egypt Among the World's Best."
+            {articles.map((item,indx)=>{
+              return (
+              <PopularItem
+              key={indx}
+              image={item.photo}
+              title={item.title}
               isArticle={true}
-              smallDescription="09 Jul 2025"
-              onPress={() => router.push(`/tripDetails/1`)}
-              onSave={() => console.log("Saved Pyramids of Giza")}
-              imageWidth={width}
-              imageHeight={height}
+              smallDescription={`${item.publisher}, ${item.published_date}`}
+              onPress={() => router.push(`/articleDetails/${item.id}`)}
+              imageWidth={"100%"}
+              imageHeight={160}
             />
+              )
+            })}
+           
           </ScrollView>
         </View>
       </View>

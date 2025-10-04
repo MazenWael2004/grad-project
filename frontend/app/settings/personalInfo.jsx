@@ -17,6 +17,7 @@ import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 
 const PersonalInfo = () => {
   const {theme} = useContext(ThemeContext);
+  const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const [value, setValue] = useState("");
   const [formattedValue, setFormattedValue] = useState("");
   const [valid, setValid] = useState(false);
@@ -24,20 +25,20 @@ const PersonalInfo = () => {
 
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
         <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.backAndPersonalInfoTitle}>
         <TouchableOpacity onPress={() => router.back()}>
           <Image
             source={require("../../assets/images/back.png")}
-            style={{ width: 30, height: 30 }}
+            style={{ width: 30, height: 30,tintColor:currentTheme.iconColor }}
           />
         </TouchableOpacity>
         <Text
           style={{
             fontFamily: "Poppins-SemiBold",
             fontSize: 20,
-            color: "#000000ff",
+            color: currentTheme.text,
             margin: "auto",
           }}
         >
@@ -53,7 +54,7 @@ const PersonalInfo = () => {
             style={{
               fontFamily: "Poppins-SemiBold",
               fontSize: 16,
-              color: "#333",
+              color: currentTheme.text,
             }}
           >
             Full Name
@@ -65,7 +66,8 @@ const PersonalInfo = () => {
               style={[
                 {
                   height: 50,
-                  backgroundColor: "#e9e7e7ff",
+                  backgroundColor: currentTheme.searchBackground,
+                  color:currentTheme.text,
                   paddingHorizontal: 10,
                   borderRadius: 10,
                   marginBottom: 2,
@@ -82,7 +84,7 @@ const PersonalInfo = () => {
             style={{
               fontFamily: "Poppins-SemiBold",
               fontSize: 16,
-              color: "#333",
+              color: currentTheme.text,
             }}
           >
             E-mail
@@ -94,7 +96,8 @@ const PersonalInfo = () => {
               style={[
                 {
                   height: 50,
-                  backgroundColor: "#e9e7e7ff",
+                  backgroundColor: currentTheme.searchBackground,
+                  color: currentTheme.text,
                   paddingHorizontal: 10,
                   borderRadius: 10,
                   marginBottom: 2,
@@ -111,7 +114,7 @@ const PersonalInfo = () => {
             style={{
               fontFamily: "Poppins-SemiBold",
               fontSize: 16,
-              color: "#333",
+              color: currentTheme.text,
             }}
           >
             Phone Number
@@ -154,7 +157,7 @@ const PersonalInfo = () => {
                fontFamily: "Poppins-Medium", 
             }}
             containerStyle={{
-                 backgroundColor: "#e9e7e7ff",
+                 backgroundColor: currentTheme.searchBackground,
                   paddingHorizontal: 10,
                   borderRadius: 10,
                   marginBottom: 2,

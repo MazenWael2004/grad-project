@@ -14,6 +14,7 @@ import { router } from "expo-router";
 import { useItinerary } from "../contexts/itineraryContext";
 import budgetOptions from "../../constants/budgetOptions";
 import partyOptions from "../../constants/partyOptions";
+import governorates from "../../constants/governorates";
 
 const MyTrips = () => {
   const [isEmpty, setIsEmpty] = useState(false);
@@ -28,7 +29,7 @@ const MyTrips = () => {
       setIsEmpty(true);
     }
   },[])
-  console.log(itineraryItems);
+  console.log("Itinerary Items",itineraryItems);
 
   const toggleActiveButton = () => {
     setIsActive(true);
@@ -54,17 +55,21 @@ const MyTrips = () => {
 
     const budgetID = userTravelPreferences["budgetId"];
     const budgetOption = budgetOptions.find((b) => b.id === budgetID);
+    const governorate_id = item['governorate_id'];
+    const governorate  = governorates.find((item)=>{
+      return item.id === governorate_id;
+    })
 
     return (
       <PopularItem
         key={item.id}
-        image={require("../../assets/images/giza.jpg")}
-        title={"Giza Governorate"}
+        image={governorate.image1}
+        title={governorate.name}
         smallDescription={`${startTripDate.toDateString()} - ${endTripDate.toDateString()} • ${
           partyOption.title
         } • ${budgetOption.title}`}
         onPress={() => router.push(`itineraryDetails/${item.id}`)}
-        onSave={() => console.log(`Saved ${item.title}`)}
+        // onSave={() => console.log(`Saved ${item.title}`)}
         imageWidth={"100%"}
         imageHeight={200}
         isArticle={true}

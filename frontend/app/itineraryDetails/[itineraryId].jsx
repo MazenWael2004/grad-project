@@ -13,11 +13,22 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { AirbnbRating } from "react-native-ratings";
 import MapView from "react-native-maps";
+import { useItinerary } from "../contexts/itineraryContext";
+import governorates from "../../constants/governorates";
 
 const ItineraryDetails = () => {
+  const {itineraryItems} = useItinerary();
   const { itineraryId } = useLocalSearchParams();
   const { theme } = useContext(ThemeContext);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
+  const itineraryItem = itineraryItems.find((item)=>{
+    return item.id === Number(itineraryId);
+  })
+  
+  const governorate = governorates.find((item)=>{
+    return item.id === itineraryItem.governorate_id;
+  })
+  console.log(itineraryItem);
 
   const handleRating = (rating) => {
     console.log("User rating:", rating);
@@ -32,19 +43,19 @@ const ItineraryDetails = () => {
         contentContainerStyle={{ paddingBottom: 30 }}
       >
         <ImageBackground
-          source={require("../../assets/images/giza.jpg")}
+          source={governorate.image1}
           style={styles.background}
         >
           <View style={styles.backAndSaveButtonWrapper}>
             <TouchableOpacity
-              style={styles.button}
+              style={[styles.button,{backgroundColor:currentTheme.background}]}
               onPress={() => {
                 router.back();
               }}
             >
               <Image
                 source={require("../../assets/images/back.png")}
-                style={{ width: 30, height: 30 }}
+                style={{ width: 30, height: 30,tintColor:currentTheme.iconColor }}
               />
             </TouchableOpacity>
 
@@ -65,7 +76,7 @@ const ItineraryDetails = () => {
         <View style={styles.tripDescriptionWrapper}>
           <View style={styles.introductoryWrapper}>
             <Text style={[styles.tripNameStyle, { color: currentTheme.text }]}>
-              Giza Governorate
+              {governorate.name}
             </Text>
             <View style={styles.locationRow}>
               <Text

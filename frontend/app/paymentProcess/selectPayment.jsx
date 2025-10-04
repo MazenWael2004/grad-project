@@ -12,12 +12,15 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import { useNavigation } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
-const PaymentMethods = () => {
+const SelectPayment = () => {
+  const {subscription} = useLocalSearchParams();
   const [isPaymentMethodExists, setIsPaymentMethodExists] = useState(false);
   const nav  = useNavigation();
   const {user,setUser} = useUser();
   const { theme } = useContext(ThemeContext);
+  const [selectedPaymentMethod,setSelectedPaymentMethod] = useState(null);
   const [cardTypeImage,setCardTypeImage] = useState(null);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
@@ -32,12 +35,27 @@ const PaymentMethods = () => {
 
   },[user.paymentMethods]);
 
+ const sub = subscription ? JSON.parse(subscription) : null;
+
+  console.log(sub); // full object you passed
+
 
   const maskCard = (cardNumber = "") => {
   const digits = String(cardNumber).replace(/\D/g, ""); // keep only numbers
   const last4 = digits.slice(-4); // get last 4
   return "**** "+"**** "+"**** "+last4;
 };
+
+
+const handlePaymentSelection = (item)=>{
+ setSelectedPaymentMethod(item);
+ console.log("Payment Selected!",item);
+ router.push({
+    pathname: "paymentProcess/reviewSummary",
+    params: { subscription: JSON.stringify(sub),selectedPayment:JSON.stringify(item) }, // 👈 better: stringify object
+  });
+
+} 
 
  
 
@@ -60,7 +78,7 @@ const PaymentMethods = () => {
             margin: "auto",
           }}
         >
-          Payment Methods
+          Select Payment Method
         </Text>
       </View>
       {!isPaymentMethodExists ? (
@@ -116,13 +134,10 @@ const PaymentMethods = () => {
 
 {user.paymentMethods.map((item,indx) =>{
   return (
-    
     <TouchableOpacity
     key={indx}
             style={[styles.countryItem,{backgroundColor:currentTheme.searchBackground}]}
-            onPress={() => {
-              console.log("Payment Selected!");
-            }}
+            onPress={() => handlePaymentSelection(item)  }
           >
             <View
               style={{ flexDirection: "row", gap: 15, alignItems: "center" }}
@@ -141,47 +156,17 @@ const PaymentMethods = () => {
                 style={{
                   fontFamily: "Poppins-SemiBold",
                   color: currentTheme.text,
-                  fontSize:10,
+                  fontSize:12,
                 }}
               >
                 {maskCard(item.cardNumber)}
                 </Text>
             </View>
-           <Text style={{fontFamily:"Poppins-Medium",color:currentTheme.description,fontSize:17,}}>
-            Connected
-           </Text>
           </TouchableOpacity>
 
   )
 })}
 
-
-
-        
-
-            <TouchableOpacity
-            style={{
-              backgroundColor: "#D4AF37",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 20,
-              borderRadius: 15,
-            }}
-            onPress={() => {
-              router.push("addPaymentMethod");
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Poppins-SemiBold",
-                color: "white",
-                width: "100%",
-                textAlign:"center",
-              }}
-            >
-              Add Payment Method
-            </Text>
-          </TouchableOpacity>
           
         </ScrollView>
         
@@ -190,7 +175,7 @@ const PaymentMethods = () => {
   );
 };
 
-export default PaymentMethods;
+export default SelectPayment;
 
 const styles = StyleSheet.create({
   container: {

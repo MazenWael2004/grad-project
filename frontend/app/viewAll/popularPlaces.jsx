@@ -6,10 +6,20 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import {LIGHT_THEME,DARK_THEME} from '../../constants/themes'
 import governorates from '../../constants/governorates';
 import PopularItem from '../../components/PopularItem';
+import { useUserTravelPreferences } from "../contexts/userTravelPreferencesContext";
 
 const PopularPlaces = () => {
   const {theme} = useContext(ThemeContext);
   const currentTheme = theme === "Light"?LIGHT_THEME:DARK_THEME;
+  const {addGovernorateId} = useUserTravelPreferences();
+
+  const handleGovernoratePress = (id)=>{
+     addGovernorateId(id);
+     router.push(`/governorateDetails/${id}`);
+   }
+ 
+ 
+
   return (
     <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
   <View style={styles.logoandTitleWrapper}>
@@ -32,7 +42,7 @@ const PopularPlaces = () => {
             key={index+1}
             image={item.image1}
             title={item.name}
-            onPress={() => router.push(`/tripDetails/${item.id}`)}
+            onPress={() => handleGovernoratePress(item.id)}
             onSave={() => console.log("Saved Pyramids of Giza")}
             imageWidth = {"100%"}
             imageHeight = {200}

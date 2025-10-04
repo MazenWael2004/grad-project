@@ -64,25 +64,44 @@ const StartTripQuestions = () => {
   // console.log(date);
 
    const togglePreference = (id) => {
-  setSelectedPreferences((prev) =>{
-    if(prev.includes(id)){ 
-      setPreferenceCount((prev)=> prev-1);
-      addInterests(prev.filter((p) => p !== id));
-       return prev.filter((p) => p !== id);
-     }
-     else{
-      if(preferenceCount >= 5){
+  console.log("👉 togglePreference called with id:", id);
+
+  setSelectedPreferences((prev) => {
+    console.log("   Current prev state:", prev);
+
+    if (prev.includes(id)) {
+      console.log("   ✅ Preference exists. Removing:", id);
+
+      setPreferenceCount((prevCount) => {
+        console.log("   Decrementing count:", prevCount, "->", prevCount - 1);
+        return prevCount - 1;
+      });
+
+      const updated = prev.filter((p) => p !== id);
+      console.log("   Updated preferences after removal:", updated);
+
+      addInterests(updated);
+      return updated;
+    } else {
+      if (preferenceCount >= 5) {
+        console.log("   ⚠️ Limit reached (5). Cannot add:", id);
         addInterests(prev);
         return prev;
       }
 
-      setPreferenceCount((prev)=> prev+1);
-      addInterests([...prev, id]);
-      return [...prev, id]    
-     } 
-       
-             }         
-  );
+      setPreferenceCount((prevCount) => {
+        console.log("   Incrementing count:", prevCount, "->", prevCount + 1);
+        return prevCount + 1;
+      });
+
+      const updated = [...prev, id]; // 👀 you are adding id+1, not id
+      console.log("   ✅ Adding new preference:", id, "=>", id + 1);
+      console.log("   Updated preferences after addition:", updated);
+
+      addInterests(updated);
+      return updated;
+    }
+  });
 };
 
 const togglePartyOption = (id) => {

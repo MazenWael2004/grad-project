@@ -57,8 +57,17 @@ export const UserTravelPreferencesProvider = ({children}) =>{
         })
     }
 
+    const addGovernorateId = (governorateId) =>{
+        setUserTravelPreferences((prev)=>{
+            return{
+                ...prev,
+                governorateId
+            }
+        })
+    }
+
      return (
-        <UserTravelPreferencesContext.Provider value={{ userTravelPreferences,addPartyId,addStartTripDate,addEndTripDate,addInterests,addBudgetId }}>
+        <UserTravelPreferencesContext.Provider value={{ userTravelPreferences,addPartyId,addStartTripDate,addEndTripDate,addInterests,addBudgetId,addGovernorateId }}>
           {children}
         </UserTravelPreferencesContext.Provider>
       );

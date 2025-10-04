@@ -1,3 +1,5 @@
+import { useLocalSearchParams } from "expo-router";
+import { useRegisterFormContext } from "../contexts/registerFormContext";
 import {
   StyleSheet,
   Text,
@@ -6,7 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { hide } from "expo-splash-screen";
 import { useRouter } from "expo-router";
 import axios from "axios";
@@ -18,7 +20,10 @@ console.log(`${API_BASE_URL}/register/`);
 const Register = () => {
   // States...
   const [email, setEmail] = useState("");
+  const { registerFormData, setRegisterFormData } = useRegisterFormContext();
   const [password, setPassword] = useState("");
+  const { country } = useLocalSearchParams();
+  console.log("COUNTRY " + country);
   const [fullName, setFullName] = useState({
     firstName: "",
     lastName: "",
@@ -26,14 +31,33 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [isPasswordCorrect, setIsPasswordCorrect] = useState(true);
-  const [isEmailValidated,setIsEmailValidated]  = useState(true);
-  const [isFirstNameRequired,setIsFirstNameRequired] = useState(true);
-  const [isLastNameRequired,setIsLastNameRequired] = useState(true);
-  const [isPasswordValidated,setIsPasswordValidated] = useState(true);
+  const [isEmailValidated, setIsEmailValidated] = useState(true);
+  const [isFirstNameRequired, setIsFirstNameRequired] = useState(true);
+  const [isLastNameRequired, setIsLastNameRequired] = useState(true);
+  const [isPasswordRequired, setIsPasswordRequired] = useState(true);
+  const [isConfirmPasswordRequired, setIsConfirmPasswordRequired] =
+    useState(true);
+  const [isCountryRequired, setIsCountryRequired] = useState(true);
+  const [isEmailRequired, setIsEmailRequired] = useState(true);
+  const [isPasswordValidated, setIsPasswordValidated] = useState(true);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+
+  const countries = [
+    { label: "Egypt", value: "EG" },
+    { label: "France", value: "FR" },
+    { label: "Japan", value: "JP" },
+    { label: "Brazil", value: "BR" },
+    // Add more countries as needed
+  ];
+
   //-----------------------------------------------------------------
+  console.log("Register Form Data: ", registerFormData);
 
+  useEffect(() => {
+    setSelectedCountry(country);
+  }, [country]);
 
- // Form Handler Functions.....
+  // Form Handler Functions.....
   const handleFirstNameChange = (text) => {
     setIsFirstNameRequired(true);
     setFullName((prevFullName) => ({
@@ -42,14 +66,29 @@ const Register = () => {
     }));
 
     console.log("Full Name: " + text + fullName.lastName);
+    setRegisterFormData((prev) => {
+      return {
+        ...prev,
+        firstName: text,
+        lastName: fullName.lastName,
+      };
+    });
   };
 
   const handleLastNameChange = (text) => {
-    setIsLastNameRequired(true)
+    setIsLastNameRequired(true);
     setFullName((prevFullName) => ({
       ...prevFullName,
       lastName: text,
     }));
+
+    setRegisterFormData((prev) => {
+      return {
+        ...prev,
+        firstName: fullName.firstName,
+        lastName: text,
+      };
+    });
 
     console.log("Full Name: " + fullName.firstName + text);
   };
@@ -57,85 +96,145 @@ const Register = () => {
   // Creates a new object by copying all properties from the previous state and replacing the `firstName` property with the new text value.
 
   const handleEmailChange = (text) => {
-    setIsEmailValidated(true);
+    setIsEmailRequired(true);
     setEmail(text);
     console.log("Email: ", text);
+    setRegisterFormData((prev) => {
+      return {
+        ...prev,
+        email: text,
+      };
+    });
   };
 
   const handlePasswordChange = (text) => {
-    setIsPasswordValidated(true);
+    setIsPasswordRequired(true);
     setPassword(text);
     console.log("Password: " + text);
+    setRegisterFormData((prev) => {
+      return {
+        ...prev,
+        password: text,
+      };
+    });
   };
 
   const handleConfirmPasswordChange = (text) => {
     setConfirmPassword(text);
+    setIsConfirmPasswordRequired(true);
     console.log("Confirm Password: " + text);
+    setRegisterFormData((prev) => {
+      return {
+        ...prev,
+        confirmPassword: text,
+      };
+    });
   };
 
-  const handleSubmitButton = async () => {
-    // First Validate Email:
+  const validateForm = () => {
+  let valid = true;
+
+  // First Name
+  if (!registerFormData.firstName || registerFormData.firstName.trim() === "") {
+    setIsFirstNameRequired(false);
+    valid = false;
+  } else {
+    setIsFirstNameRequired(true);
+  }
+
+  // Last Name
+  if (!registerFormData.lastName || registerFormData.lastName.trim() === "") {
+    setIsLastNameRequired(false);
+    valid = false;
+  } else {
+    setIsLastNameRequired(true);
+  }
+
+  // Email
+  if (!registerFormData.email || registerFormData.email.trim() === "") {
+    setIsEmailRequired(false);
+    valid = false;
+  } else {
+    setIsEmailRequired(true);
     let regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if(regex.test(email)){
-      console.log("Valid Email address.");
-    }
-    else{
-      console.log("Invalid Email Address!");
+    if (!regex.test(registerFormData.email)) {
       setIsEmailValidated(false);
-
+      valid = false;
+    } else {
+      setIsEmailValidated(true);
     }
+  }
 
-    // Second Make Sure first name field is not empty:
+  // Country
+  if (!registerFormData.country || registerFormData.country.trim() === "") {
+    setIsCountryRequired(false);
+    valid = false;
+  } else {
+    setIsCountryRequired(true);
+  }
 
-    if(fullName.firstName.trim() !== "") {
-      console.log("First Name Entered!")
-    }
-    else{
-      setIsFirstNameRequired(false);
-      console.log("First Name Required!");
-
-
-    }
-
-    // Third: make sure last name is not empty..
-
-    if(fullName.lastName.trim() !== "") {
-      console.log("Last Name Entered!")
-    }
-    else{
-      setIsLastNameRequired(false);
-      console.log("Last Name Required!");
-
-
-    }
-
-    // Password validation:
-    if(password.length < 8){
+  // Password
+  if (!registerFormData.password || registerFormData.password.trim() === "") {
+    setIsPasswordRequired(false);
+    valid = false;
+  } else {
+    setIsPasswordRequired(true);
+    if (registerFormData.password.length < 8) {
       setIsPasswordValidated(false);
-      console.log("Password must be at least 8 characters.");
+      valid = false;
+    } else {
+      setIsPasswordValidated(true);
     }
-    try {
-      const response = await axios.post(`${API_BASE_URL}/register/`, {
-        first_name: fullName.firstName,
-        last_name: fullName.lastName,
-        email,
-        password,
-      });
+  }
 
-      if (response.status === 201) {
-        Alert.alert("Success", "Account created successfully!");
-        router.push("/authentication/login");
-      }
-   } 
-      catch (error) {
-        console.error(error.response?.data || error.message);
-        Alert.alert("Error", "Registration failed. Try again.");
-      }
+  // Confirm Password
+  if (
+    !registerFormData.confirmPassword ||
+    registerFormData.confirmPassword.trim() === ""
+  ) {
+    setIsConfirmPasswordRequired(false);
+    valid = false;
+  } else {
+    setIsConfirmPasswordRequired(true);
+    if (registerFormData.confirmPassword !== registerFormData.password) {
+      setIsPasswordCorrect(false);
+      valid = false;
+    } else {
+      setIsPasswordCorrect(true);
+    }
+  }
+
+  return valid;
+};
+
+const handleSubmitButton = async () => {
+  if (!validateForm()) {
+    console.log("Validation failed ❌");
+    Alert.alert("Warning", "Please fix errors before submitting.");
+    return;
+  }
+
+  console.log("Validation passed ✅");
+  // Proceed with API request
+  try {
+    const response = await axios.post(`${API_BASE_URL}/register/`, {
+      first_name: registerFormData.firstName,
+      last_name: registerFormData.lastName,
+      email: registerFormData.email,
+      password: registerFormData.password,
+    });
+
+    if (response.status === 201) {
+      Alert.alert("Success", "Account created successfully!");
+      router.push("/authentication/login");
+    }
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    Alert.alert("Error", "Registration failed. Try again.");
+  }
+};
 
 
-  };
-
-  
 
   const router = useRouter();
   return (
@@ -192,27 +291,33 @@ const Register = () => {
               </Text>
               <TextInput
                 placeholder="John"
-                style={[{
-                  height: 50,
-                  borderColor: "#ccc",
-                  borderWidth: 1,
-                  paddingHorizontal: 10,
-                  borderRadius: 10,
-                  fontFamily: "Poppins-Regular",
-                },
+                style={[
+                  {
+                    height: 50,
+                    borderColor: "#ccc",
+                    borderWidth: 1,
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                    fontFamily: "Poppins-Regular",
+                  },
 
-                !isFirstNameRequired && styles.errorInput
-             
-              ]}
+                  !isFirstNameRequired && styles.errorInput,
+                ]}
                 onChangeText={handleFirstNameChange}
-                value={fullName.firstName}
-                
+                value={registerFormData?.firstName}
               />
-              {
-                !isFirstNameRequired && (
-                  <Text style={{color:"red",fontFamily:"Poppins-Medium",fontSize:13,marginTop:5,}}>Field required.</Text>
-                )
-              }
+              {!isFirstNameRequired && (
+                <Text
+                  style={{
+                    color: "red",
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 13,
+                    marginTop: 5,
+                  }}
+                >
+                  Field required.
+                </Text>
+              )}
             </View>
 
             <View style={{ flex: 1 }}>
@@ -229,24 +334,32 @@ const Register = () => {
               </Text>
               <TextInput
                 placeholder="Doe"
-                style={[{
-                  height: 50,
-                  borderColor: "#ccc",
-                  borderWidth: 1,
-                  paddingHorizontal: 10,
-                  borderRadius: 10,
-                  fontFamily: "Poppins-Regular",
-                },
-                !isLastNameRequired && styles.errorInput
-              ]}
+                style={[
+                  {
+                    height: 50,
+                    borderColor: "#ccc",
+                    borderWidth: 1,
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                    fontFamily: "Poppins-Regular",
+                  },
+                  !isLastNameRequired && styles.errorInput,
+                ]}
                 onChangeText={handleLastNameChange}
-                value={fullName.lastName}
+                value={registerFormData?.lastName}
               />
-              {
-                !isLastNameRequired && (
-                  <Text style={{color:"red",fontFamily:"Poppins-Medium",fontSize:13,marginTop:5,}}>Field required.</Text>
-                )
-              }
+              {!isLastNameRequired && (
+                <Text
+                  style={{
+                    color: "red",
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 13,
+                    marginTop: 5,
+                  }}
+                >
+                  Field required.
+                </Text>
+              )}
             </View>
           </View>
 
@@ -275,14 +388,36 @@ const Register = () => {
                     fontFamily: "Poppins-Regular",
                     position: "relative",
                   },
-                  !isEmailValidated && styles.errorInput
+                  (!isEmailValidated || !isEmailRequired) && styles.errorInput,
                 ]}
-                value={email}
+                value={registerFormData?.email}
                 onChangeText={handleEmailChange}
               />
-                {!isEmailValidated && (
-                        <Text style={{color:"red",fontFamily:"Poppins-Medium",fontSize:13,marginTop:5,}}>Invalid Email address. Please Enter a valid one.</Text>
-                      )}
+              {!isEmailValidated && (
+                <Text
+                  style={{
+                    color: "red",
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 13,
+                    marginTop: 5,
+                  }}
+                >
+                  Invalid Email address. Please Enter a valid one.
+                </Text>
+              )}
+
+              {!isEmailRequired && (
+                <Text
+                  style={{
+                    color: "red",
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 13,
+                    marginTop: 5,
+                  }}
+                >
+                  Field required.
+                </Text>
+              )}
             </View>
           </View>
 
@@ -298,8 +433,8 @@ const Register = () => {
               <Text style={{ color: "red" }}> *</Text>
             </Text>
             <View>
-              <TextInput
-                placeholder="Enter your email"
+              <TouchableOpacity
+                onPress={() => router.push("countryPicker")}
                 style={[
                   {
                     height: 50,
@@ -307,12 +442,52 @@ const Register = () => {
                     borderWidth: 1,
                     paddingHorizontal: 10,
                     borderRadius: 10,
+                    backgroundColor: "#e4e2e2ff",
                     marginBottom: 2,
                     fontFamily: "Poppins-Regular",
                     position: "relative",
+                    paddingTop: 15,
+                    paddingLeft: 10,
                   },
+                  !isCountryRequired && styles.errorInput,
                 ]}
-              />
+              >
+                
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontFamily: "Poppins-Medium", color: "#333" }}>
+                    {selectedCountry !== undefined
+                      ? selectedCountry
+                      : "Select your country"}
+                  </Text>
+                  <Image
+                    source={require("../../assets/images/right-arrow.png")}
+                    style={{
+                      width: 15,
+                      height: 15,
+                      resizeMode: "contain",
+                      tintColor: "#333",
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+              {!isCountryRequired && (
+                  <Text
+                    style={{
+                      color: "red",
+                      fontFamily: "Poppins-Medium",
+                      fontSize: 13,
+                      marginTop: 5,
+                    }}
+                  >
+                    Field required.
+                  </Text>
+                )}
             </View>
           </View>
 
@@ -340,15 +515,38 @@ const Register = () => {
                     fontFamily: "Poppins-Regular",
                     position: "relative",
                   },
-                  !isPasswordValidated && styles.errorInput
+                  (!isPasswordRequired || !isPasswordValidated) &&
+                    styles.errorInput,
                 ]}
                 secureTextEntry={hidePassword ? true : false}
-                value={password}
+                value={registerFormData?.password}
                 onChangeText={handlePasswordChange}
               />
               {!isPasswordValidated && (
-                        <Text style={{color:"red",fontFamily:"Poppins-Medium",fontSize:13,marginTop:5,}}>Password must be at least 8 characters.</Text>
-                      )}
+                <Text
+                  style={{
+                    color: "red",
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 13,
+                    marginTop: 5,
+                  }}
+                >
+                  Password must be at least 8 characters.
+                </Text>
+              )}
+
+              {!isPasswordRequired && (
+                <Text
+                  style={{
+                    color: "red",
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 13,
+                    marginTop: 5,
+                  }}
+                >
+                  Field required.
+                </Text>
+              )}
               <TouchableOpacity
                 onPress={() => setHidePassword(!hidePassword)}
                 style={{
@@ -400,11 +598,24 @@ const Register = () => {
                     fontFamily: "Poppins-Regular",
                     position: "relative",
                   },
+                  !isConfirmPasswordRequired && styles.errorInput,
                 ]}
                 secureTextEntry={hidePassword ? true : false}
-                value={confirmPassword}
+                value={registerFormData?.confirmPassword}
                 onChangeText={handleConfirmPasswordChange}
               />
+              {!isConfirmPasswordRequired && (
+                <Text
+                  style={{
+                    color: "red",
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 13,
+                    marginTop: 5,
+                  }}
+                >
+                  Field required.
+                </Text>
+              )}
               <TouchableOpacity
                 onPress={() => setHidePassword(!hidePassword)}
                 style={{
@@ -477,7 +688,7 @@ export default Register;
 const styles = {
   loginWrapper: {
     width: "100%",
-    height: 650,
+    height: 700,
     padding: 20,
     flexDirection: "column",
   },

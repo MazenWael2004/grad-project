@@ -16,6 +16,7 @@ import budgetOptions from "../../constants/budgetOptions";
 import { useUserTravelPreferences } from "../contexts/userTravelPreferencesContext";
 import preferences from "../../constants/preferences";
 import { useItinerary } from "../contexts/itineraryContext";
+import governorates from "../../constants/governorates";
 
 const ReviewSummary = () => {
   const { theme } = useContext(ThemeContext);
@@ -27,7 +28,13 @@ const ReviewSummary = () => {
   const startTripDate = new Date(startDate);
   const endTripDate = new Date(endDate);
   const interests = userTravelPreferences['interests']; // [3,5,6]
+  console.log("Interests Array: ",interests);
   const userInterests = preferences.filter(pref => interests.includes(pref.id-1));
+  console.log(userInterests);
+  const {governorateId} = userTravelPreferences;
+  const governorate = governorates.find((item)=>{
+    return item.id === governorateId;
+  })
   
   
 const getMonthAndDay = (date) => {
@@ -59,6 +66,7 @@ const getMonthAndDay = (date) => {
 
   const handleBuildItineraryButton = () =>{
     addToItineraryList({
+      governorateId: governorateId,
       userPreferences:userTravelPreferences
     })
 
@@ -118,7 +126,7 @@ const getMonthAndDay = (date) => {
                 }}
               >
                 <Image
-                  source={require("../../assets/images/giza.jpg")}
+                  source={governorate.image1}
                   style={{ width: "100%", height: "100%", resizeMode: "cover" }}
                 />
               </View>
@@ -130,11 +138,11 @@ const getMonthAndDay = (date) => {
                     color: currentTheme.text,
                   }}
                 >
-                  Giza Governorate
+                  {governorate.name}
                 </Text>
 
                 <Image
-                  source={require("../../assets/images/giza-governorate.png")}
+                  source={governorate.logo}
                   style={{ width: 40, height: 40 }}
                 />
               </View>

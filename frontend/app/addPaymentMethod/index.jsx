@@ -10,12 +10,23 @@ import {
 import { router } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
+import { useUser } from "../contexts/userContext";
+import { useNavigation } from "expo-router";
+
+
 
 const AddPaymentMethod = () => {
+  const {user,setUser} = useUser();
+  const nav = useNavigation();
   const [cardNumber, setCardNumber] = useState("");
   const [accountHolderName, setAccountHolderName] = useState("");
-  const [expMonth, setExpMonth] = useState("");
-  const [expYear, setExpYear] = useState("");
+  const [cardType,setCardType] = useState("");
+  const [expiryDate,setExpiryDate] = useState({
+    expiryMonth: "",
+    expiryYear: "",
+  });
+  // const [expMonth, setExpMonth] = useState("");
+  // const [expYear, setExpYear] = useState("");
   const [cvv, setCvv] = useState("");
   const {theme} = useContext(ThemeContext);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
@@ -23,10 +34,82 @@ const AddPaymentMethod = () => {
   const handleReset = () => {
     setCardNumber("");
     setAccountHolderName("");
-    setExpMonth("");
-    setExpYear("");
+    // setExpMonth("");
+    // setExpYear("");
     setCvv("");
   };
+
+  const handleCardNumberChange = (text) =>{
+    // console.log(text.length);
+    // if(text.length % 4 === 0){
+    //   text+=" ";
+    // }
+
+    if(text[0]=== '4'){
+      console.log("Visa Card");
+      setCardType("Visa");
+    }
+    else if(text[0] === '5'){
+      console.log("MasterCard Card");
+      setCardType("MasterCard");
+    }
+    setCardNumber(text);
+    console.log("Card Number: "+text);
+  }
+
+  const handleAccountHolderName = (text) =>{
+    setAccountHolderName(text);
+    console.log("Account Holder Name: "+text);
+  }
+
+  const handleExpiryMonthChange  = (text) =>{
+    setExpiryDate((prev)=>{
+      return {
+        ...prev,
+        expiryMonth:text
+      }
+    })
+
+    console.log("Expiry Month:"+text)
+  }
+
+  const handleExpiryYearChange  = (text) =>{
+    setExpiryDate((prev)=>{
+      return {
+        ...prev,
+        expiryYear:text
+      }
+    })
+
+    console.log("Expiry Year:"+text)
+  }
+
+  const handleCVVChange = (text) =>{
+    setCvv(text);
+    console.log("CVV: "+text);
+  }
+
+  const handleSaveMethod = ()=>{
+    setUser((prev)=>{
+      return {
+        ...prev,
+        paymentMethods: [
+          ...prev.paymentMethods,
+          {
+             id: prev.paymentMethods.length + 1,
+             cardHolderName: accountHolderName,
+             cardNumber,
+             expiryDate,
+             cardType,
+             CVV: cvv
+          }
+        ]
+      }
+    })
+
+    // console.log(user);
+    router.push("settings/paymentMethods");
+  }
 
   return (
     <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
@@ -57,10 +140,10 @@ const AddPaymentMethod = () => {
           <Text style={[styles.label,{color:currentTheme.text}]}>Card Number</Text>
           <TextInput
             value={cardNumber}
-            onChangeText={setCardNumber}
+            onChangeText={handleCardNumberChange}
             placeholder="Ex: 2640 1234 5678 9012"
             placeholderTextColor="#6b6b6b"
-            style={[styles.input,{backgroundColor:currentTheme.searchBackground}]}
+            style={[styles.input,{backgroundColor:currentTheme.searchBackground,color:currentTheme.text}]}
             keyboardType="number-pad"
             maxLength={19} // 16 digits + 3 spaces if you later format xxxx xxxx xxxx xxxx
           />
@@ -71,10 +154,10 @@ const AddPaymentMethod = () => {
           <Text style={[styles.label,{color:currentTheme.text}]}>Account Holder Name</Text>
           <TextInput
             value={accountHolderName}
-            onChangeText={setAccountHolderName}
+            onChangeText={handleAccountHolderName}
             placeholder="John Doe"
             placeholderTextColor="#6b6b6b"
-            style={[styles.input,{backgroundColor:currentTheme.searchBackground}]}
+            style={[styles.input,{backgroundColor:currentTheme.searchBackground,color:currentTheme.text}]}
             autoCapitalize="words"
             autoCorrect={false}
           />
@@ -87,21 +170,21 @@ const AddPaymentMethod = () => {
             <Text style={[styles.label,{color:currentTheme.text}]}>Expiry Date</Text>
             <View style={[styles.expiryField,{backgroundColor:currentTheme.searchBackground}]}>
               <TextInput
-                value={expMonth}
-                onChangeText={setExpMonth}
+                value={expiryDate.expiryMonth}
+                onChangeText={handleExpiryMonthChange}
                 placeholder="MM"
                 placeholderTextColor="#6b6b6b"
-                style={[styles.expiryInput, { width: 40 }]}
+                style={[styles.expiryInput, { width: 40 },{color:currentTheme.text}]}
                 keyboardType="number-pad"
                 maxLength={2}
               />
               <Text style={styles.slash}>/</Text>
               <TextInput
-                value={expYear}
-                onChangeText={setExpYear}
+                value={expiryDate.expiryYear}
+                onChangeText={handleExpiryYearChange}
                 placeholder="YY"
                 placeholderTextColor="#6b6b6b"
-                style={[styles.expiryInput, { width: 46 }]}
+                style={[styles.expiryInput, { width: 46 },{color:currentTheme.text}]}
                 keyboardType="number-pad"
                 maxLength={2}
               />
@@ -110,16 +193,16 @@ const AddPaymentMethod = () => {
 
           {/* CVV */}
           <View style={styles.colRight}>
-            <Text style={styles.label}>CVV</Text>
+            <Text style={[styles.label,{color:currentTheme.text}]}>CVV</Text>
             <TextInput
               value={cvv}
               onChangeText={setCvv}
               placeholder="123"
               placeholderTextColor="#6b6b6b"
-              style={[styles.input,{backgroundColor:currentTheme.searchBackground}]}
+              style={[styles.input,{backgroundColor:currentTheme.searchBackground},{color:currentTheme.text}]}
               keyboardType="number-pad"
               secureTextEntry
-              maxLength={4}
+              maxLength={3}
             />
           </View>
         </View>
@@ -170,10 +253,10 @@ const AddPaymentMethod = () => {
           right: 20,
           marginBottom: 20,
         }}
-        onPress={() => {
+        onPress={
           // Handle form submission here
-          console.log("Form submitted");
-        }}
+          handleSaveMethod
+        }
       >
         <Text
           style={{
