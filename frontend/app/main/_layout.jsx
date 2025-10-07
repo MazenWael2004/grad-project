@@ -3,11 +3,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { useContext } from "react";
-import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
+import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
+import { Image } from "react-native";
 
 export default function Layout() {
-  const {theme} = useContext(ThemeContext);
-  const currentTheme = theme === "Light"?LIGHT_THEME:DARK_THEME;
+  const { theme } = useContext(ThemeContext);
+  const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   return (
     <Tabs
       screenOptions={{
@@ -37,10 +38,15 @@ export default function Layout() {
         options={{
           title: "Home",
           tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
-              name={focused ? "home" : "home-outline"}
-              size={28}
-              color={color}
+            <Image
+              source={
+                require("../../assets/images/tent.png")
+              }
+              style={{
+                width: 28,
+                height: 28,
+                tintColor: focused ? "#b29227ff" : "#9f9e9eff", // تغيير اللون حسب الحالة
+              }}
             />
           ),
         }}
@@ -50,8 +56,17 @@ export default function Layout() {
         name="saved"
         options={{
           title: "Saved",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="bookmark-outline" size={size} color={color} />
+          tabBarIcon: ({ color, size,focused }) => (
+           <Image
+              source={
+                focused?require("../../assets/images/saved-egypt-outlined.png"):require("../../assets/images/saved-egypt.png")
+              }
+              style={{
+                width: 28,
+                height: 28,
+                tintColor: focused ? "#b29227ff" : "#9f9e9eff", // تغيير اللون حسب الحالة
+              }}
+            />
           ),
         }}
       />

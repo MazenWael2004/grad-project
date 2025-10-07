@@ -32,12 +32,19 @@ export default function Index() {
       text: "Learn the stories behind Egypt’s monuments and treasures with AI-powered answers to your questions.",
       image: require("../../assets/images/Chatbot.jpg"),
     },
+     {
+    key: "4",
+    title: "Uncover the Magic",
+    text: "Snap a photo of your favorite landmark — discover even more reasons to love it.",
+    image: require("../../assets/images/image-class.jpg"),
+    },
     {
-      key: "3",
+      key: "5",
       title: "Get Started",
       text: "Embark on your adventure through Egypt’s timeless heritage — let’s begin!",
       image: require("../../assets/images/People ready for travelling.jpg"),
     },
+   
   ];
    
   const skipButton = () =>{

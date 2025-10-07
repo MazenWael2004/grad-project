@@ -19,9 +19,15 @@ const PersonalInfo = () => {
   const {theme} = useContext(ThemeContext);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const [value, setValue] = useState("");
-  const [formattedValue, setFormattedValue] = useState("");
+  const [formattedValue, setFormattedValue] = useState("");  // Formatted Phone Number
   const [valid, setValid] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
+
+
+  const handleSaveChanges = () =>{
+
+    console.log("Phone Number: "+formattedValue);
+  }
 
 
   return (
@@ -175,7 +181,7 @@ const PersonalInfo = () => {
       </View>
       </ScrollView>
           
-      <TouchableOpacity style={{borderRadius:30,backgroundColor:"#D4AF37",width:"100%",justifyContent:"center",alignItems:"center",padding:12,marginBottom:40,}} onPress={()=>{console.log("Started a trip pressed!")}}>
+      <TouchableOpacity style={{borderRadius:30,backgroundColor:"#D4AF37",width:"100%",justifyContent:"center",alignItems:"center",padding:12,marginBottom:40,}} onPress={handleSaveChanges}>
         <Text style={{fontFamily:"Poppins-Medium",color:"white",fontSize:15}}>
           Save Changes
         </Text>

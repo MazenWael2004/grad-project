@@ -26,7 +26,7 @@ const PopularPlaces = () => {
     <TouchableOpacity style={[styles.button,{backgroundColor:currentTheme.searchBackground}]} onPress={() => router.back()}>
       <Image
         source={require("../../assets/images/back.png")}
-        style={{ width: 24, height: 24, resizeMode: "contain" }}
+        style={{ width: 24, height: 24, resizeMode: "contain",tintColor:currentTheme.iconColor }}
       />
     </TouchableOpacity>
     <Text style={[styles.title,{color:currentTheme.text}]}>Popular Places</Text>

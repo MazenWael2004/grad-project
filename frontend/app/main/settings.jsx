@@ -72,7 +72,7 @@ const Settings = () => {
 
       
 
-        <TouchableOpacity style={styles.settingItem}>
+        <TouchableOpacity style={styles.settingItem} onPress={() =>{router.push('currencyConverter')}}>
           <Image source={require("../../assets/images/exchange.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
           <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Live Currency Converter</Text>
           <Image
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "100%",
     height: 100,
-    backgroundColor: "#D4AF37",
+    backgroundColor: "#b4952fff",
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "space-between",

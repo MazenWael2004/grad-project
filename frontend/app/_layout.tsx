@@ -165,6 +165,11 @@ export default function RootLayout() {
       name="successMessage/paymentCompleted"
       options={{headerShown:false}}
       />
+
+      <Stack.Screen
+      name="currencyConverter/index"
+      options={{headerShown:false}}
+      />
      
     </Stack>
   

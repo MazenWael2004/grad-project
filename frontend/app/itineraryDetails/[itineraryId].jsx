@@ -12,9 +12,10 @@ import { useContext } from "react";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { AirbnbRating } from "react-native-ratings";
-import MapView from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE,Marker } from "react-native-maps";
 import { useItinerary } from "../contexts/itineraryContext";
 import governorates from "../../constants/governorates";
+import { landmarks } from '../../constants/landmarks';
 
 const ItineraryDetails = () => {
   const {itineraryItems} = useItinerary();
@@ -33,6 +34,10 @@ const ItineraryDetails = () => {
   const handleRating = (rating) => {
     console.log("User rating:", rating);
   };
+
+  const handleRegionChange = (region) =>{
+    console.log(region);
+  }
 
   return (
     <View
@@ -93,7 +98,7 @@ const ItineraryDetails = () => {
           <MapView
             style={{
               width: "100%",
-              height: 200,
+              height: 250,
               backgroundColor: currentTheme.searchBackground,
               borderRadius: 15,
               justifyContent: "center",
@@ -102,12 +107,31 @@ const ItineraryDetails = () => {
               marginBottom: 15,
             }}
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              latitude: 30.06699114837697,
+              longitude: 31.293998254151173,
+              latitudeDelta: 0.1,
+              longitudeDelta: 0.1,
+              // 30.06699114837697, 31.293998254151173
             }}
+            showsUserLocation
+            showsMyLocationButton
+            provider={PROVIDER_GOOGLE}
+            onRegionChange={handleRegionChange}
+          >
+
+            
+{landmarks.map(({ id, title, description, coordinate, color }) => (
+          <Marker
+            key={id}
+            identifier={id}
+            coordinate={coordinate}
+            title={title}
+            description={description}
+            pinColor={color}
           />
+        ))}
+
+          </MapView>
         </View>
 
         <ScrollView
@@ -209,7 +233,7 @@ const ItineraryDetails = () => {
             paddingBottom: 100,
           }}
         >
-          <View style={styles.placeItem}>
+          <View style={[styles.placeItem,{backgroundColor:currentTheme.searchBackground}]}>
             <Image
               source={require("../../assets/images/Pharaonic-Village.webp")}
               style={{
@@ -323,7 +347,7 @@ const ItineraryDetails = () => {
               >
                 <Image
                   source={require("../../assets/images/location.png")}
-                  style={{ width: 25, height: 25, tintColor: "#D4AF37" }}
+                  style={{ width: 20, height: 20, tintColor: "#D4AF37" }}
                 />
                 <Text
                   style={{

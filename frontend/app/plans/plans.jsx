@@ -91,7 +91,7 @@ const Plans = () => {
                     color: currentTheme.text,
                   }}
                 >
-                  {item.price === 0 ? "Free" : `${item.price}/month`}
+                  {item.price === 0 ? "Free" : `${Math.floor(item.price * user.exchangeRate)}/month`}
                 </Text>
               </View>
 

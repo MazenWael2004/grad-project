@@ -21,6 +21,7 @@ const AddPaymentMethod = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [accountHolderName, setAccountHolderName] = useState("");
   const [cardType,setCardType] = useState("");
+  const [isCardNumberValidated,setIsCardNumberValidated] = useState(true);
   const [expiryDate,setExpiryDate] = useState({
     expiryMonth: "",
     expiryYear: "",
@@ -37,6 +38,7 @@ const AddPaymentMethod = () => {
     // setExpMonth("");
     // setExpYear("");
     setCvv("");
+    setIsCardNumberValidated(true);
   };
 
   const handleCardNumberChange = (text) =>{
@@ -49,7 +51,7 @@ const AddPaymentMethod = () => {
       console.log("Visa Card");
       setCardType("Visa");
     }
-    else if(text[0] === '5'){
+    else if(text[0] === '5' || text[0] === '2'){
       console.log("MasterCard Card");
       setCardType("MasterCard");
     }
@@ -89,7 +91,22 @@ const AddPaymentMethod = () => {
     console.log("CVV: "+text);
   }
 
+  const isValidate  = () =>{
+    // Validate Card Number
+    if(cardNumber[0] === '4'){
+      console.log("Card Number is a Visa Card!");
+      setIsCardNumberValidated(true);
+      return true;
+    }
+    else{
+      console.log("Invaild Card Number!");
+      setIsCardNumberValidated(false);
+      return false;
+    }
+  }
+
   const handleSaveMethod = ()=>{
+    if(isValidate()){
     setUser((prev)=>{
       return {
         ...prev,
@@ -106,9 +123,14 @@ const AddPaymentMethod = () => {
         ]
       }
     })
+    router.push("settings/paymentMethods");
+  }
+  else{
+    console.log("Validation Error!");
+  }
 
     // console.log(user);
-    router.push("settings/paymentMethods");
+    
   }
 
   return (
@@ -143,9 +165,9 @@ const AddPaymentMethod = () => {
             onChangeText={handleCardNumberChange}
             placeholder="Ex: 2640 1234 5678 9012"
             placeholderTextColor="#6b6b6b"
-            style={[styles.input,{backgroundColor:currentTheme.searchBackground,color:currentTheme.text}]}
+            style={[styles.input,{backgroundColor:currentTheme.searchBackground,color:currentTheme.text},!isCardNumberValidated && styles.errorInput]}
             keyboardType="number-pad"
-            maxLength={19} // 16 digits + 3 spaces if you later format xxxx xxxx xxxx xxxx
+            maxLength={16} // 16 digits + 3 spaces if you later format xxxx xxxx xxxx xxxx
           />
         </View>
 
@@ -377,5 +399,10 @@ const styles = StyleSheet.create({
   supportedPaymentsWrapper: {
     flexDirection: "column",
     gap: 10,
+  },
+    errorInput: {
+    borderColor: "#e24646ff",
+    borderWidth: 1,
+    borderRadius: 10,
   },
 });

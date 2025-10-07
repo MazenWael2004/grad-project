@@ -66,7 +66,7 @@ const PaymentMethods = () => {
       {!isPaymentMethodExists ? (
         <View style={styles.noPaymentAddedContainer}>
           <Image
-            source={require("../../assets/images/payment-method.png")}
+            source={require("../../assets/images/add-payment.png")}
             style={{
               width: 160,
               height: 160,
