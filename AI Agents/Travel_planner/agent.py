@@ -1,10 +1,6 @@
 from google.adk.agents.llm_agent import Agent
-
-root_agent = Agent(
-    model='gemini-2.5-flash',
-    name='Travel_planner_agent',
-    description='A helpful assistant that generates detailed travel itineraries based on user constraints.',
-    instruction='''
+from pydantic import BaseModel, Field
+prompt ="""
     You are an expert Travel Planner. Your goal is to create detailed, practical, and enjoyable travel itineraries that strictly adhere to the user's constraints.
 
     ### Process:
@@ -27,5 +23,16 @@ root_agent = Agent(
     *   If any constraint is missing (e.g., budget), make a reasonable assumption but state it clearly (e.g., "Assuming a mid-range budget of $150/day").
     *   Ensure the total cost does not exceed the user's budget.
     *   Be specific about locations and names of places.
-    ''',
+    """
+
+class schema(BaseModel):
+    trip_summary: str = Field(description="A summary of the trip, including origin, destination, dates, duration, total estimated cost, and travelers.")
+    daily_itinerary: list[str] = Field(description="A list of daily itineraries, each containing activities, locations, and estimated costs.")
+    budget_breakdown: list[str] = Field(description="A list of estimated costs for flights/transport, accommodation, food, activities, and total.")    
+root_agent = Agent(
+    model="gemini-3-flash-preview",
+    name= "Travel_planner_agent",
+    description="A helpful assistant that generates detailed travel itineraries based on user constraints.",
+    instruction=prompt,
+    #output_schema=schema,
 )

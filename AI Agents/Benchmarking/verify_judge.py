@@ -26,8 +26,6 @@ def verify_judge():
     # test 1: Pass case (using the reference annotated_plan)
     print("--- Test Case 1: Expecting Pass ---")
     
-    # The dataset seems to have a 'train' column containing stringified dicts
-    # or just one column. Let's inspect/try parsing.
     first_col = df.columns[0]
     raw_data = df.iloc[0][first_col]
     

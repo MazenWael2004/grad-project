@@ -32,7 +32,7 @@ judge_agent = Agent(
     - "pass": boolean (true if all constraints are met, false otherwise)
     - "reason": string (a brief explanation of why it passed or failed)
     - "failed_constraints": list of strings (list the specific constraints that were not met, e.g. ["Budget", "Duration"], or empty list if passed)
-    
+    Do not talk about the plan or the query.
     Do not output markdown code blocks, just the JSON string.
     ''',
     output_schema=schema
