@@ -56,14 +56,21 @@ async def main():
                     print(text_chunk, end="", flush=True)
                     
     print("\n" + "-" * 50)
+    print("\n" + "-" * 50)
     print("Verification:")
-    required_keywords = ["Trip Summary", "Daily Itinerary", "Budget Breakdown"]
-    missing = [k for k in required_keywords if k not in response_text]
-    
-    if missing:
-        print(f"FAILED: Missing sections: {missing}")
-    else:
-        print("PASSED: Output contains all required sections.")
+    import json
+    try:
+        data = json.loads(response_text)
+        required_keys = ["trip_summary", "itinerary", "budget_breakdown", "landmarks"]
+        missing = [k for k in required_keys if k not in data]
+        if missing:
+            print(f"FAILED: Missing keys in JSON: {missing}")
+        else:
+            print("PASSED: Output contains all required JSON keys.")
+            print(f"Landmarks count: {len(data.get('landmarks', []))}")
+            print(f"Itinerary days: {len(data.get('itinerary', []))}")
+    except json.JSONDecodeError:
+        print("FAILED: Output is not valid JSON.")
 
 if __name__ == "__main__":
     asyncio.run(main())

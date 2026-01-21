@@ -16,174 +16,174 @@ import { useUserTravelPreferences } from "../contexts/userTravelPreferencesConte
 
 const StartTripQuestions = () => {
   const [progressBar, setProgressBar] = useState(0.25);
-  const [preferenceCount,setPreferenceCount] = useState(0);
+  const [preferenceCount, setPreferenceCount] = useState(0);
   const [selectedPreferences, setSelectedPreferences] = useState([]);
-  const [selectedPartyOption,setSelectedPartyOption] = useState(null);
-  const [selectedBudgetOption,setSelectedBudgetOption] = useState(null);
-  const {theme} = useContext(ThemeContext);
-  const [date,setDate] = useState(null);
-  const {userTravelPreferences,addPartyId,addStartTripDate,addEndTripDate,addInterests,addBudgetId} = useUserTravelPreferences();
+  const [selectedPartyOption, setSelectedPartyOption] = useState(null);
+  const [selectedBudgetOption, setSelectedBudgetOption] = useState(null);
+  const { theme } = useContext(ThemeContext);
+  const [date, setDate] = useState(null);
+  const { userTravelPreferences, addPartyId, addStartTripDate, addEndTripDate, addInterests, addBudgetId } = useUserTravelPreferences();
 
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const minDate = new Date(); // Today
-  const maxDate = new Date(2025,11,31);
+  const maxDate = new Date(2030, 11, 31);
 
   // To step back the progress bar by 0.25 by pressing the back button.
-  const handleBackButton = (progress) =>{
-    setProgressBar((prev)=>prev-0.25);
-    
+  const handleBackButton = (progress) => {
+    setProgressBar((prev) => prev - 0.25);
+
   }
 
-  const handleDateChange = (date,type)=>{
-    if(type === "END_DATE"){
-    setDate((prevDate)=>{
-      return {
-        ...prevDate,
-        selectedEndDate: date
-      };
-    })
-    
+  const handleDateChange = (date, type) => {
+    if (type === "END_DATE") {
+      setDate((prevDate) => {
+        return {
+          ...prevDate,
+          selectedEndDate: date
+        };
+      })
 
-    addEndTripDate(date);
-    
-    
-  }
-  else{
-     setDate((prevDate)=>{
-      return {
-        ...prevDate,
-        selectedStartDate: date
-      };
-    })
 
-    addStartTripDate(date);
-  }
-    
+      addEndTripDate(date);
+
+
+    }
+    else {
+      setDate((prevDate) => {
+        return {
+          ...prevDate,
+          selectedStartDate: date
+        };
+      })
+
+      addStartTripDate(date);
+    }
+
   }
 
   // console.log(date);
 
-   const togglePreference = (id) => {
-  console.log("👉 togglePreference called with id:", id);
+  const togglePreference = (id) => {
+    console.log("👉 togglePreference called with id:", id);
 
-  setSelectedPreferences((prev) => {
-    console.log("   Current prev state:", prev);
+    setSelectedPreferences((prev) => {
+      console.log("   Current prev state:", prev);
 
-    if (prev.includes(id)) {
-      console.log("   ✅ Preference exists. Removing:", id);
+      if (prev.includes(id)) {
+        console.log("   ✅ Preference exists. Removing:", id);
 
-      setPreferenceCount((prevCount) => {
-        console.log("   Decrementing count:", prevCount, "->", prevCount - 1);
-        return prevCount - 1;
-      });
+        setPreferenceCount((prevCount) => {
+          console.log("   Decrementing count:", prevCount, "->", prevCount - 1);
+          return prevCount - 1;
+        });
 
-      const updated = prev.filter((p) => p !== id);
-      console.log("   Updated preferences after removal:", updated);
+        const updated = prev.filter((p) => p !== id);
+        console.log("   Updated preferences after removal:", updated);
 
-      addInterests(updated);
-      return updated;
-    } else {
-      if (preferenceCount >= 5) {
-        console.log("   ⚠️ Limit reached (5). Cannot add:", id);
-        addInterests(prev);
-        return prev;
+        addInterests(updated);
+        return updated;
+      } else {
+        if (preferenceCount >= 5) {
+          console.log("   ⚠️ Limit reached (5). Cannot add:", id);
+          addInterests(prev);
+          return prev;
+        }
+
+        setPreferenceCount((prevCount) => {
+          console.log("   Incrementing count:", prevCount, "->", prevCount + 1);
+          return prevCount + 1;
+        });
+
+        const updated = [...prev, id]; // 👀 you are adding id+1, not id
+        console.log("   ✅ Adding new preference:", id, "=>", id + 1);
+        console.log("   Updated preferences after addition:", updated);
+
+        addInterests(updated);
+        return updated;
       }
+    });
+  };
 
-      setPreferenceCount((prevCount) => {
-        console.log("   Incrementing count:", prevCount, "->", prevCount + 1);
-        return prevCount + 1;
-      });
+  const togglePartyOption = (id) => {
+    setSelectedPartyOption((prevOption) => {
+      addPartyId(id);
+      return prevOption === id ? null : id;
 
-      const updated = [...prev, id]; // 👀 you are adding id+1, not id
-      console.log("   ✅ Adding new preference:", id, "=>", id + 1);
-      console.log("   Updated preferences after addition:", updated);
 
-      addInterests(updated);
-      return updated;
+    });
+
+    console.log("ID: " + id);
+  };
+
+  const toggleBudgetOption = (id) => {
+    setSelectedBudgetOption((prevOption) => {
+      addBudgetId(id);
+      return prevOption === id ? null : id;
+    });
+
+    console.log("ID: " + id);
+  };
+
+  const handleContinueButton = () => {
+    // Handle Party Options Validation
+    if (progressBar === 0.25) {
+      if (!selectedPartyOption) {
+        console.log("You must select an option!");
+        return;
+      }
+      else {
+        setProgressBar((prev) => prev + 0.25);
+      }
     }
-  });
-};
+    // Handle Trip Date Validation
+    else if (progressBar === 0.5) {
+      if (!date) {
+        console.log("You must pick both start and end dates!")
+        return;
+      }
+      if (date.selectedEndDate === undefined || date.selectedEndDate === null) {
+        console.log("Where is the end date broo!!!!!");
+        return;
+      }
+      console.log(date.selectedEndDate)
+      setProgressBar((prev) => prev + 0.25);
 
-const togglePartyOption = (id) => {
-  setSelectedPartyOption((prevOption) => {
-    addPartyId(id);
-    return prevOption === id ? null : id;
+    }
+    // Handle Interets Options
+    else if (progressBar === 0.75) {
+      if (selectedPreferences.length === 0) {
+        console.log("You must select an option!");
+        return;
+      }
+      else {
+        setProgressBar((prev) => prev + 0.25);
+      }
+    }
+    else if (progressBar === 1) {
+      if (!selectedBudgetOption) {
+        console.log("You must select an option!");
+        return;
+      }
+      else {
+        router.push('startTripQuestions/reviewSummary')
+      }
+    }
 
+    // console.log(userTravelPreferences);
+    // console.log(date);
 
-  });
-
-  console.log("ID: "+id);
-};
-
-const toggleBudgetOption = (id) => {
-  setSelectedBudgetOption((prevOption) => {
-    addBudgetId(id);
-    return prevOption === id ? null : id;
-  });
-
-  console.log("ID: "+id);
-};
-
-const handleContinueButton = ()=>{
-  // Handle Party Options Validation
-  if(progressBar === 0.25){
-    if(!selectedPartyOption) {
-    console.log("You must select an option!");
-    return;
   }
-  else{
-   setProgressBar((prev) => prev + 0.25);
-  }
-  }
-  // Handle Trip Date Validation
-  else if(progressBar === 0.5){
-    if(!date){
-      console.log("You must pick both start and end dates!")
-      return;
-    }
-    if(date.selectedEndDate === undefined || date.selectedEndDate === null ){
-      console.log("Where is the end date broo!!!!!");
-      return;
-    }
-    console.log(date.selectedEndDate)
-    setProgressBar((prev) => prev + 0.25);
-    
-  }
-  // Handle Interets Options
-  else if(progressBar === 0.75){
-    if(selectedPreferences.length === 0){
-       console.log("You must select an option!");
-       return;
-    }
-    else{
-       setProgressBar((prev) => prev + 0.25);
-    }
-  }
-  else if(progressBar === 1){
-    if(!selectedBudgetOption){
-      console.log("You must select an option!");
-       return;
-    }
-    else{
-      router.push('startTripQuestions/reviewSummary')
-    }
-  }
-
-  // console.log(userTravelPreferences);
-  // console.log(date);
- 
-}
 
   // Everytime the progress bar is changed,check if reached to 0 that way we go to the previous screen,
-  useEffect(()=>{
-    if(progressBar === 0){
+  useEffect(() => {
+    if (progressBar === 0) {
       router.back();
     }
 
-    if(progressBar === 1.25){
+    if (progressBar === 1.25) {
       router.push("startTripQuestions/reviewSummary");
     }
-  },[progressBar])
+  }, [progressBar])
 
 
   const getStepContent = (progressBar) => {
@@ -192,9 +192,9 @@ const handleContinueButton = ()=>{
         title: "Who is going? 🧳",
         description:
           "Let's start with the basics. Who's joining you on this adventure?",
-        content:partyOptions.map((option,index)=>{
+        content: partyOptions.map((option, index) => {
           return (
-            <PartyItem key={index} title={option.title} description={option.description} onPress={()=>{togglePartyOption(index+1)}} isSelected={selectedPartyOption===index+1?true:false}  />
+            <PartyItem key={index} title={option.title} description={option.description} onPress={() => { togglePartyOption(index + 1) }} isSelected={selectedPartyOption === index + 1 ? true : false} />
           )
         })
       };
@@ -203,63 +203,63 @@ const handleContinueButton = ()=>{
         title: "When will your adventure begin and end? 📅",
         description:
           "Choose the dates for your trip. This helps us plan the perfect itinerary for your travel period.",
-        content:(
+        content: (
           <CalendarPicker
-          textStyle={{color:currentTheme.text,fontFamily:"Poppins-Medium"}}
-          todayBackgroundColor={currentTheme.searchBackground}
-          todayTextStyle={{color:currentTheme.text}}
-          minDate={minDate}
-          maxDate={maxDate}
-          onDateChange={handleDateChange}
-          selectedDayStyle={{backgroundColor:"#6fc276",padding:20}}
-          allowRangeSelection={true}
-          monthTitleStyle={{fontFamily:"Poppins-SemiBold"}}
-          yearTitleStyle={{fontFamily:"Poppins-SemiBold"}}
-          selectedRangeStartStyle={{backgroundColor:"#5bcc65ff",}}
-          selectedRangeEndStyle={{backgroundColor:"#5bcc65ff",}}
-          selectedRangeStyle={{backgroundColor:"#5bcc65ff",}}
-          selectedRangeStartTextStyle={{color:"white"}}
-          selectedRangeEndTextStyle={{color:"white"}}
-          selectedRangeTextStyle={{color:"white"}}
-  
-          
- customDayHeaderStyles={() => ({
-    textStyle: {        
-      fontFamily: 'Poppins-SemiBold',
-      fontSize: 12,
-      letterSpacing: 0.3,
-      textTransform: 'uppercase',
-    },
-  })}
+            textStyle={{ color: currentTheme.text, fontFamily: "Poppins-Medium" }}
+            todayBackgroundColor={currentTheme.searchBackground}
+            todayTextStyle={{ color: currentTheme.text }}
+            minDate={minDate}
+            maxDate={maxDate}
+            onDateChange={handleDateChange}
+            selectedDayStyle={{ backgroundColor: "#6fc276", padding: 20 }}
+            allowRangeSelection={true}
+            monthTitleStyle={{ fontFamily: "Poppins-SemiBold" }}
+            yearTitleStyle={{ fontFamily: "Poppins-SemiBold" }}
+            selectedRangeStartStyle={{ backgroundColor: "#5bcc65ff", }}
+            selectedRangeEndStyle={{ backgroundColor: "#5bcc65ff", }}
+            selectedRangeStyle={{ backgroundColor: "#5bcc65ff", }}
+            selectedRangeStartTextStyle={{ color: "white" }}
+            selectedRangeEndTextStyle={{ color: "white" }}
+            selectedRangeTextStyle={{ color: "white" }}
 
-           />
+
+            customDayHeaderStyles={() => ({
+              textStyle: {
+                fontFamily: 'Poppins-SemiBold',
+                fontSize: 12,
+                letterSpacing: 0.3,
+                textTransform: 'uppercase',
+              },
+            })}
+
+          />
         )
       };
-    if (progressBar === 0.75) 
-      return { 
-    title:"Tailor your trip to your tastes ✨",
-    description:"Select your interests and preferences to make your trip truly yours.",
-    content:(
-       <View style={styles.preferencesContainer}>
-      {preferences.map((item,index)=>{
-        return(
-          <PreferenceItem key = {index} title={item.title} isSelected={selectedPreferences.includes(index)}
-      onPress={() => togglePreference(index)} /> 
-        );
-      })}
-      </View>
-    )
+    if (progressBar === 0.75)
+      return {
+        title: "Tailor your trip to your tastes ✨",
+        description: "Select your interests and preferences to make your trip truly yours.",
+        content: (
+          <View style={styles.preferencesContainer}>
+            {preferences.map((item, index) => {
+              return (
+                <PreferenceItem key={index} title={item.title} isSelected={selectedPreferences.includes(index)}
+                  onPress={() => togglePreference(index)} />
+              );
+            })}
+          </View>
+        )
       };
     if (progressBar === 1)
-      return{
-       title:"Set your trip budget 💰",
-       description:"Let us know your budget preference and we'll craft an itinerary that suits your financial confort.",
-       content:budgetOptions.map((option,index)=>{
+      return {
+        title: "Set your trip budget 💰",
+        description: "Let us know your budget preference and we'll craft an itinerary that suits your financial confort.",
+        content: budgetOptions.map((option, index) => {
           return (
-            <BudgetItem key={index} title={option.title} description={option.description} onPress={()=>{toggleBudgetOption(index+1)}} isSelected={selectedBudgetOption===index+1?true:false}  />
+            <BudgetItem key={index} title={option.title} description={option.description} onPress={() => { toggleBudgetOption(index + 1) }} isSelected={selectedBudgetOption === index + 1 ? true : false} />
           )
         })
-    };
+      };
     return "";
   };
   return (
@@ -268,7 +268,7 @@ const handleContinueButton = ()=>{
     >
       <View style={styles.backAndProgressBarWrapper}>
         {/* Back Button */}
-        <TouchableOpacity onPress={()=>handleBackButton(progressBar)}>
+        <TouchableOpacity onPress={() => handleBackButton(progressBar)}>
           <Image
             source={require("../../assets/images/back.png")}
             style={{ width: 30, height: 30, tintColor: currentTheme.iconColor }}
@@ -355,11 +355,11 @@ const styles = StyleSheet.create({
   progressBar: {
     marginLeft: 30,
   },
-   preferencesContainer:{
-    flexDirection:"row",
-    gap:14,
-    marginTop:10,
-    height:"auto",
-     flexWrap: "wrap",   
+  preferencesContainer: {
+    flexDirection: "row",
+    gap: 14,
+    marginTop: 10,
+    height: "auto",
+    flexWrap: "wrap",
   },
 });

@@ -8,35 +8,75 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { AirbnbRating } from "react-native-ratings";
-import MapView, { PROVIDER_GOOGLE,Marker } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { useItinerary } from "../contexts/itineraryContext";
 import governorates from "../../constants/governorates";
 import { landmarks } from '../../constants/landmarks';
 
 const ItineraryDetails = () => {
-  const {itineraryItems} = useItinerary();
+  const { itineraryItems } = useItinerary();
   const { itineraryId } = useLocalSearchParams();
   const { theme } = useContext(ThemeContext);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
-  const itineraryItem = itineraryItems.find((item)=>{
-    return item.id === Number(itineraryId);
-  })
-  
-  const governorate = governorates.find((item)=>{
-    return item.id === itineraryItem.governorate_id;
-  })
-  console.log(itineraryItem);
+  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
-  const handleRating = (rating) => {
-    console.log("User rating:", rating);
+  const itineraryItem = itineraryItems.find((item) => item.id === Number(itineraryId));
+
+  // Handle case where governorateId might be in userPreferences (if API failed and we only have initial data)
+  const govId = itineraryItem?.governorateId || itineraryItem?.userPreferences?.governorateId;
+  const governorate = governorates.find((item) => item.id === govId);
+
+
+
+
+  // Fallback data (Hardcoded values from previous version)
+  const fallbackDetails = {
+    trip_name: governorate?.name || "Trip Details",
+    trip_dates: "Dec 12 - Dec 14, 2025",
+    travelers_type: "Couple",
+    luxury_level: "Luxury",
+    landmarks: landmarks, // Imported from constants
+    itinerary: [
+      {
+        day: "December 1",
+        activities: [
+          {
+            title: "Pharaonic Village",
+            description: "A living museum of Ancient Egyptian life.",
+            rating: 4.0,
+            reviews_count: 938,
+            time: "08:00 AM - 3:00 PM",
+            cost: "EGP 300",
+            google_maps_url: "https://maps.google.com"
+          }
+        ]
+      },
+      { day: "December 2", activities: [] },
+      { day: "December 3", activities: [] },
+      { day: "December 4", activities: [] },
+    ]
   };
 
-  const handleRegionChange = (region) =>{
-    console.log(region);
+  // Merge dynamic data with fallback, preferring dynamic if available
+  const displayData = {
+    trip_name: itineraryItem?.trip_name || fallbackDetails.trip_name,
+    trip_dates: itineraryItem?.trip_dates || fallbackDetails.trip_dates,
+    travelers_type: itineraryItem?.travelers_type || fallbackDetails.travelers_type,
+    luxury_level: itineraryItem?.luxury_level || fallbackDetails.luxury_level,
+    landmarks: (itineraryItem?.landmarks && itineraryItem.landmarks.length > 0) ? itineraryItem.landmarks : fallbackDetails.landmarks,
+    itinerary: (itineraryItem?.itinerary && itineraryItem.itinerary.length > 0) ? itineraryItem.itinerary : fallbackDetails.itinerary
+  };
+
+  if (!itineraryItem) return <View><Text>Loading...</Text></View>;
+
+  const currentDayPlan = displayData.itinerary[selectedDayIndex];
+
+  const handleRegionChange = (region) => {
+    // console.log(region);
   }
 
   return (
@@ -48,19 +88,19 @@ const ItineraryDetails = () => {
         contentContainerStyle={{ paddingBottom: 30 }}
       >
         <ImageBackground
-          source={governorate.image1}
+          source={governorate?.image1 || require("../../assets/images/cairo4.jpg")} // Ensure you have a fallback if governorate is null
           style={styles.background}
         >
           <View style={styles.backAndSaveButtonWrapper}>
             <TouchableOpacity
-              style={[styles.button,{backgroundColor:currentTheme.background}]}
+              style={[styles.button, { backgroundColor: currentTheme.background }]}
               onPress={() => {
                 router.back();
               }}
             >
               <Image
                 source={require("../../assets/images/back.png")}
-                style={{ width: 30, height: 30,tintColor:currentTheme.iconColor }}
+                style={{ width: 30, height: 30, tintColor: currentTheme.iconColor }}
               />
             </TouchableOpacity>
 
@@ -81,7 +121,7 @@ const ItineraryDetails = () => {
         <View style={styles.tripDescriptionWrapper}>
           <View style={styles.introductoryWrapper}>
             <Text style={[styles.tripNameStyle, { color: currentTheme.text }]}>
-              {governorate.name}
+              {displayData.trip_name}
             </Text>
             <View style={styles.locationRow}>
               <Text
@@ -90,7 +130,7 @@ const ItineraryDetails = () => {
                   { color: currentTheme.description },
                 ]}
               >
-                Dec 12 - Dec 14, 2025 . A Couple . Luxury
+                {displayData.trip_dates} . {displayData.travelers_type} . {displayData.luxury_level}
               </Text>
             </View>
           </View>
@@ -107,11 +147,10 @@ const ItineraryDetails = () => {
               marginBottom: 15,
             }}
             initialRegion={{
-              latitude: 30.06699114837697,
-              longitude: 31.293998254151173,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.1,
-              // 30.06699114837697, 31.293998254151173
+              latitude: displayData.landmarks?.[0]?.coordinate?.latitude || 30.0444,
+              longitude: displayData.landmarks?.[0]?.coordinate?.longitude || 31.2357,
+              latitudeDelta: 0.5,
+              longitudeDelta: 0.5,
             }}
             showsUserLocation
             showsMyLocationButton
@@ -119,17 +158,17 @@ const ItineraryDetails = () => {
             onRegionChange={handleRegionChange}
           >
 
-            
-{landmarks.map(({ id, title, description, coordinate, color }) => (
-          <Marker
-            key={id}
-            identifier={id}
-            coordinate={coordinate}
-            title={title}
-            description={description}
-            pinColor={color}
-          />
-        ))}
+
+            {(displayData.landmarks || []).map(({ id, title, description, coordinate, color }, index) => (
+              <Marker
+                key={id || index}
+                identifier={id}
+                coordinate={coordinate}
+                title={title}
+                description={description}
+                pinColor={color}
+              />
+            ))}
 
           </MapView>
         </View>
@@ -144,82 +183,28 @@ const ItineraryDetails = () => {
             marginTop: 20,
           }}
         >
-          {/* Each day card */}
-          <TouchableOpacity
-            style={{
-              borderRadius: 30,
-              backgroundColor: currentTheme.searchBackground,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}
-          >
-            <Text
+          {displayData.itinerary.map((dayPlan, index) => (
+            <TouchableOpacity
+              key={index}
               style={{
-                fontFamily: "Poppins-Medium",
-                fontSize: 13,
-                color: currentTheme.text,
+                borderRadius: 30,
+                backgroundColor: selectedDayIndex === index ? "#D4AF37" : currentTheme.searchBackground,
+                paddingHorizontal: 20,
+                paddingVertical: 10,
               }}
+              onPress={() => setSelectedDayIndex(index)}
             >
-              December 1
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              borderRadius: 30,
-              backgroundColor: currentTheme.searchBackground,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Poppins-Medium",
-                fontSize: 13,
-                color: currentTheme.text,
-              }}
-            >
-              December 2
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              borderRadius: 30,
-              backgroundColor: currentTheme.searchBackground,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Poppins-Medium",
-                fontSize: 13,
-                color: currentTheme.text,
-              }}
-            >
-              December 3
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              borderRadius: 30,
-              backgroundColor: currentTheme.searchBackground,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Poppins-Medium",
-                fontSize: 13,
-                color: currentTheme.text,
-              }}
-            >
-              December 4
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  fontFamily: "Poppins-Medium",
+                  fontSize: 13,
+                  color: selectedDayIndex === index ? "#FFF" : currentTheme.text,
+                }}
+              >
+                {dayPlan.day.split(":")[0] || `Day ${index + 1}`}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
         {/* Recommended Places To Visit */}
         <ScrollView
@@ -233,135 +218,128 @@ const ItineraryDetails = () => {
             paddingBottom: 100,
           }}
         >
-          <View style={[styles.placeItem,{backgroundColor:currentTheme.searchBackground}]}>
-            <Image
-              source={require("../../assets/images/Pharaonic-Village.webp")}
-              style={{
-                width: "100%",
-                height: 200,
-                borderTopRightRadius: 10,
-                borderTopLeftRadius: 10,
-                resizeMode: "cover",
-              }}
-            />
-            <View style={styles.placeDescription}>
-              <Text style={[styles.placeTitle, { color: currentTheme.text }]}>
-                Pharaonic Vilage
+          {currentDayPlan ? (
+            <>
+              <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 18, color: currentTheme.text, marginBottom: 15 }}>
+                {currentDayPlan.day}
               </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  gap: 10,
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <Image
-                  source={require("../../assets/images/review.png")}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    tintColor: currentTheme.iconColor,
-                  }}
-                />
-                <Text
-                  style={{
-                    fontFamily: "Poppins-Regular",
-                    color: currentTheme.description,
-                    marginTop: 10,
-                  }}
-                >
-                  (4.0) 938 reviews
-                </Text>
-              </View>
-              <View
-                style={{
-                  borderWidth: 0.2,
-                  borderColor: currentTheme.description,
-                  width: "100%",
-                  marginBottom: 10,
-                }}
-              ></View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  gap: 10,
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <Image
-                  source={require("../../assets/images/clock.png")}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    tintColor: currentTheme.iconColor,
-                  }}
-                />
-                <Text
-                  style={{
-                    fontFamily: "Poppins-Medium",
-                    fontSize: 14,
-                    color: currentTheme.text,
-                    marginTop: 10,
-                  }}
-                >
-                  08:00 AM - 3:00 PM
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  gap: 10,
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <Image
-                  source={require("../../assets/images/pound.png")}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    tintColor: currentTheme.iconColor,
-                  }}
-                />
-                <Text
-                  style={{
-                    fontFamily: "Poppins-Medium",
-                    fontSize: 14,
-                    color: currentTheme.text,
-                    marginTop: 10,
-                  }}
-                >
-                  EGP 300
-                </Text>
-              </View>
 
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  gap: 10,
-                  alignItems: "center",
-                  marginBottom: 10,
-                }}
-              >
-                <Image
-                  source={require("../../assets/images/location.png")}
-                  style={{ width: 20, height: 20, tintColor: "#D4AF37" }}
-                />
-                <Text
-                  style={{
-                    fontFamily: "Poppins-Medium",
-                    fontSize: 14,
-                    color: "#D4AF37",
-                    marginTop: 10,
-                  }}
-                >
-                  View on Google Maps
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+              {currentDayPlan.activities.map((activity, index) => (
+                <View key={index} style={[styles.placeItem, { backgroundColor: currentTheme.searchBackground, marginBottom: 20 }]}>
+                  <Image
+                    source={require("../../assets/images/Pharaonic-Village.webp")}
+                    style={{
+                      width: "100%",
+                      height: 200,
+                      borderTopRightRadius: 10,
+                      borderTopLeftRadius: 10,
+                      resizeMode: "cover",
+                    }}
+                  />
+                  <View style={styles.placeDescription}>
+                    <Text style={[styles.placeTitle, { color: currentTheme.text }]}>
+                      {activity.title}
+                    </Text>
+
+                    <Text style={{ fontFamily: "Poppins-Regular", fontSize: 13, color: currentTheme.description, marginBottom: 10 }}>
+                      {activity.description}
+                    </Text>
+
+                    <View style={styles.infoRow}>
+                      <Image
+                        source={require("../../assets/images/review.png")}
+                        style={{
+                          width: 30,
+                          height: 30,
+                          tintColor: currentTheme.iconColor,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontFamily: "Poppins-Regular",
+                          color: currentTheme.description,
+                          marginTop: 10,
+                        }}
+                      >
+                        {activity.rating} ({activity.reviews_count} reviews)
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        borderWidth: 0.2,
+                        borderColor: currentTheme.description,
+                        width: "100%",
+                        marginBottom: 10,
+                      }}
+                    ></View>
+                    <View style={styles.infoRow}>
+                      <Image
+                        source={require("../../assets/images/clock.png")}
+                        style={{
+                          width: 25,
+                          height: 25,
+                          tintColor: currentTheme.iconColor,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontFamily: "Poppins-Medium",
+                          fontSize: 14,
+                          color: currentTheme.text,
+                          marginTop: 10,
+                        }}
+                      >
+                        {activity.time}
+                      </Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                      <Image
+                        source={require("../../assets/images/pound.png")}
+                        style={{
+                          width: 25,
+                          height: 25,
+                          tintColor: currentTheme.iconColor,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontFamily: "Poppins-Medium",
+                          fontSize: 14,
+                          color: currentTheme.text,
+                          marginTop: 10,
+                        }}
+                      >
+                        {activity.cost}
+                      </Text>
+                    </View>
+
+                    {activity.google_maps_url && (
+                      <TouchableOpacity style={styles.infoRow}>
+                        <Image
+                          source={require("../../assets/images/location.png")}
+                          style={{ width: 20, height: 20, tintColor: "#D4AF37" }}
+                        />
+                        <Text
+                          style={{
+                            fontFamily: "Poppins-Medium",
+                            fontSize: 14,
+                            color: "#D4AF37",
+                            marginTop: 10,
+                          }}
+                        >
+                          View on Google Maps
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
+              ))}
+            </>
+          ) : (
+            <Text style={{ color: currentTheme.description, textAlign: 'center', marginTop: 20 }}>
+              No itinerary details available.
+            </Text>
+          )}
         </ScrollView>
       </ScrollView>
       {/* <View
@@ -483,5 +461,20 @@ const styles = StyleSheet.create({
   placeTitle: {
     fontFamily: "Poppins-Bold",
     fontSize: 16,
+  },
+  infoRow: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  icon: {
+    width: 25,
+    height: 25,
+  },
+  infoText: {
+    fontFamily: "Poppins-Medium",
+    fontSize: 14,
+    marginTop: 10,
   },
 });
