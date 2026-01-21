@@ -6,7 +6,7 @@ class schema(BaseModel):
     failed_constraints: list[str] = Field(description="List of specific constraints that were not met.")
 
 judge_agent = Agent(
-    model='gemini-2.5-flash',
+    model='gemini-3-flash-preview',
     name='judge_agent',
     description='An agent that evaluates travel plans against user queries.',
     instruction='''
@@ -15,7 +15,7 @@ judge_agent = Agent(
     
     You will be given:
     1. A User Query (containing requirements like Origin, Destination, Budget, Duration, etc.)
-    2. A Travel Plan (text or structured output)
+    2. A Travel Plan (a structured JSON object containing 'itinerary', 'landmarks', 'trip_summary', etc.)
     
     You must extract the following constraints from the Query:
     - Origin City
@@ -26,6 +26,10 @@ judge_agent = Agent(
     - Dates
     
     Then, check if the Plan satisfies ALL these constraints.
+    Parsing the plan:
+    - Look at 'trip_summary' for high-level details.
+    - Check 'budget_breakdown' and individual activity costs for budget compliance.
+    - Check 'trip_dates' and 'itinerary' length for duration compliance.
     
     Output Format:
     Return a JSON object with the following fields:

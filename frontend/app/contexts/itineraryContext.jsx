@@ -11,7 +11,7 @@ export const ItineraryProvider = ({ children }) => {
         ...prev,
         {
           id: prev.length + 1,
-          governorate_id:item.governorateId,
+          governorate_id: item.governorateId,
           userPreferences: item.userPreferences,
           // place_to_visit_id:
         },
@@ -19,12 +19,23 @@ export const ItineraryProvider = ({ children }) => {
     });
   };
 
+  const updateItineraryItem = (id, updatedData) => {
+    setItineraryItems((prev) => {
+      return prev.map((item) => {
+        if (item.id === id) {
+          return { ...item, ...updatedData };
+        }
+        return item;
+      });
+    });
+  };
+
   return (
-    <ItineraryContext.Provider value={{ itineraryItems, addToItineraryList }}>
+    <ItineraryContext.Provider value={{ itineraryItems, addToItineraryList, updateItineraryItem }}>
       {children}
     </ItineraryContext.Provider>
   );
 };
 
 
-export const useItinerary = ()=> useContext(ItineraryContext);
+export const useItinerary = () => useContext(ItineraryContext);
