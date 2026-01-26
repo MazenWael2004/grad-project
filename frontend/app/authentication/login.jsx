@@ -9,13 +9,38 @@ import {
 import React, { use, useState } from "react";
 import { hide } from "expo-splash-screen";
 import {useRouter} from "expo-router";
+import { Alert } from "react-native";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
-  const [isPasswordCorrect,setIsPasswordCorrect] = useState(false);
+  const [isPasswordCorrect,setIsPasswordCorrect] = useState(true);
   const router = useRouter();
+
+  const handleEmailChange = (text)=>{
+    setEmail(text);
+  }
+
+  const handlePasswordChange = (text)=>{
+    setPassword(text);
+  }
+
+  const handleLogin = () => {
+   if(!email || !password){
+    Alert.alert("Please Input Required Fields.")
+    return;
+   } 
+   // Email Validation
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   if(!emailRegex.test(email)){
+     Alert.alert("Invalid Email")
+     return;
+   } 
+
+  router.push('/main')
+
+  };
   return (
     <View
       style={{
@@ -48,7 +73,9 @@ const Login = () => {
             E-mail
           </Text>
           <TextInput
+            
             placeholder="Enter your email"
+            onChangeText={handleEmailChange}
             style={{
               height: 50,
               borderColor: "#ccc",
@@ -73,6 +100,7 @@ const Login = () => {
           <View>
             <TextInput
               placeholder="Enter your password"
+              onChangeText={handlePasswordChange}
               style={
                 [{
                 height: 50,
@@ -138,9 +166,7 @@ const Login = () => {
             borderRadius: 25,
             alignItems: "center",
           }}
-          onPress={() => {
-            router.push("main");
-          }}
+          onPress={handleLogin}
         >
           <Text
             style={{
