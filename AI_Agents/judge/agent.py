@@ -1,10 +1,6 @@
 from google.adk.agents.llm_agent import Agent
 from pydantic import BaseModel, Field  
-class schema(BaseModel):
-    passed: bool = Field(description="Whether the travel plan satisfies all constraints.")
-    reason: str = Field(description="A brief explanation of why it passed or failed.")
-    failed_constraints: list[str] = Field(description="List of specific constraints that were not met.")
-
+from AI_Agents.schemas import criterion
 judge_agent = Agent(
     model='gemini-3-flash-preview',
     name='judge_agent',
@@ -39,5 +35,5 @@ judge_agent = Agent(
     Do not talk about the plan or the query.
     Do not output markdown code blocks, just the JSON string.
     ''',
-    output_schema=schema
+    output_schema=criterion
 )
