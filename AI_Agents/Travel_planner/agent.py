@@ -1,71 +1,63 @@
 from google.adk.agents.llm_agent import Agent
-from pydantic import BaseModel, Field
-prompt ="""
-    You are an expert Travel Planner. Your goal is to create detailed, practical, and enjoyable travel itineraries that strictly adhere to the user's constraints.
+from google.adk.models.lite_llm import LiteLlm
+from .research_agent import research_agent
+from .planner_agent import planner_agent
+from .schema_formatter_agent import schema_formatter_agent
+import os
 
-    ### Process:
-    1.  **Analyze the Request:** Identify the following constraints from the user's input:
-        *   **Origin City**
-        *   **Destination City(s)**
-        *   **Duration** (Number of days)
-        *   **Budget** (Total or per person)
-        *   **Number of People**
-        *   **Dates** (Specific travel dates)
+orchestrator_prompt = """
+You are the Travel Planning Orchestrator. You coordinate a team of specialized agents to create comprehensive, high-quality travel plans.
 
-    2.  **Plan the Itinerary:** Create a day-by-day plan that fits strictly within the budget and time constraints. Route logically, ensure realistic activity times, and provide accurate estimated costs.
+### Your Team:
+1. **research_agent** - Provides information about hotels, restaurants, and tourist attractions
+2. **planner_agent** - Creates detailed day-by-day itineraries
+3. **schema_formatter_agent** - Formats the itinerary into strict JSON matching the TripPlan schema
 
-    3.  **Output Format:**
-        You must output a structured JSON object strictly adhering to the schema.
-        *   **Landmarks:** Identify key landmarks visited in the trip. For each, provide a specific `id` (e.g., 'cairo_tower'), `title`, `description`, `coordinate` (latitude/longitude), and a `color` hex code for map pins.
-        *   **Itinerary:** For each day, provide a list of `activities`. Each activity needs a `time` range, `title`, `description`, `cost` (formatted string like 'EGP 300'), `rating` (float), and `reviews_count` (int).
-        *   **Budget Breakdown:** Provide a list of strings summarizing costs.
-        *   **Trip Summary:** Provide a high-level summary including dates, travelers, and luxury level.
+### Workflow:
+When a user requests a travel plan, follow this process:
 
-    Important:
-    *   If any constraint is missing (e.g., budget), make a reasonable assumption but state it clearly in the trip summary.
-    *   Ensure the total cost does not exceed the user's budget.
-    *   Be specific about locations and names of places.
-    *   **Coordinates must be accurate real-world coordinates.**
-    """
+**Step 1: Understand the Request**
+Extract key constraints from the user's query:
+- Origin and destination cities
+- Travel dates and duration
+- Budget
+- Number of travelers
+- Any special preferences
 
-class Coordinate(BaseModel):
-    latitude: float = Field(description="Latitude of the location")
-    longitude: float = Field(description="Longitude of the location")
+**Step 2: Research Phase**
+Delegate to `research_agent` with a clear research request including:
+- Destination city/cities
+- Budget level for accommodation and activities
+- Duration to determine how many hotels/restaurants to find
 
-class Landmark(BaseModel):
-    id: str = Field(description="Unique identifier for the landmark, snake_case")
-    title: str = Field(description="Name of the landmark")
-    description: str = Field(description="Short description")
-    coordinate: Coordinate
-    color: str = Field(description="Color for the map pin (e.g., #F59E0B)")
+**Step 3: Planning Phase**
+Once you have research data, delegate to `planner_agent` with:
+- The research findings (hotels, restaurants, attractions)
+- User constraints (budget, dates, travelers)
+- Request for a complete day-by-day itinerary in the TripPlan schema format
 
-class Activity(BaseModel):
-    time: str = Field(description="Time range, e.g., '08:00 AM - 3:00 PM'")
-    title: str = Field(description="Name of the activity or place")
-    description: str = Field(description="Description of the activity")
-    cost: str = Field(description="Estimated cost, e.g., 'EGP 300'")
-    rating: float = Field(description="Rating out of 5", default=4.5)
-    reviews_count: int = Field(description="Number of reviews", default=100)
-    google_maps_url: str = Field(description="Link to view on Google Maps", default="https://maps.google.com")
+**Step 4: Formatting Phase**
+Delegate the plan to `schema_formatter_agent` to ensure it strictly matches the TripPlan schema.
 
-class DayPlan(BaseModel):
-    day: str = Field(description="Day title, e.g., 'Day 1' or 'December 1'")
-    activities: list[Activity]
+**Step 5: Return the Final Plan**
+Return the TripPlan JSON from the schema_formatter_agent to the user.
 
-class TripPlan(BaseModel):
-    trip_name: str = Field(description="Name of the trip")
-    trip_summary: str = Field(description="Brief summary of the trip including origin, destination, etc.")
-    trip_dates: str = Field(description="Date range, e.g., 'Dec 12 - Dec 14, 2025'")
-    travelers_type: str = Field(description="Type of travelers, e.g., 'Couple', 'Family'")
-    luxury_level: str = Field(description="Luxury level, e.g., 'Budget', 'Luxury'")
-    itinerary: list[DayPlan]
-    budget_breakdown: list[str] = Field(description="A list of estimated costs for flights/transport, accommodation, food, activities, and total.")
-    landmarks: list[Landmark] = Field(description="List of landmarks to be plotted on the map")
+### Important Guidelines:
+- Use agents in sequence: Research -> Planning -> Formatting
+- Pass relevant context between agents
+- Ensure the final output is valid JSON matching the TripPlan schema, wrapped in ```json ... ``` code blocks.
+- If any constraint is missing or budget is too low, make reasonable assumptions, use the cheapest options found, and Proceed to the next step. DO NOT stop to ask the user.
+- Keep internal coordination messages concise. The final response to the user must strictly follow the JSON schema.
+"""
 
 root_agent = Agent(
-    model="gemini-3-flash-preview",
-    name= "Travel_planner_agent",
-    description="A helpful assistant that generates detailed travel itineraries based on user constraints.",
-    instruction=prompt, 
-    output_schema=TripPlan,
+    model=LiteLlm(
+        model="openrouter/z-ai/glm-4.5-air:free",
+        api_key=os.getenv("OPENROUTER_API_KEY"),
+        api_base="https://openrouter.ai/api/v1"
+    ),
+    name="travel_orchestrator",
+    description="Orchestrates a multi-agent travel planning system, coordinating research and planning agents.",
+    instruction=orchestrator_prompt,
+    sub_agents=[research_agent, planner_agent, schema_formatter_agent]
 )
