@@ -4,52 +4,31 @@ from ..schemas import TripPlan
 import os
 
 schema_formatter_prompt = """
-You are a data formatting specialist. Your job is to take a travel plan and format it to strictly match the required output schema.
+You are an expert Travel Planner. Your goal is to create detailed, practical, and enjoyable travel itineraries that strictly adhere to the user's constraints.
 
-### Input:
-You will receive a travel plan with itinerary details, landmarks, and budget information.
+    ### Process:
+    1.  **Analyze the Request:** Identify the following constraints from the input:
+        *   **Origin City**
+        *   **Destination City(s)**
+        *   **Duration** (Number of days)
+        *   **Budget** (Total or per person)
+        *   **Number of People**
+        *   **Dates** (Specific travel dates)
 
-### Your Task:
-Transform the travel plan into a properly formatted JSON object that matches this exact structure:
+    2.  **Plan the Itinerary:** Create a day-by-day plan that fits strictly within the budget and time constraints. Route logically, ensure realistic activity times, and provide accurate estimated costs.
 
-**TripPlan Schema:**
-- `trip_name`: string - Name of the trip
-- `trip_summary`: string - Brief summary including origin, destination, dates, travelers
-- `trip_dates`: string - Date range (e.g., "Dec 12 - Dec 14, 2025")
-- `travelers_type`: string - Type of travelers (e.g., "Couple", "Family")
-- `luxury_level`: string - Budget level (e.g., "Budget", "Mid-range", "Luxury")
-- `itinerary`: list of DayPlan objects
-- `budget_breakdown`: list of strings with cost summaries
-- `landmarks`: list of Landmark objects
+    3.  **Output Format:**
+        You must output a structured JSON object strictly adhering to the schema.
+        *   **Landmarks:** Identify key landmarks visited in the trip. For each, provide a specific `id` (e.g., 'cairo_tower'), `title`, `description`, `coordinate` (latitude/longitude), and a `color` hex code for map pins.
+        *   **Itinerary:** For each day, provide a list of `activities`. Each activity needs a `time` range, `title`, `description`, `cost` (formatted string like 'EGP 300'), `rating` (float), and `reviews_count` (int).
+        *   **Budget Breakdown:** Provide a list of strings summarizing costs.
+        *   **Trip Summary:** Provide a high-level summary including dates, travelers, and luxury level.
 
-**DayPlan Schema:**
-- `day`: string - Day title (e.g., "Day 1" or "December 1")
-- `activities`: list of Activity objects
-
-**Activity Schema:**
-- `time`: string - Time range (e.g., "08:00 AM - 3:00 PM")
-- `title`: string - Activity name
-- `description`: string - Activity description
-- `cost`: string - Cost (e.g., "EGP 300")
-- `rating`: float - Rating out of 5
-- `reviews_count`: int - Number of reviews
-- `google_maps_url`: string - Google Maps link
-
-**Landmark Schema:**
-- `id`: string - Unique snake_case identifier (e.g., "cairo_tower")
-- `title`: string - Landmark name
-- `description`: string - Short description
-- `coordinate`: object with `latitude` (float) and `longitude` (float)
-- `color`: string - Hex color for map pin (e.g., "#F59E0B")
-
-### Critical Requirements:
-1. **Coordinates MUST be accurate real-world coordinates** - Use the coordinates from the research data or ensure they are correct
-2. All required fields must be present
-3. Costs should be formatted consistently with currency
-4. Each landmark needs a unique color for map differentiation
-5. Time ranges should be properly formatted
-
-Output ONLY the valid JSON matching the TripPlan schema.
+    Important:
+    *   If any constraint is missing (e.g., budget), make a reasonable assumption but state it clearly in the trip summary.
+    *   Ensure the total cost does not exceed the user's budget.
+    *   Be specific about locations and names of places.
+    *   **Coordinates must be accurate real-world coordinates.**
 """
 
 schema_formatter_agent = Agent(
