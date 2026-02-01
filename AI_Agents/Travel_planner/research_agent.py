@@ -40,11 +40,12 @@ DO NOT ask for clarification or suggest changing the budget. Just provide the be
 """
 
 research_agent = Agent(
-    model=LiteLlm(
-        model="openrouter/z-ai/glm-4.5-air:free",
-        api_key=os.getenv("OPENROUTER_API_KEY"),
-        api_base="https://openrouter.ai/api/v1"
-    ),
+   #  model=LiteLlm(
+   #      model="openrouter/z-ai/glm-4.5-air:free",
+   #      api_key=os.getenv("OPENROUTER_API_KEY"),
+   #      api_base="https://openrouter.ai/api/v1"
+   #  ),
+    model = "gemini-2.5-flash",
     name="research_agent",
     description="Provides travel information including hotels, restaurants, and tourist attractions with prices and locations.",
     instruction=research_prompt,

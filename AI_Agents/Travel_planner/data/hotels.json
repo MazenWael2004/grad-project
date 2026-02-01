@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Marriott Mena House",
+    "city": "Cairo",
+    "price_per_night": 400,
+    "rating": 4.5,
+    "category": "luxury",
+    "latitude": 29.9967,
+    "longitude": 31.1328
+  },
+  {
+    "id": 2,
+    "name": "Steigenberger Hotel El Tahrir",
+    "city": "Cairo",
+    "price_per_night": 200,
+    "rating": 4.0,
+    "category": "mid-range",
+    "latitude": 30.0444,
+    "longitude": 31.2357
+  },
+  {
+    "id": 3,
+    "name": "Ramses Hilton",
+    "city": "Cairo",
+    "price_per_night": 250,
+    "rating": 4.2,
+    "category": "mid-range",
+    "latitude": 30.0548,
+    "longitude": 31.2318
+  },
+  {
+    "id": 4,
+    "name": "Arabian Nights Hostel",
+    "city": "Cairo",
+    "price_per_night": 50,
+    "rating": 3.8,
+    "category": "budget",
+    "latitude": 30.0512,
+    "longitude": 31.2421
+  },
+  {
+    "id": 5,
+    "name": "Safari Hostel",
+    "city": "Cairo",
+    "price_per_night": 60,
+    "rating": 4.0,
+    "category": "budget",
+    "latitude": 30.0523,
+    "longitude": 31.2403
+  },
+  {
+    "id": 6,
+    "name": "Kempinski Nile Hotel",
+    "city": "Cairo",
+    "price_per_night": 350,
+    "rating": 4.6,
+    "category": "luxury",
+    "latitude": 30.0607,
+    "longitude": 31.2186
+  },
+  {
+    "id": 7,
+    "name": "Le Meridien Pyramids",
+    "city": "Giza",
+    "price_per_night": 180,
+    "rating": 4.1,
+    "category": "mid-range",
+    "latitude": 29.9972,
+    "longitude": 31.1371
+  }
+]

@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "name": "Abou Tarek",
+    "city": "Cairo",
+    "cuisine": "Egyptian",
+    "average_meal_cost": 80,
+    "rating": 4.5,
+    "specialty": "Koshari",
+    "latitude": 30.0509,
+    "longitude": 31.2435
+  },
+  {
+    "id": 2,
+    "name": "Sequoia",
+    "city": "Cairo",
+    "cuisine": "Mediterranean",
+    "average_meal_cost": 250,
+    "rating": 4.3,
+    "specialty": "Seafood",
+    "latitude": 30.0607,
+    "longitude": 31.2186
+  },
+  {
+    "id": 3,
+    "name": "Zooba",
+    "city": "Cairo",
+    "cuisine": "Egyptian",
+    "average_meal_cost": 120,
+    "rating": 4.4,
+    "specialty": "Street Food",
+    "latitude": 30.0620,
+    "longitude": 31.2119
+  },
+  {
+    "id": 4,
+    "name": "Felfela",
+    "city": "Cairo",
+    "cuisine": "Egyptian",
+    "average_meal_cost": 100,
+    "rating": 4.2,
+    "specialty": "Traditional Egyptian",
+    "latitude": 30.0448,
+    "longitude": 31.2353
+  },
+  {
+    "id": 5,
+    "name": "Andrea El Mariouteya",
+    "city": "Giza",
+    "cuisine": "Egyptian",
+    "average_meal_cost": 150,
+    "rating": 4.3,
+    "specialty": "Grilled Chicken",
+    "latitude": 29.9889,
+    "longitude": 31.1264
+  },
+  {
+    "id": 6,
+    "name": "Kazouza",
+    "city": "Cairo",
+    "cuisine": "Egyptian",
+    "average_meal_cost": 90,
+    "rating": 4.1,
+    "specialty": "Traditional Food",
+    "latitude": 30.0634,
+    "longitude": 31.2156
+  },
+  {
+    "id": 7,
+    "name": "The Smokery",
+    "city": "Cairo",
+    "cuisine": "International",
+    "average_meal_cost": 200,
+    "rating": 4.2,
+    "specialty": "Fusion",
+    "latitude": 30.0615,
+    "longitude": 31.2139
+  }
+]

@@ -2,11 +2,19 @@ import sys
 import os
 import asyncio
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from dotenv import load_dotenv
 env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Travel_planner', '.env'))
 load_dotenv(env_path)
+
+
+load_dotenv()
+api_key = os.getenv("OPENROUTER_API_KEY")
+print("Key loaded:", bool(api_key))
 
 if os.getenv('OPEN_ROUTER_API_KEY'):
     os.environ['OPENROUTER_API_KEY'] = os.getenv('OPEN_ROUTER_API_KEY')
@@ -18,7 +26,7 @@ from google.genai import types
 
 async def main():
     
-    query = "Plan a 3-day trip to cairo from saudi arabia riyadh for 2 people with a budget of 1500 SAR start date 2026-06-01"
+    query = "Plan a 3-day trip to cairo from saudi arabia riyadh for 2 people with a budget of 1500 SAR start date 2026-06-01 and recommanded resturants and hotels"
     print(f"Query: {query}\n")
     print("-" * 50)
     

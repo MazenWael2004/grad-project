@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "name": "Pyramids of Giza",
+    "city": "Giza",
+    "category": ["history", "culture"],
+    "average_cost": 500,
+    "visit_duration_hours": 3,
+    "best_time": "morning",
+    "popularity": 5,
+    "latitude": 29.9792,
+    "longitude": 31.1342
+  },
+  {
+    "id": 2,
+    "name": "Egyptian Museum",
+    "city": "Cairo",
+    "category": ["history", "museum"],
+    "average_cost": 700,
+    "visit_duration_hours": 2,
+    "best_time": "afternoon",
+    "popularity": 4,
+    "latitude": 30.0478,
+    "longitude": 31.2336
+  },
+  {
+    "id": 3,
+    "name": "Khan El Khalili",
+    "city": "Cairo",
+    "category": ["shopping", "culture"],
+    "average_cost": 200,
+    "visit_duration_hours": 2,
+    "best_time": "evening",
+    "popularity": 5,
+    "latitude": 30.0489,
+    "longitude": 31.2622
+  },
+  {
+    "id": 4,
+    "name": "Citadel of Saladin",
+    "city": "Cairo",
+    "category": ["history", "architecture"],
+    "average_cost": 450,
+    "visit_duration_hours": 2,
+    "best_time": "morning",
+    "popularity": 4,
+    "latitude": 30.0296,
+    "longitude": 31.2600
+  },
+  {
+    "id": 5,
+    "name": "Al-Azhar Mosque",
+    "city": "Cairo",
+    "category": ["religion", "architecture"],
+    "average_cost": 100,
+    "visit_duration_hours": 1,
+    "best_time": "morning",
+    "popularity": 4,
+    "latitude": 30.0456,
+    "longitude": 31.2633
+  },
+  {
+    "id": 6,
+    "name": "Nile River Cruise",
+    "city": "Cairo",
+    "category": ["entertainment", "relaxation"],
+    "average_cost": 300,
+    "visit_duration_hours": 2,
+    "best_time": "evening",
+    "popularity": 5,
+    "latitude": 30.0444,
+    "longitude": 31.2357
+  },
+  {
+    "id": 7,
+    "name": "Coptic Museum",
+    "city": "Cairo",
+    "category": ["history", "museum"],
+    "average_cost": 250,
+    "visit_duration_hours": 2,
+    "best_time": "afternoon",
+    "popularity": 3,
+    "latitude": 30.0059,
+    "longitude": 31.2304
+  }
+]
