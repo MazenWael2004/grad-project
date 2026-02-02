@@ -3,8 +3,11 @@
     "id": 1,
     "name": "Pyramids of Giza",
     "city": "Giza",
-    "category": ["history", "culture"],
-    "average_cost": 500,
+    "category": [
+      "history",
+      "culture"
+    ],
+    "average_cost": 700,
     "visit_duration_hours": 3,
     "best_time": "morning",
     "popularity": 5,
@@ -15,8 +18,11 @@
     "id": 2,
     "name": "Egyptian Museum",
     "city": "Cairo",
-    "category": ["history", "museum"],
-    "average_cost": 700,
+    "category": [
+      "history",
+      "museum"
+    ],
+    "average_cost": 550,
     "visit_duration_hours": 2,
     "best_time": "afternoon",
     "popularity": 4,
@@ -27,8 +33,11 @@
     "id": 3,
     "name": "Khan El Khalili",
     "city": "Cairo",
-    "category": ["shopping", "culture"],
-    "average_cost": 200,
+    "category": [
+      "shopping",
+      "culture"
+    ],
+    "average_cost": 0,
     "visit_duration_hours": 2,
     "best_time": "evening",
     "popularity": 5,
@@ -39,8 +48,11 @@
     "id": 4,
     "name": "Citadel of Saladin",
     "city": "Cairo",
-    "category": ["history", "architecture"],
-    "average_cost": 450,
+    "category": [
+      "history",
+      "architecture"
+    ],
+    "average_cost": 550,
     "visit_duration_hours": 2,
     "best_time": "morning",
     "popularity": 4,
@@ -51,8 +63,11 @@
     "id": 5,
     "name": "Al-Azhar Mosque",
     "city": "Cairo",
-    "category": ["religion", "architecture"],
-    "average_cost": 100,
+    "category": [
+      "religion",
+      "architecture"
+    ],
+    "average_cost": 0,
     "visit_duration_hours": 1,
     "best_time": "morning",
     "popularity": 4,
@@ -63,8 +78,11 @@
     "id": 6,
     "name": "Nile River Cruise",
     "city": "Cairo",
-    "category": ["entertainment", "relaxation"],
-    "average_cost": 300,
+    "category": [
+      "entertainment",
+      "relaxation"
+    ],
+    "average_cost": 1500,
     "visit_duration_hours": 2,
     "best_time": "evening",
     "popularity": 5,
@@ -75,8 +93,11 @@
     "id": 7,
     "name": "Coptic Museum",
     "city": "Cairo",
-    "category": ["history", "museum"],
-    "average_cost": 250,
+    "category": [
+      "history",
+      "museum"
+    ],
+    "average_cost": 280,
     "visit_duration_hours": 2,
     "best_time": "afternoon",
     "popularity": 3,
