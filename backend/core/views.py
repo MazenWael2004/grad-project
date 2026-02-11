@@ -1,3 +1,4 @@
+"""
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -30,7 +31,7 @@ def login_view(request):
     if user and user.check_password(password):
         login(request, user)
         return Response(UserSerializer(user).data)
-    
+
     return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
@@ -43,7 +44,7 @@ def logout_view(request):
 def photo_list(request):
     photos = [
         {
-        "id": 1, 
+        "id": 1,
         "title": "Sunset",
         "discribtion":"dd",
         "url": "media\photos\488808739.jpg"
@@ -51,14 +52,15 @@ def photo_list(request):
         {
         "id": 2,
         "title": "a",
-        "discribtion":"dd", 
+        "discribtion":"dd",
         "url": "media\photos\download.jpg"
         },
         {
         "id": 3,
         "title": "f",
-        "discribtion":"dd", 
+        "discribtion":"dd",
         "url": "media\photos\Sphinx-giza-pyramids.jpg"
         },
 ]
     return Response(photos)
+"""
