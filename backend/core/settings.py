@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "core",
     "apps.accounts",
+    "apps.subscriptions",
 ]
 
 MIDDLEWARE = [
