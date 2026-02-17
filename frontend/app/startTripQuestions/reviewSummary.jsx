@@ -28,9 +28,9 @@ const ReviewSummary = () => {
   const startTripDate = new Date(startDate);
   const endTripDate = new Date(endDate);
   const interests = userTravelPreferences['interests']; // [3,5,6]
-  console.log("Interests Array: ",interests);
+  // console.log("Interests Array: ",interests);
   const userInterests = preferences.filter(pref => interests.includes(pref.id-1));
-  console.log(userInterests);
+  console.log("User Interests: ", userInterests);
   const {governorateId} = userTravelPreferences;
   const governorate = governorates.find((item)=>{
     return item.id === governorateId;
@@ -59,9 +59,9 @@ const getMonthAndDay = (date) => {
 
 
   
-  console.log(partyOption);
+  console.log("Party Option: ", partyOption);
   useEffect(()=>{
-    console.log(userTravelPreferences);
+    console.log("User Travel Preferences: ", JSON.stringify(userTravelPreferences, null, 2));
   },[]);
 
   const handleBuildItineraryButton = () =>{

@@ -23,7 +23,7 @@ const Register = () => {
   const { registerFormData, setRegisterFormData } = useRegisterFormContext();
   const [password, setPassword] = useState("");
   const { country } = useLocalSearchParams();
-  console.log("COUNTRY " + country);
+
   const [fullName, setFullName] = useState({
     firstName: "",
     lastName: "",
@@ -51,7 +51,7 @@ const Register = () => {
   ];
 
   //-----------------------------------------------------------------
-  console.log("Register Form Data: ", registerFormData);
+  console.log("Register Form Data: ", JSON.stringify(registerFormData, null, 2));
 
   useEffect(() => {
     setSelectedCountry(country);
@@ -65,7 +65,7 @@ const Register = () => {
       firstName: text,
     }));
 
-    console.log("Full Name: " + text + fullName.lastName);
+    // console.log("Full Name: " + text + fullName.lastName);
     setRegisterFormData((prev) => {
       return {
         ...prev,
@@ -90,7 +90,7 @@ const Register = () => {
       };
     });
 
-    console.log("Full Name: " + fullName.firstName + text);
+    // console.log("Full Name: " + fullName.firstName + text);
   };
 
   // Creates a new object by copying all properties from the previous state and replacing the `firstName` property with the new text value.
@@ -98,7 +98,7 @@ const Register = () => {
   const handleEmailChange = (text) => {
     setIsEmailRequired(true);
     setEmail(text);
-    console.log("Email: ", text);
+    // console.log("Email: ", text);
     setRegisterFormData((prev) => {
       return {
         ...prev,
@@ -110,7 +110,7 @@ const Register = () => {
   const handlePasswordChange = (text) => {
     setIsPasswordRequired(true);
     setPassword(text);
-    console.log("Password: " + text);
+    // console.log("Password: " + text);
     setRegisterFormData((prev) => {
       return {
         ...prev,
@@ -122,7 +122,7 @@ const Register = () => {
   const handleConfirmPasswordChange = (text) => {
     setConfirmPassword(text);
     setIsConfirmPasswordRequired(true);
-    console.log("Confirm Password: " + text);
+    // console.log("Confirm Password: " + text);
     setRegisterFormData((prev) => {
       return {
         ...prev,
@@ -177,6 +177,7 @@ const Register = () => {
   if (!registerFormData.password || registerFormData.password.trim() === "") {
     setIsPasswordRequired(false);
     valid = false;
+    
   } else {
     setIsPasswordRequired(true);
     if (registerFormData.password.length < 8) {
@@ -215,6 +216,7 @@ const handleSubmitButton = async () => {
   }
 
   console.log("Validation passed ✅");
+  console.log("Submitting form with data: ", registerFormData); // Debug log to check form data before API call
   // Proceed with API request
   try {
     const response = await axios.post(`${API_BASE_URL}/register/`, {
@@ -222,6 +224,7 @@ const handleSubmitButton = async () => {
       last_name: registerFormData.lastName,
       email: registerFormData.email,
       password: registerFormData.password,
+      country: registerFormData.country, // Added this...
     });
 
     if (response.status === 201) {

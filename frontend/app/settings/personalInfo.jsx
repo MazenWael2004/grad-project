@@ -11,14 +11,21 @@ import {useState,useRef,useContext} from "react";
 import { router } from "expo-router";
 import PhoneInput from "react-native-phone-number-input";
 import { ThemeContext } from "../../theme/ThemeContext";
+import { useUser } from "../contexts/userContext";
+import * as ImagePicker from "expo-image-picker";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 
 
 
 const PersonalInfo = () => {
   const {theme} = useContext(ThemeContext);
+  const [image, setImage] = useState(null);
+  const {user, setUser} = useUser();
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const [value, setValue] = useState("");
+  const [fullName, setFullName] = useState("Mazen Wael");
+  console.log("User from context: ", JSON.stringify(user, null, 2)); // Debug log to check user data from context
+
   const [formattedValue, setFormattedValue] = useState("");  // Formatted Phone Number
   const [valid, setValid] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
@@ -28,6 +35,24 @@ const PersonalInfo = () => {
 
     console.log("Phone Number: "+formattedValue);
   }
+
+   const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled) { 
+      setImage(result.assets[0].uri);
+      setUser(prevUser => ({
+        ...prevUser,
+        profilePic: result.assets[0].uri,
+      }));
+      
+    }
+  };
+
+  
 
 
   return (
@@ -52,7 +77,31 @@ const PersonalInfo = () => {
         </Text>
       </View>
       <View style={styles.profilePictureWrapper}>
-        <View style={styles.profilePicture}></View>
+         {user.profilePic?(
+        <Image
+          source={{ uri: user.profilePic }}
+          style={styles.profilePicture}
+        />
+      ):(
+        <View style={styles.profilePicture} />
+        
+      )}
+        <TouchableOpacity
+
+          style={{
+            backgroundColor: currentTheme.searchBackground,
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 10,
+            marginTop: 10,
+            marginBottom: 20,
+          }}
+          onPress={pickImage}
+        >
+          <Text style={{ fontFamily: "Poppins-Medium", color: currentTheme.text }}>
+            Change Profile Picture
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.formWrapper}>
         <View style={styles.inputWrapper}>

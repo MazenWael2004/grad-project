@@ -20,6 +20,7 @@ const AddPaymentMethod = () => {
   const nav = useNavigation();
   const [cardNumber, setCardNumber] = useState("");
   const [accountHolderName, setAccountHolderName] = useState("");
+  const [amount, setAmount] = useState(1000); // Default amount for testing
   const [cardType,setCardType] = useState("");
   const [isCardNumberValidated,setIsCardNumberValidated] = useState(true);
   const [expiryDate,setExpiryDate] = useState({
@@ -30,6 +31,7 @@ const AddPaymentMethod = () => {
   // const [expYear, setExpYear] = useState("");
   const [cvv, setCvv] = useState("");
   const {theme} = useContext(ThemeContext);
+  const [cardDetails, setCardDetails] = useState(null);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
   const handleReset = () => {
@@ -40,7 +42,15 @@ const AddPaymentMethod = () => {
     setCvv("");
     setIsCardNumberValidated(true);
   };
-
+  
+  console.log("Card Details: ", JSON.stringify({
+    cardNumber,
+    accountHolderName,
+    expiryDate,
+    cvv,
+    cardType,
+    amount
+  }, null, 2));
   const handleCardNumberChange = (text) =>{
     // console.log(text.length);
     // if(text.length % 4 === 0){
@@ -48,23 +58,27 @@ const AddPaymentMethod = () => {
     // }
 
     if(text[0]=== '4'){
-      console.log("Visa Card");
+      // console.log("Visa Card");
       setCardType("Visa");
     }
     else if(text[0] === '5' || text[0] === '2'){
-      console.log("MasterCard Card");
+      // console.log("MasterCard Card");
       setCardType("MasterCard");
     }
+    else{
+      setCardType("Invalid");
+    }
     setCardNumber(text);
-    console.log("Card Number: "+text);
+    // console.log("Card Number: "+text);
   }
 
   const handleAccountHolderName = (text) =>{
     setAccountHolderName(text);
-    console.log("Account Holder Name: "+text);
+    // console.log("Account Holder Name: "+text);
   }
 
   const handleExpiryMonthChange  = (text) =>{
+    
     setExpiryDate((prev)=>{
       return {
         ...prev,
@@ -72,7 +86,7 @@ const AddPaymentMethod = () => {
       }
     })
 
-    console.log("Expiry Month:"+text)
+    // console.log("Expiry Month:"+text)
   }
 
   const handleExpiryYearChange  = (text) =>{
@@ -83,27 +97,34 @@ const AddPaymentMethod = () => {
       }
     })
 
-    console.log("Expiry Year:"+text)
+    // console.log("Expiry Year:"+text)
   }
 
   const handleCVVChange = (text) =>{
     setCvv(text);
-    console.log("CVV: "+text);
+    // console.log("CVV: "+text);
   }
 
-  const isValidate  = () =>{
-    // Validate Card Number
-    if(cardNumber[0] === '4'){
-      console.log("Card Number is a Visa Card!");
-      setIsCardNumberValidated(true);
-      return true;
-    }
-    else{
-      console.log("Invaild Card Number!");
-      setIsCardNumberValidated(false);
-      return false;
-    }
+  const isValidate = () => {
+  // Validate Card Number
+  if (cardNumber[0] !== '4') {
+    console.log("Invalid Card Number!");
+    setIsCardNumberValidated(false);
+    return false;
   }
+
+  console.log("Card Number is a Visa Card!");
+  setIsCardNumberValidated(true);
+
+  // Validate Expiry Date
+  if (expiryDate.expiryMonth < 1 || expiryDate.expiryMonth > 12) {
+    alert("Invalid Expiry Month!");
+    return false;
+  }
+
+  return true;
+};
+
 
   const handleSaveMethod = ()=>{
     if(isValidate()){
@@ -118,6 +139,7 @@ const AddPaymentMethod = () => {
              cardNumber,
              expiryDate,
              cardType,
+             amount,
              CVV: cvv
           }
         ]

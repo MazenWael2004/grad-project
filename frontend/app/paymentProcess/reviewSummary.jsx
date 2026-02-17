@@ -20,18 +20,22 @@ const ReviewSummary = () => {
     return "**** " + "**** " + "**** " + last4;
   };
 
-  console.log("Subscription", sub);
+  console.log("Subscription", JSON.stringify(sub, null, 2));
   console.log("\n\n\n\n\n");
-  console.log("Payment", paymentMethod);
+  console.log("Payment", JSON.stringify(paymentMethod, null, 2));
 
   const handleConfirmPayment = () =>{
+    if(paymentMethod.amount < sub.price){
+      alert("Insufficient balance.");
+      return;
+    }
     setUser((prev)=>{
         return {
             ...prev,
             currentSubscription:sub,
         }
     })
-
+    alert("Payment Successful! Subscription Updated.");
     router.replace("main/settings");
   };
 

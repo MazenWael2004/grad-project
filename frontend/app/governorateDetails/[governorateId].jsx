@@ -48,7 +48,7 @@ const TripDetails = () => {
     fetchWeather(governorate.name);
   }, []);
 
-  console.log(weather);
+  // console.log(weather);
 
   return (
     <View

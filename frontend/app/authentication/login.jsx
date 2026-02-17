@@ -20,10 +20,13 @@ const Login = () => {
 
   const handleEmailChange = (text)=>{
     setEmail(text);
+    console.log("Login Form Email: "+text);
+    
   }
 
   const handlePasswordChange = (text)=>{
     setPassword(text);
+    console.log("Login Form Password:"+text);
   }
 
   const handleLogin = () => {

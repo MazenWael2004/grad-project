@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
     currentSubscription: subscriptions[0],
     country: '',
     isLoggedIn: false,
+    role: 'user',
     profilePic:null,
     exchangeRate: 1,
   });
