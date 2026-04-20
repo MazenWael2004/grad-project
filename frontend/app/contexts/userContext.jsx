@@ -16,6 +16,7 @@ export const UserProvider = ({ children }) => {
     role: 'user',
     profilePic:null,
     exchangeRate: 1,
+    phoneNumber: '',
   });
 
   const login = (userData) => {

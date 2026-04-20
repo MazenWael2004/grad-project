@@ -204,7 +204,7 @@ const Login = () => {
           </Text>
         </View>
       </View>
-      <View style={styles.googleLoginWrapper}>
+      {/* <View style={styles.googleLoginWrapper}>
         <Text
           style={{
             color: "rgba(102, 98, 98, 1)",
@@ -248,7 +248,7 @@ const Login = () => {
             Continue with Google
           </Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 };

@@ -5,237 +5,142 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  ScrollView
+  ScrollView,
 } from "react-native";
-import {useState,useRef,useContext} from "react";
+import { useState, useContext } from "react"; // removed unused useRef
 import { router } from "expo-router";
 import PhoneInput from "react-native-phone-number-input";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { useUser } from "../contexts/userContext";
 import * as ImagePicker from "expo-image-picker";
-import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
-
-
+import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 
 const PersonalInfo = () => {
-  const {theme} = useContext(ThemeContext);
-  const [image, setImage] = useState(null);
-  const {user, setUser} = useUser();
+  const { theme } = useContext(ThemeContext);
+  const { user, setUser } = useUser();
+
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
-  const [value, setValue] = useState("");
-  const [fullName, setFullName] = useState("Mazen Wael");
-  console.log("User from context: ", JSON.stringify(user, null, 2)); // Debug log to check user data from context
 
-  const [formattedValue, setFormattedValue] = useState("");  // Formatted Phone Number
-  const [valid, setValid] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
+  const [image, setImage] = useState(null);
+  const [fullName, setFullName] = useState(user.fullName || "");
+  const [phoneValue, setPhoneValue] = useState(user.phoneNumber || ""); 
+  const [formattedValue, setFormattedValue] = useState("");
+  const profilePicUri = image || user.profilePic;
 
+  const handleSaveChanges = () => {
+    const updatedUser = {
+      ...user,
+      fullName,
+      phoneNumber: phoneValue,
+      profilePic: image || user.profilePic,
+    };
+    setUser(updatedUser);
 
-  const handleSaveChanges = () =>{
+    // Do api call to save changes in backend here.
+  };
 
-    console.log("Phone Number: "+formattedValue);
-  }
-
-   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
     });
-
-    if (!result.canceled) { 
+    if (!result.canceled) {
       setImage(result.assets[0].uri);
-      setUser(prevUser => ({
-        ...prevUser,
-        profilePic: result.assets[0].uri,
-      }));
-      
     }
   };
 
-  
-
-
   return (
-    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.backAndPersonalInfoTitle}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Image
-            source={require("../../assets/images/back.png")}
-            style={{ width: 30, height: 30,tintColor:currentTheme.iconColor }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontFamily: "Poppins-SemiBold",
-            fontSize: 20,
-            color: currentTheme.text,
-            margin: "auto",
-          }}
-        >
-          Personal Info
-        </Text>
-      </View>
-      <View style={styles.profilePictureWrapper}>
-         {user.profilePic?(
-        <Image
-          source={{ uri: user.profilePic }}
-          style={styles.profilePicture}
-        />
-      ):(
-        <View style={styles.profilePicture} />
-        
-      )}
-        <TouchableOpacity
+    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
+      <ScrollView showsVerticalScrollIndicator={false}>
 
-          style={{
-            backgroundColor: currentTheme.searchBackground,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            borderRadius: 10,
-            marginTop: 10,
-            marginBottom: 20,
-          }}
-          onPress={pickImage}
-        >
-          <Text style={{ fontFamily: "Poppins-Medium", color: currentTheme.text }}>
-            Change Profile Picture
+        {/* Header */}
+        <View style={styles.backAndPersonalInfoTitle}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Image
+              source={require("../../assets/images/back.png")}
+              style={{ width: 30, height: 30, tintColor: currentTheme.iconColor }}
+            />
+          </TouchableOpacity>
+          {/* FIX: replaced invalid margin:"auto" with flex:1 + textAlign:"center" */}
+          <Text style={[styles.headerTitle, { color: currentTheme.text }]}>
+            Personal Info
           </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.formWrapper}>
-        <View style={styles.inputWrapper}>
-          <Text
-            style={{
-              fontFamily: "Poppins-SemiBold",
-              fontSize: 16,
-              color: currentTheme.text,
-            }}
+        </View>
+
+        {/* Profile Picture */}
+        <View style={styles.profilePictureWrapper}>
+          {/* FIX: profilePicUri reflects newly picked image immediately */}
+          {profilePicUri ? (
+            <Image source={{ uri: profilePicUri }} style={styles.profilePicture} />
+          ) : (
+            <View style={styles.profilePicture} />
+          )}
+          <TouchableOpacity
+            style={[styles.changePicButton, { backgroundColor: currentTheme.searchBackground }]}
+            onPress={pickImage}
           >
-            Full Name
-            
-          </Text>
-          <View>
+            <Text style={{ fontFamily: "Poppins-Medium", color: currentTheme.text }}>
+              Change Profile Picture
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Form */}
+        <View style={styles.formWrapper}>
+
+          {/* Full Name — FIX: added onChangeText so edits are captured */}
+          <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: currentTheme.text }]}>Full Name</Text>
             <TextInput
-            value="Mazen Wael"
-              style={[
-                {
-                  height: 50,
-                  backgroundColor: currentTheme.searchBackground,
-                  color:currentTheme.text,
-                  paddingHorizontal: 10,
-                  borderRadius: 10,
-                  marginBottom: 2,
-                  fontFamily: "Poppins-Medium",
-                  position: "relative",
-                },
-              ]}
+              value={fullName}
+              onChangeText={setFullName}
+              style={[styles.textInput, {
+                backgroundColor: currentTheme.searchBackground,
+                color: currentTheme.text,
+              }]}
             />
           </View>
-        </View>
 
-            <View style={styles.inputWrapper}>
-          <Text
-            style={{
-              fontFamily: "Poppins-SemiBold",
-              fontSize: 16,
-              color: currentTheme.text,
-            }}
-          >
-            E-mail
-            
-          </Text>
-          <View>
+          {/* Email — marked editable={false} since it's read-only */}
+          <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: currentTheme.text }]}>E-mail</Text>
             <TextInput
-            value="random-email@gmail.com"
-              style={[
-                {
-                  height: 50,
-                  backgroundColor: currentTheme.searchBackground,
-                  color: currentTheme.text,
-                  paddingHorizontal: 10,
-                  borderRadius: 10,
-                  marginBottom: 2,
-                  fontFamily: "Poppins-Medium",
-                  position: "relative",
-                },
-              ]}
+              value={user.email}
+              editable={false}
+              style={[styles.textInput, {
+                backgroundColor: currentTheme.searchBackground,
+                color: currentTheme.text,
+              }]}
             />
           </View>
-        </View>
 
-            <View style={styles.inputWrapper}>
-          <Text
-            style={{
-              fontFamily: "Poppins-SemiBold",
-              fontSize: 16,
-              color: currentTheme.text,
-            }}
-          >
-            Phone Number
-            
-          </Text>
-          {/* <View>
-            <TextInput
-            value="Mazen Wael"
-              style={[
-                {
-                  height: 50,
-                  backgroundColor: "#e9e7e7ff",
-                  paddingHorizontal: 10,
-                  borderRadius: 10,
-                  marginBottom: 2,
-                  fontFamily: "Poppins-Medium",
-                  position: "relative",
-                },
-              ]}
+          {/* Phone Number */}
+          <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: currentTheme.text }]}>Phone Number</Text>
+            <PhoneInput
+              defaultValue={phoneValue}
+              defaultCode="DM"
+              layout="first"
+              onChangeText={(text) => setPhoneValue(text)} // FIX: now updates unified phoneValue state
+              onChangeFormattedText={(text) => setFormattedValue(text)}
+              withDarkTheme
+              withShadow
+              textInputStyle={{ fontFamily: "Poppins-Medium" }}
+              codeTextStyle={{ fontFamily: "Poppins-Medium" }}
+              containerStyle={[styles.phoneContainer, {
+                backgroundColor: currentTheme.searchBackground,
+              }]}
+              countryPickerButtonStyle={{ fontFamily: "Poppins-SemiBold" }}
             />
-          </View> */}
-           <PhoneInput
-            defaultValue={value}
-            defaultCode="DM"
-            layout="first"
-            onChangeText={(text) => {
-              setValue(text);
-              console.log("Phone Number: "+text);
-            }}
-            onChangeFormattedText={(text) => {
-              setFormattedValue(text);
-            }}
-            withDarkTheme
-            withShadow
-            textInputStyle={{
-                  fontFamily: "Poppins-Medium",
+          </View>
 
-            }}
-            codeTextStyle={{
-               fontFamily: "Poppins-Medium", 
-            }}
-            containerStyle={{
-                 backgroundColor: currentTheme.searchBackground,
-                  paddingHorizontal: 10,
-                  borderRadius: 10,
-                  marginBottom: 2,
-                  fontFamily: "Poppins-Medium",
-                  position: "relative",
-                  width:"100%"
-                
-            }}
-            countryPickerButtonStyle={{
-                fontFamily:"Poppins-SemiBold",
-            }}
-          />
-          
         </View>
-      </View>
       </ScrollView>
-          
-      <TouchableOpacity style={{borderRadius:30,backgroundColor:"#D4AF37",width:"100%",justifyContent:"center",alignItems:"center",padding:12,marginBottom:40,}} onPress={handleSaveChanges}>
-        <Text style={{fontFamily:"Poppins-Medium",color:"white",fontSize:15}}>
-          Save Changes
-        </Text>
-      </TouchableOpacity>
 
+      {/* Save Button */}
+      <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+        <Text style={styles.saveButtonText}>Save Changes</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -255,17 +160,30 @@ const styles = StyleSheet.create({
     width: "90%",
     marginBottom: 15,
   },
+  headerTitle: {
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 20,
+    flex: 1,
+    textAlign: "center",
+  },
   profilePictureWrapper: {
     width: "100%",
-    height: 150,
+    height: 170,
     justifyContent: "center",
     alignItems: "center",
   },
   profilePicture: {
     backgroundColor: "grey",
-    borderRadius: 100,
+    borderRadius: 60,
     height: 120,
     width: 120,
+  },
+  changePicButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 20,
   },
   formWrapper: {
     flexDirection: "column",
@@ -274,5 +192,37 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     marginBottom: 5,
+  },
+  inputLabel: {
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  textInput: {
+    height: 50,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 2,
+    fontFamily: "Poppins-Medium",
+  },
+  phoneContainer: {
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 2,
+    width: "100%",
+  },
+  saveButton: {
+    borderRadius: 30,
+    backgroundColor: "#D4AF37",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 12,
+    marginBottom: 40,
+  },
+  saveButtonText: {
+    fontFamily: "Poppins-Medium",
+    color: "white",
+    fontSize: 15,
   },
 });
