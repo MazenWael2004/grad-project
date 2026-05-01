@@ -61,11 +61,7 @@ Do not explain. Do not output markdown.
 """
 
 judge_agent = Agent(
-    model=LiteLlm(
-        model="openrouter/google/gemini-2.5-flash-preview",
-        api_key=os.getenv("OPENROUTER_API_KEY"),
-        api_base="https://openrouter.ai/api/v1"
-    ),
+    model="gemini-3-flash-preview",
     name="judge_agent",
     description="Evaluates whether a generated travel plan satisfies user constraints and checks spatial coherence.",
     instruction=judge_prompt,
