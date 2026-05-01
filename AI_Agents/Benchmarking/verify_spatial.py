@@ -1,12 +1,13 @@
 """
-verify_spatial.py — Spatial Coherence Verification for Travel Itineraries
+verify_spatial.py -- Spatial Coherence Verification for Travel Itineraries
 
-This script checks whether a generated travel itinerary makes spatial sense by:
-1. Extracting landmarks and their coordinates from the TripPlan
-2. Matching itinerary activities to landmarks by name
-3. Computing distances between consecutive activities using the Haversine formula
+Checks whether a generated travel itinerary makes spatial sense by:
+1. Extracting coordinates from landmarks, local data (restaurants/hotels/places)
+2. Matching itinerary activities to coordinates using fuzzy token matching
+3. Computing distances between consecutive activities (Haversine)
 4. Estimating travel times and flagging unrealistic transitions
-5. Optionally running the full judge agent for combined constraint + spatial evaluation
+5. Detecting routing inefficiency (zigzagging)
+6. Penalizing low coordinate coverage in the score
 
 Usage:
     python verify_spatial.py                   # Run with built-in test cases
@@ -31,25 +32,70 @@ load_dotenv(env_path)
 
 from AI_Agents.Travel_planner.tools import calculate_distance_tool
 
-# ─── Configuration ───────────────────────────────────────────────────────────
+# -- Configuration ------------------------------------------------------------
 
 URBAN_SPEED_KMH = 30       # Average urban travel speed (km/h)
 INTERCITY_SPEED_KMH = 80   # Average intercity travel speed (km/h)
 MAX_URBAN_DISTANCE_KM = 50 # Max km between consecutive activities before flagging
 MAX_TRAVEL_TIME_HOURS = 2  # Max acceptable travel time between back-to-back activities
+COVERAGE_PENALTY_THRESHOLD = 0.5  # If less than 50% of activities are matched, penalize score
+ZIGZAG_RETURN_THRESHOLD_KM = 5    # If route returns within 5km of a previous point, flag zigzag
+
+# -- Load local data as fallback coordinate sources ----------------------------
+
+_data_dir = os.path.join(os.path.dirname(__file__), '..', 'Travel_planner', 'data')
+
+def _load_json(filename):
+    path = os.path.join(_data_dir, filename)
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+_local_restaurants = _load_json("restaurants.json")
+_local_hotels = _load_json("hotels.json")
+_local_places = _load_json("egypt_places.json")
 
 
-# ─── Core Spatial Analysis ───────────────────────────────────────────────────
+def build_local_coords_index() -> dict:
+    """
+    Build a coordinate lookup from all local data files (restaurants, hotels, places).
+    Returns dict mapping lowercase name -> (latitude, longitude).
+    """
+    index = {}
+    for r in _local_restaurants:
+        name = r.get("name", "").lower().strip()
+        lat, lon = r.get("latitude"), r.get("longitude")
+        if name and lat is not None and lon is not None:
+            index[name] = (lat, lon)
+    for h in _local_hotels:
+        name = h.get("name", "").lower().strip()
+        lat, lon = h.get("latitude"), h.get("longitude")
+        if name and lat is not None and lon is not None:
+            index[name] = (lat, lon)
+    for p in _local_places:
+        name = p.get("name", "").lower().strip()
+        lat, lon = p.get("latitude"), p.get("longitude")
+        if name and lat is not None and lon is not None:
+            index[name] = (lat, lon)
+    return index
+
+_local_coords = build_local_coords_index()
+
+
+# -- Core Spatial Analysis -----------------------------------------------------
+
+# Common prefixes to strip when matching activity titles to location names
+_STRIP_PREFIXES = [
+    "lunch at", "dinner at", "breakfast at", "visit", "explore",
+    "tour of", "tour", "sunset at", "morning at", "evening at",
+    "farewell dinner at", "arrive at", "check in at", "check-in at",
+]
+
 
 def build_landmark_index(landmarks: list[dict]) -> dict:
     """
     Build a lookup dictionary mapping landmark titles (lowercased) to their coordinates.
-    
-    Args:
-        landmarks: List of landmark dicts with 'title' and 'coordinate' keys.
-    
-    Returns:
-        Dict mapping lowercase title -> (latitude, longitude)
     """
     index = {}
     for lm in landmarks:
@@ -62,30 +108,80 @@ def build_landmark_index(landmarks: list[dict]) -> dict:
     return index
 
 
-def match_activity_to_landmark(activity_title: str, landmark_index: dict):
+def _strip_activity_prefix(title: str) -> str:
+    """Strip common prefixes like 'Lunch at', 'Dinner at' from activity titles."""
+    lower = title.lower().strip()
+    for prefix in sorted(_STRIP_PREFIXES, key=len, reverse=True):
+        if lower.startswith(prefix):
+            stripped = lower[len(prefix):].strip()
+            if stripped:
+                return stripped
+    return lower
+
+
+def _token_match(name_a: str, name_b: str) -> bool:
     """
-    Try to match an activity title to a landmark's coordinates.
-    Uses substring matching as a fallback if exact match fails.
-    
+    Check if two names share significant word tokens.
+    Returns True if all tokens of the shorter name appear in the longer one.
+    E.g., 'abou tarek' matches 'koshary abou tarek' and 'lunch at abou tarek'.
+    """
+    tokens_a = set(name_a.lower().split())
+    tokens_b = set(name_b.lower().split())
+    # Remove trivial words
+    trivial = {"the", "a", "an", "at", "in", "of", "and", "&", "-", "to", "for"}
+    tokens_a -= trivial
+    tokens_b -= trivial
+    if not tokens_a or not tokens_b:
+        return False
+    smaller, larger = (tokens_a, tokens_b) if len(tokens_a) <= len(tokens_b) else (tokens_b, tokens_a)
+    return smaller.issubset(larger)
+
+
+def match_activity_to_coords(activity_title: str, landmark_index: dict):
+    """
+    Try to match an activity title to coordinates using a 3-tier strategy:
+      1. Exact/substring match against plan landmarks
+      2. Token-based fuzzy match against plan landmarks
+      3. Fuzzy match against local data (restaurants, hotels, places)
+
     Args:
         activity_title: The activity/place name from the itinerary.
         landmark_index: Dict mapping lowercase landmark title -> (lat, lon).
-    
+
     Returns:
-        (lat, lon) tuple if matched, None otherwise.
+        (lat, lon, source) tuple if matched, (None, None, None) otherwise.
+        source is 'landmark', 'local_data', or None.
     """
     title_lower = activity_title.lower().strip()
-    
-    # Exact match
+    stripped = _strip_activity_prefix(activity_title)
+
+    # --- Tier 1: Exact / substring match against landmarks ---
     if title_lower in landmark_index:
-        return landmark_index[title_lower]
-    
-    # Substring match: check if any landmark name is contained in activity title or vice versa
+        return (*landmark_index[title_lower], "landmark")
+    if stripped in landmark_index:
+        return (*landmark_index[stripped], "landmark")
     for lm_title, coords in landmark_index.items():
         if lm_title in title_lower or title_lower in lm_title:
-            return coords
-    
-    return None
+            return (*coords, "landmark")
+        if lm_title in stripped or stripped in lm_title:
+            return (*coords, "landmark")
+
+    # --- Tier 2: Token-based fuzzy match against landmarks ---
+    for lm_title, coords in landmark_index.items():
+        if _token_match(stripped, lm_title):
+            return (*coords, "landmark")
+
+    # --- Tier 3: Match against local data (restaurants, hotels, places) ---
+    if stripped in _local_coords:
+        return (*_local_coords[stripped], "local_data")
+    for local_name, coords in _local_coords.items():
+        if local_name in stripped or stripped in local_name:
+            return (*coords, "local_data")
+    for local_name, coords in _local_coords.items():
+        if _token_match(stripped, local_name):
+            return (*coords, "local_data")
+
+    return (None, None, None)
 
 
 def estimate_travel_time(distance_km: float) -> float:
@@ -108,48 +204,44 @@ def estimate_travel_time(distance_km: float) -> float:
 def analyze_day_spatial(day_plan: dict, landmark_index: dict) -> dict:
     """
     Analyze the spatial coherence of a single day's activities.
-    
-    Args:
-        day_plan: A day plan dict with 'day' and 'activities' keys.
-        landmark_index: Dict mapping landmark title -> (lat, lon).
-    
-    Returns:
-        Dict with 'day', 'transitions', 'issues', and 'unmatched_activities'.
+    Includes distance checks, travel time estimates, and zigzag detection.
     """
     day_label = day_plan.get("day", "Unknown Day")
     activities = day_plan.get("activities", [])
-    
+
     transitions = []
     issues = []
     unmatched = []
-    
+
     # Resolve coordinates for each activity
     resolved = []
     for act in activities:
         title = act.get("title", "Unknown")
-        coords = match_activity_to_landmark(title, landmark_index)
-        if coords:
-            resolved.append({"title": title, "lat": coords[0], "lon": coords[1]})
+        lat, lon, source = match_activity_to_coords(title, landmark_index)
+        if lat is not None:
+            resolved.append({"title": title, "lat": lat, "lon": lon, "source": source})
         else:
             unmatched.append(title)
-    
+
     # Compute distances between consecutive resolved activities
     for i in range(len(resolved) - 1):
         a = resolved[i]
         b = resolved[i + 1]
-        
+
         distance_km = calculate_distance_tool(a["lat"], a["lon"], b["lat"], b["lon"])
         travel_time_hrs = estimate_travel_time(distance_km)
-        
+
         transition = {
             "from": a["title"],
+            "from_source": a["source"],
             "to": b["title"],
+            "to_source": b["source"],
             "distance_km": round(distance_km, 2),
             "estimated_travel_time_hrs": round(travel_time_hrs, 2),
         }
         transitions.append(transition)
-        
-        # Flag issues
+
+        # Flag distance issues
         if distance_km > MAX_URBAN_DISTANCE_KM:
             issues.append(
                 f"{day_label}: {a['title']} -> {b['title']} is {distance_km:.1f} km apart "
@@ -160,47 +252,67 @@ def analyze_day_spatial(day_plan: dict, landmark_index: dict) -> dict:
                 f"{day_label}: {a['title']} -> {b['title']} would take ~{travel_time_hrs:.1f}h "
                 f"to travel ({distance_km:.1f} km) - exceeds reasonable urban travel time"
             )
-    
+
+    # Zigzag detection: check if route doubles back near a previous point
+    for i in range(2, len(resolved)):
+        current = resolved[i]
+        for j in range(i - 2):  # compare with all points before the previous one
+            prev = resolved[j]
+            return_dist = calculate_distance_tool(
+                current["lat"], current["lon"], prev["lat"], prev["lon"]
+            )
+            if return_dist < ZIGZAG_RETURN_THRESHOLD_KM:
+                mid = resolved[i - 1]
+                detour_dist = calculate_distance_tool(prev["lat"], prev["lon"], mid["lat"], mid["lon"])
+                if detour_dist > ZIGZAG_RETURN_THRESHOLD_KM:
+                    issues.append(
+                        f"{day_label}: Route zigzags - {prev['title']} -> {mid['title']} "
+                        f"({detour_dist:.1f}km away) -> {current['title']} (returns near {prev['title']})"
+                    )
+
     return {
         "day": day_label,
         "transitions": transitions,
         "issues": issues,
         "unmatched_activities": unmatched,
+        "total_activities": len(activities),
+        "matched_activities": len(resolved),
     }
 
 
 def analyze_spatial_coherence(trip_plan: dict) -> dict:
     """
     Perform a full spatial coherence analysis on a TripPlan.
-    
-    Args:
-        trip_plan: A TripPlan dict with 'landmarks' and 'itinerary' keys.
-    
-    Returns:
-        Dict with overall analysis results including per-day breakdowns,
-        all spatial issues, a coherence score, and unmatched activities.
+    Uses plan landmarks + local data (restaurants/hotels/places) for coordinate lookup.
+    Penalizes score when too few activities can be geocoded.
     """
     landmarks = trip_plan.get("landmarks", [])
     itinerary = trip_plan.get("itinerary", [])
-    
-    if not landmarks:
+
+    landmark_index = build_landmark_index(landmarks)
+
+    # Even with no landmarks, we can still try local data fallback
+    if not landmarks and not _local_coords:
         return {
             "spatial_score": 0.0,
-            "spatial_issues": ["No landmarks found in the plan - cannot verify spatial coherence."],
+            "spatial_issues": ["No landmarks and no local data - cannot verify spatial coherence."],
             "per_day": [],
             "unmatched_activities": [],
             "total_transitions": 0,
             "flagged_transitions": 0,
+            "total_activities": 0,
+            "matched_activities": 0,
+            "coverage": 0.0,
         }
-    
-    landmark_index = build_landmark_index(landmarks)
-    
+
     all_issues = []
     all_unmatched = []
     per_day_results = []
     total_transitions = 0
     flagged_transitions = 0
-    
+    total_activities = 0
+    matched_activities = 0
+
     for day_plan in itinerary:
         day_result = analyze_day_spatial(day_plan, landmark_index)
         per_day_results.append(day_result)
@@ -208,14 +320,33 @@ def analyze_spatial_coherence(trip_plan: dict) -> dict:
         all_unmatched.extend(day_result["unmatched_activities"])
         total_transitions += len(day_result["transitions"])
         flagged_transitions += len(day_result["issues"])
-    
+        total_activities += day_result["total_activities"]
+        matched_activities += day_result["matched_activities"]
+
+    # Coverage ratio: what fraction of activities could be geocoded
+    coverage = matched_activities / total_activities if total_activities > 0 else 0.0
+
     # Compute spatial coherence score
     if total_transitions == 0:
-        spatial_score = 1.0  # No transitions to evaluate (single-activity days)
+        transition_score = 1.0
     else:
-        spatial_score = round(1.0 - (flagged_transitions / total_transitions), 2)
-        spatial_score = max(0.0, spatial_score)
-    
+        transition_score = 1.0 - (flagged_transitions / total_transitions)
+
+    # Apply coverage penalty: if less than threshold of activities are matched,
+    # reduce score proportionally so a 100% score with 20% coverage becomes ~20%
+    if coverage < COVERAGE_PENALTY_THRESHOLD:
+        coverage_penalty = coverage / COVERAGE_PENALTY_THRESHOLD
+        spatial_score = round(transition_score * coverage_penalty, 2)
+        if all_unmatched:
+            all_issues.append(
+                f"Low coverage: only {matched_activities}/{total_activities} activities "
+                f"({coverage:.0%}) could be geocoded - spatial check is unreliable"
+            )
+    else:
+        spatial_score = round(transition_score, 2)
+
+    spatial_score = max(0.0, min(1.0, spatial_score))
+
     return {
         "spatial_score": spatial_score,
         "spatial_issues": all_issues,
@@ -223,6 +354,9 @@ def analyze_spatial_coherence(trip_plan: dict) -> dict:
         "unmatched_activities": list(set(all_unmatched)),
         "total_transitions": total_transitions,
         "flagged_transitions": flagged_transitions,
+        "total_activities": total_activities,
+        "matched_activities": matched_activities,
+        "coverage": round(coverage, 2),
     }
 
 
@@ -361,44 +495,55 @@ BAD_PLAN = {
 }
 
 
-# ─── Report Formatting ──────────────────────────────────────────────────────
+# -- Report Formatting ---------------------------------------------------------
 
 def print_spatial_report(analysis: dict, plan_name: str = "Plan"):
     """Print a formatted spatial coherence report."""
     print(f"\n{'='*70}")
     print(f"  SPATIAL COHERENCE REPORT -- {plan_name}")
     print(f"{'='*70}")
-    
+
     score = analysis["spatial_score"]
     score_bar = "#" * int(score * 20) + "-" * (20 - int(score * 20))
-    print(f"\n  Score: [{score_bar}] {score:.0%}")
+    coverage = analysis.get("coverage", 0)
+    matched = analysis.get("matched_activities", 0)
+    total = analysis.get("total_activities", 0)
+
+    print(f"\n  Score:    [{score_bar}] {score:.0%}")
+    print(f"  Coverage: {matched}/{total} activities geocoded ({coverage:.0%})")
     print(f"  Transitions analyzed: {analysis['total_transitions']}")
     print(f"  Issues flagged: {analysis['flagged_transitions']}")
-    
+
     if analysis["unmatched_activities"]:
         print(f"\n  [!] Unmatched activities (no coordinates found):")
         for name in analysis["unmatched_activities"]:
             print(f"    - {name}")
-    
+
     for day in analysis["per_day"]:
-        print(f"\n  -- {day['day']} --")
+        day_matched = day.get("matched_activities", 0)
+        day_total = day.get("total_activities", 0)
+        print(f"\n  -- {day['day']} ({day_matched}/{day_total} located) --")
         if not day["transitions"]:
             print("    No transitions to evaluate (0-1 located activities)")
             continue
         for t in day["transitions"]:
             status = "[OK]" if t["distance_km"] <= MAX_URBAN_DISTANCE_KM else "[!!]"
+            # Show source labels for coordinates
+            src_from = f"[{t.get('from_source', '?')}]" if t.get("from_source") else ""
+            src_to = f"[{t.get('to_source', '?')}]" if t.get("to_source") else ""
             print(
-                f"    {status} {t['from']:<25s} -> {t['to']:<25s}  "
+                f"    {status} {t['from']:<25s}{src_from:<13s} -> "
+                f"{t['to']:<25s}{src_to:<13s} "
                 f"{t['distance_km']:>7.1f} km  (~{t['estimated_travel_time_hrs']:.1f}h)"
             )
-    
+
     if analysis["spatial_issues"]:
         print(f"\n  [FAIL] SPATIAL ISSUES:")
         for issue in analysis["spatial_issues"]:
             print(f"    - {issue}")
     else:
         print(f"\n  [PASS] No spatial issues detected.")
-    
+
     print(f"\n{'='*70}\n")
 
 
