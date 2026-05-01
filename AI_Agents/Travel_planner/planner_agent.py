@@ -75,7 +75,7 @@ You MUST output a JSON object matching this exact structure, wrapped in ```json 
 
 planner_agent = Agent(
     model=LiteLlm(
-        model="openrouter/minimax/minimax-m2.5:free",
+        model="openrouter/z-ai/glm-4.5-air:free",
         api_key=os.getenv("OPENROUTER_API_KEY"),
         api_base="https://openrouter.ai/api/v1"
     ),
