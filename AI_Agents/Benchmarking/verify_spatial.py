@@ -19,6 +19,7 @@ import os
 import json
 import argparse
 import asyncio
+import time
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
@@ -31,6 +32,7 @@ env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(env_path)
 
 from AI_Agents.Travel_planner.tools import calculate_distance_tool
+from AI_Agents.Benchmarking.benchmark_logger import log_result
 
 # -- Configuration ------------------------------------------------------------
 
@@ -551,13 +553,15 @@ def print_spatial_report(analysis: dict, plan_name: str = "Plan"):
 
 def run_test_cases():
     """Run built-in test cases to validate the spatial checker."""
+    start_time = time.time()
     
     # Test 1: Good plan (all Cairo, close together)
     print("\n>> TEST 1: Good Plan (all Cairo activities, close proximity)")
     good_analysis = analyze_spatial_coherence(GOOD_PLAN)
     print_spatial_report(good_analysis, "Cairo Explorer (Good)")
     
-    if good_analysis["spatial_score"] >= 0.7:
+    test1_passed = good_analysis["spatial_score"] >= 0.7
+    if test1_passed:
         print("  [PASS] TEST 1 PASSED - Good plan scored well spatially.\n")
     else:
         print("  [FAIL] TEST 1 FAILED - Good plan unexpectedly scored poorly.\n")
@@ -567,21 +571,67 @@ def run_test_cases():
     bad_analysis = analyze_spatial_coherence(BAD_PLAN)
     print_spatial_report(bad_analysis, "Impossible Egypt Tour (Bad)")
     
-    if bad_analysis["spatial_issues"] and bad_analysis["spatial_score"] < 0.7:
+    test2_passed = bad_analysis["spatial_issues"] and bad_analysis["spatial_score"] < 0.7
+    if test2_passed:
         print("  [PASS] TEST 2 PASSED - Bad plan correctly flagged spatial issues.\n")
     else:
         print("  [FAIL] TEST 2 FAILED - Bad plan was not flagged properly.\n")
+    
+    elapsed = round(time.time() - start_time, 2)
+    log_result(
+        script_name="verify_spatial",
+        results={
+            "mode": "test_cases",
+            "test1_good_plan": {
+                "passed": test1_passed,
+                "spatial_score": good_analysis["spatial_score"],
+                "coverage": good_analysis.get("coverage", 0),
+                "flagged_transitions": good_analysis["flagged_transitions"],
+                "total_transitions": good_analysis["total_transitions"],
+                "issues": good_analysis["spatial_issues"],
+            },
+            "test2_bad_plan": {
+                "passed": test2_passed,
+                "spatial_score": bad_analysis["spatial_score"],
+                "coverage": bad_analysis.get("coverage", 0),
+                "flagged_transitions": bad_analysis["flagged_transitions"],
+                "total_transitions": bad_analysis["total_transitions"],
+                "issues": bad_analysis["spatial_issues"],
+            },
+        },
+        extra={"elapsed_seconds": elapsed},
+    )
     
     return good_analysis, bad_analysis
 
 
 def verify_plan_file(filepath: str):
     """Load and verify a TripPlan JSON file."""
+    start_time = time.time()
     with open(filepath, "r", encoding="utf-8") as f:
         plan = json.load(f)
     
     analysis = analyze_spatial_coherence(plan)
     print_spatial_report(analysis, os.path.basename(filepath))
+    
+    elapsed = round(time.time() - start_time, 2)
+    log_result(
+        script_name="verify_spatial",
+        results={
+            "mode": "file",
+            "file": os.path.basename(filepath),
+            "spatial_score": analysis["spatial_score"],
+            "coverage": analysis.get("coverage", 0),
+            "total_activities": analysis.get("total_activities", 0),
+            "matched_activities": analysis.get("matched_activities", 0),
+            "flagged_transitions": analysis["flagged_transitions"],
+            "total_transitions": analysis["total_transitions"],
+            "issues": analysis["spatial_issues"],
+            "unmatched_activities": analysis.get("unmatched_activities", []),
+        },
+        extra={"elapsed_seconds": elapsed},
+    )
+    
     return analysis
 
 
