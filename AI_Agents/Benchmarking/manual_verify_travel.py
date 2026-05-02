@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 import asyncio
 
 import warnings
@@ -23,8 +24,10 @@ from AI_Agents.Travel_planner.agent import root_agent
 from google.adk.runners import Runner
 from google.adk.sessions.in_memory_session_service import InMemorySessionService
 from google.genai import types
+from AI_Agents.Benchmarking.benchmark_logger import log_result
 
 async def main():
+    start_time = time.time()
     
     query = "Plan a 3-day trip to cairo from saudi arabia riyadh for 2 people with a budget of 1500 SAR start date 2026-06-01 and recommanded resturants and hotels"
     print(f"Query: {query}\n")
@@ -75,18 +78,53 @@ async def main():
     if match:
         clean_text = match.group(1).strip()
     
+    elapsed = round(time.time() - start_time, 2)
+
     try:
         data = json.loads(clean_text)
         required_keys = ["trip_summary", "itinerary", "budget_breakdown", "landmarks"]
         missing = [k for k in required_keys if k not in data]
         if missing:
             print(f"FAILED: Missing keys in JSON: {missing}")
+            log_result(
+                script_name="manual_verify_travel",
+                query=query,
+                results={
+                    "passed": False,
+                    "reason": f"Missing keys: {missing}",
+                    "valid_json": True,
+                },
+                extra={"elapsed_seconds": elapsed, "raw_response": response_text},
+            )
         else:
             print("PASSED: Output contains all required JSON keys.")
-            print(f"Landmarks count: {len(data.get('landmarks', []))}")
-            print(f"Itinerary days: {len(data.get('itinerary', []))}")
+            landmarks_count = len(data.get('landmarks', []))
+            itinerary_days = len(data.get('itinerary', []))
+            print(f"Landmarks count: {landmarks_count}")
+            print(f"Itinerary days: {itinerary_days}")
+            log_result(
+                script_name="manual_verify_travel",
+                query=query,
+                results={
+                    "passed": True,
+                    "valid_json": True,
+                    "landmarks_count": landmarks_count,
+                    "itinerary_days": itinerary_days,
+                },
+                extra={"elapsed_seconds": elapsed, "raw_response": response_text},
+            )
     except json.JSONDecodeError:
         print("FAILED: Output is not valid JSON.")
+        log_result(
+            script_name="manual_verify_travel",
+            query=query,
+            results={
+                "passed": False,
+                "reason": "Output is not valid JSON",
+                "valid_json": False,
+            },
+            extra={"elapsed_seconds": elapsed, "raw_response": response_text},
+        )
 
 if __name__ == "__main__":
     asyncio.run(main())

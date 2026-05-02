@@ -15,6 +15,7 @@ import os
 import asyncio
 import json
 import re
+import time
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
@@ -43,6 +44,7 @@ from google.genai import types
 # Import judge agent runner and spatial verifier
 from AI_Agents.Benchmarking.judge import judge_agent
 from AI_Agents.Benchmarking.verify_spatial import analyze_spatial_coherence, print_spatial_report
+from AI_Agents.Benchmarking.benchmark_logger import log_result
 
 
 def extract_json_from_response(response_text):
@@ -150,6 +152,7 @@ Travel Plan:
 
 
 async def main():
+    start_time = time.time()
     query = (
         "Plan a 3-day trip to cairo from saudi arabia riyadh for 2 people "
         "with a budget of 1500 SAR start date 2026-06-01 and recommanded "
@@ -207,6 +210,7 @@ async def main():
     print("\nRunning judge agent (constraint + spatial)...\n")
 
     judge_data = None
+    judge_response = None
     try:
         judge_response = await run_judge(query, plan_json_str)
 
@@ -227,6 +231,7 @@ async def main():
         print(f"[ERROR] Judge agent failed: {e}")
 
     # -- Summary --
+    elapsed = round(time.time() - start_time, 2)
     print("\n" + "=" * 70)
     print("  SUMMARY")
     print("=" * 70)
@@ -237,6 +242,32 @@ async def main():
     else:
         print(f"  Judge passed:                  N/A (judge failed)")
     print("=" * 70)
+
+    # -- Log results --
+    log_result(
+        script_name="run_judge_flow",
+        query=query,
+        results={
+            "plan_valid_json": plan_data is not None,
+            "plan_missing_keys": missing if plan_data else None,
+            "trip_name": plan_data.get("trip_name") if plan_data else None,
+            "landmarks_count": len(plan_data.get("landmarks", [])) if plan_data else 0,
+            "itinerary_days": len(plan_data.get("itinerary", [])) if plan_data else 0,
+            "spatial_score": spatial_result["spatial_score"],
+            "spatial_coverage": spatial_result.get("coverage", 0),
+            "spatial_flagged_transitions": spatial_result["flagged_transitions"],
+            "spatial_total_transitions": spatial_result["total_transitions"],
+            "spatial_issues": spatial_result["spatial_issues"],
+            "judge_passed": judge_data.get("passed") if judge_data else None,
+            "judge_reason": judge_data.get("reason") if judge_data else None,
+            "judge_failed_constraints": judge_data.get("failed_constraints", []) if judge_data else [],
+        },
+        extra={
+            "elapsed_seconds": elapsed,
+            "raw_plan_response": response_text,
+            "raw_judge_response": judge_response,
+        },
+    )
 
 
 if __name__ == "__main__":
