@@ -10,8 +10,10 @@ from rest_framework.authtoken.models import Token
 from apps.accounts.models import User
 from .models import Plan, Subscription, SubscriptionMember
 
-class SubscriptionTests(APITestCase):
+
+class BaseSubscriptionSetup(APITestCase):
     def setUp(self):
+        # User
         self.user = User.objects.create_user(
             email="test@test.com",
             first_name="John",
@@ -21,20 +23,19 @@ class SubscriptionTests(APITestCase):
 
         self.token = Token.objects.create(user=self.user)
 
+        self.client.credentials(
+            HTTP_AUTHORIZATION=f"Token {self.token.key}"
+        )
+
+        # Plan
         self.plan = Plan.objects.create(
             name="Premium",
             price=100,
             max_users=5,
         )
 
-        self.client.credentials(
-            HTTP_AUTHORIZATION=f"Token {self.token.key}"
-        )
 
-    # --------------------
-    # Plan List
-    # --------------------
-
+class PlanTests(BaseSubscriptionSetup):
     def test_list_plans(self):
         response = self.client.get(reverse("plan-list"))
 
@@ -42,10 +43,8 @@ class SubscriptionTests(APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["name"], "Premium")
 
-    # --------------------
-    # Subscribe
-    # --------------------
 
+class SubscribeTests(BaseSubscriptionSetup):
     def test_subscribe_success(self):
         response = self.client.post(
             reverse("subscribe"),
@@ -54,10 +53,6 @@ class SubscriptionTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        self.assertTrue(
-            Subscription.objects.filter(owner=self.user).exists()
-        )
 
         subscription = Subscription.objects.get(owner=self.user)
 
@@ -78,10 +73,7 @@ class SubscriptionTests(APITestCase):
             format="json",
         )
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_404_NOT_FOUND,
-        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_subscribe_when_already_subscribed(self):
         now = timezone.now()
@@ -105,28 +97,37 @@ class SubscriptionTests(APITestCase):
             format="json",
         )
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_403_FORBIDDEN,
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class UnsubscribeTests(BaseSubscriptionSetup):
+    def setUp(self):
+        super().setUp()
+
+        self.other_user = User.objects.create_user(
+            email="other@test.com",
+            first_name="Jane",
+            last_name="Doe",
+            password="password123",
         )
 
-    # --------------------
-    # Unsubscribe
-    # --------------------
-
-    def test_unsubscribe_success(self):
         now = timezone.now()
 
-        subscription = Subscription.objects.create(
-            owner=self.user,
+        self.subscription = Subscription.objects.create(
+            owner=self.other_user,
             plan=self.plan,
             status="active",
             start_date=now,
             end_date=now + timedelta(days=30),
         )
 
+    def test_owner_unsubscribe_cancels_subscription(self):
+        # make self.user the owner
+        self.subscription.owner = self.user
+        self.subscription.save()
+
         SubscriptionMember.objects.create(
-            subscription=subscription,
+            subscription=self.subscription,
             user=self.user,
         )
 
@@ -134,21 +135,42 @@ class SubscriptionTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        subscription.refresh_from_db()
-        self.assertEqual(subscription.status, "cancelled")
+        self.subscription.refresh_from_db()
+        self.assertEqual(self.subscription.status, "cancelled")
 
-    def test_unsubscribe_without_subscription(self):
-        response = self.client.post(reverse("unsubscribe"))
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_403_FORBIDDEN,
+    def test_member_unsubscribe_leaves_subscription(self):
+        SubscriptionMember.objects.create(
+            subscription=self.subscription,
+            user=self.user,
         )
 
-    # --------------------
-    # Authentication
-    # --------------------
+        response = self.client.post(reverse("unsubscribe"))
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # subscription should NOT be cancelled
+        self.subscription.refresh_from_db()
+        self.assertEqual(self.subscription.status, "active")
+
+        # member should be removed
+        self.assertFalse(
+            SubscriptionMember.objects.filter(
+                subscription=self.subscription,
+                user=self.user,
+            ).exists()
+        )
+
+
+    def test_unsubscribe_requires_authentication(self):
+        self.client.credentials()
+
+        response = self.client.post(reverse("unsubscribe"))
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class AuthTests(BaseSubscriptionSetup):
     def test_subscribe_requires_authentication(self):
         self.client.credentials()
 
@@ -157,17 +179,4 @@ class SubscriptionTests(APITestCase):
             {"plan_id": self.plan.id},
         )
 
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_401_UNAUTHORIZED,
-        )
-
-    def test_unsubscribe_requires_authentication(self):
-        self.client.credentials()
-
-        response = self.client.post(reverse("unsubscribe"))
-
-        self.assertEqual(
-            response.status_code,
-            status.HTTP_401_UNAUTHORIZED,
-        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

@@ -52,12 +52,36 @@ class UnsubscribeView(APIView):
     permission_classes = [IsSubscribed]
 
     def post(self, request):
-        subscription = (
-            request.active_subscription
-        )  # Provided by IsSubscribed permission
-        subscription.status = "cancelled"
-        subscription.save()
+        subscription = request.active_subscription
+        user = request.user
+
+        # CASE 1: OWNER cancels
+        if subscription.owner == user:
+            subscription.status = "cancelled"
+            subscription.save()
+            # Remove Members
+            SubscriptionMember.objects.filter(
+                subscription=subscription
+            ).delete()
+
+            return Response(
+                {"message": "Subscription cancelled by owner"},
+                status=status.HTTP_200_OK,
+            )
+
+        # CASE 2: MEMBER leaves
+        removed, _ = SubscriptionMember.objects.filter(
+            subscription=subscription,
+            user=user,
+        ).delete()
+
+        if removed == 0:
+            return Response(
+                {"error": "User is not a member"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         return Response(
-            {"message": "Subscription cancelled"}, status=status.HTTP_200_OK
+            {"message": "You left the subscription"},
+            status=status.HTTP_200_OK,
         )
