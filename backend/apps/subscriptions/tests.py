@@ -23,9 +23,7 @@ class BaseSubscriptionSetup(APITestCase):
 
         self.token = Token.objects.create(user=self.user)
 
-        self.client.credentials(
-            HTTP_AUTHORIZATION=f"Token {self.token.key}"
-        )
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token.key}")
 
         # Plan
         self.plan = Plan.objects.create(
@@ -138,7 +136,6 @@ class UnsubscribeTests(BaseSubscriptionSetup):
         self.subscription.refresh_from_db()
         self.assertEqual(self.subscription.status, "cancelled")
 
-
     def test_member_unsubscribe_leaves_subscription(self):
         SubscriptionMember.objects.create(
             subscription=self.subscription,
@@ -161,7 +158,6 @@ class UnsubscribeTests(BaseSubscriptionSetup):
             ).exists()
         )
 
-
     def test_unsubscribe_requires_authentication(self):
         self.client.credentials()
 
@@ -180,3 +176,144 @@ class AuthTests(BaseSubscriptionSetup):
         )
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class AddMemberTests(BaseSubscriptionSetup):
+    def setUp(self):
+        super().setUp()
+
+        self.member = User.objects.create_user(
+            email="member@test.com",
+            first_name="Member",
+            last_name="User",
+            password="password123",
+        )
+
+        now = timezone.now()
+
+        self.subscription = Subscription.objects.create(
+            owner=self.user,
+            plan=self.plan,
+            status="active",
+            start_date=now,
+            end_date=now + timedelta(days=30),
+        )
+
+        SubscriptionMember.objects.create(
+            subscription=self.subscription,
+            user=self.user,
+        )
+
+    def test_owner_can_add_member(self):
+        response = self.client.post(
+            reverse("add-member"),
+            {"user_email": self.member.email},
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+        )
+
+        self.assertTrue(
+            SubscriptionMember.objects.filter(
+                subscription=self.subscription,
+                user=self.member,
+            ).exists()
+        )
+
+    def test_add_nonexistent_user(self):
+        response = self.client.post(
+            reverse("add-member"),
+            {"user_email": "missing@test.com"},
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_404_NOT_FOUND,
+        )
+
+    def test_non_owner_cannot_add_member(self):
+        other_user = User.objects.create_user(
+            email="other@test.com",
+            first_name="Other",
+            last_name="User",
+            password="password123",
+        )
+
+        SubscriptionMember.objects.create(
+            subscription=self.subscription,
+            user=other_user,
+        )
+
+        other_token = Token.objects.create(user=other_user)
+
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {other_token.key}")
+
+        response = self.client.post(
+            reverse("add-member"),
+            {"user_email": self.member.email},
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+    def test_cannot_add_user_already_subscribed(self):
+
+        other_subscription = Subscription.objects.create(
+            owner=self.member,
+            plan=self.plan,
+            status="active",
+            start_date=timezone.now(),
+            end_date=timezone.now() + timedelta(days=30),
+        )
+
+        SubscriptionMember.objects.create(
+            subscription=other_subscription,
+            user=self.member,
+        )
+
+        response = self.client.post(
+            reverse("add-member"),
+            {"user_email": self.member.email},
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+        )
+
+    def test_cannot_add_member_when_subscription_is_full(self):
+        self.plan.max_users = 1
+        self.plan.save()
+
+        response = self.client.post(
+            reverse("add-member"),
+            {"user_email": self.member.email},
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+        )
+
+    def test_add_member_requires_authentication(self):
+        self.client.credentials()
+
+        response = self.client.post(
+            reverse("add-member"),
+            {"user_email": self.member.email},
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED,
+        )

@@ -2,11 +2,11 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.views import APIView, PermissionDenied
 from .serializers import PlanSerializer
-from .permissions import IsSubscribed, IsNotSubscribed
+from .permissions import IsSubscribed, IsNotSubscribed, get_active_subscription
 from .models import Subscription, SubscriptionMember, Plan
-
+from apps.accounts.models import User
 
 class PlanListView(generics.ListAPIView):
     queryset = Plan.objects.all()
@@ -60,9 +60,7 @@ class UnsubscribeView(APIView):
             subscription.status = "cancelled"
             subscription.save()
             # Remove Members
-            SubscriptionMember.objects.filter(
-                subscription=subscription
-            ).delete()
+            SubscriptionMember.objects.filter(subscription=subscription).delete()
 
             return Response(
                 {"message": "Subscription cancelled by owner"},
@@ -85,3 +83,50 @@ class UnsubscribeView(APIView):
             {"message": "You left the subscription"},
             status=status.HTTP_200_OK,
         )
+
+class AddMemberView(APIView):
+    permission_classes = [IsSubscribed]
+
+    def post(self, request):
+        subscription = request.active_subscription
+
+        # Only owner can add members
+        if subscription.owner != request.user:
+            raise PermissionDenied(
+                "Only the subscription owner can add members."
+            )
+
+        user_email = request.data.get("user_email")
+
+        try:
+            user = User.objects.get(email=user_email)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # User already belongs to a subscription
+        if get_active_subscription(user):
+            return Response(
+                {"error": "User already has an active subscription"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Capacity check
+        current_members = subscription.members.count()
+
+        if current_members >= subscription.plan.max_users:
+            return Response(
+                {"error": "Subscription has reached its member limit"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        SubscriptionMember.objects.create(
+            subscription=subscription,
+            user=user,
+        )
+
+        return Response(
+            {"message": "Member added successfully"},
+            status=status.HTTP_201_CREATED,)
