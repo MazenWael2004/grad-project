@@ -5,6 +5,14 @@ class criterion(BaseModel):
     passed: bool = Field(description="Whether the travel plan satisfies all constraints.")
     reason: str = Field(description="A brief explanation of why it passed or failed.")
     failed_constraints: list[str] = Field(description="List of specific constraints that were not met.")
+    spatial_issues: list[str] = Field(
+        default_factory=list,
+        description="List of spatial/distance issues found in the itinerary, e.g. unreachable consecutive activities."
+    )
+    spatial_score: float = Field(
+        default=1.0,
+        description="Spatial coherence score from 0.0 (completely incoherent) to 1.0 (perfectly coherent)."
+    )
 
 class Coordinate(BaseModel):
     latitude: float = Field(description="Latitude of the location")

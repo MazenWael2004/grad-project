@@ -145,6 +145,7 @@ const AddPaymentMethod = () => {
         ]
       }
     })
+    // Do api call to save new payment method in backend here. or update user.
     router.push("settings/paymentMethods");
   }
   else{
