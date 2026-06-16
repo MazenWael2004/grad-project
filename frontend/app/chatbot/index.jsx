@@ -37,7 +37,7 @@ const ChatBot = () => {
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const scrollViewRef = useRef(null);
 
-  const API_URL = "https://713c114d737a.ngrok-free.app";
+  const API_URL = "https://7570-34-21-71-3.ngrok-free.app/generate";
   const API_KEY = "secret123";
 
   
@@ -141,11 +141,13 @@ useEffect(() => {
         ]);
       }
     } catch (err) {
+      console.log("CHATBOT ERROR:", err);
+
       setMessagesList((prev) => [
         ...prev,
         {
           id: prev.length + 1,
-          text: "Network error. Please try again.",
+          text: `Error: ${err.message}`,
           role: "bot",
           photo: require("../../assets/images/chatbot.png"),
         },
