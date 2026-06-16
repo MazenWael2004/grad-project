@@ -1,0 +1,14 @@
+Open the Kaggle notebook that contains the model code and run all cells inside the model folder until the FastAPI server is started and the ngrok endpoint is generated.
+
+Copy the generated public endpoint (ngrok URL) that looks like:
+
+https://xxxxxx.ngrok-free.app
+
+In your React Native project, open:
+
+app/camera/index.jsx
+Replace the API URL with your new endpoint:
+
+const API_URL = "https://your-ngrok-endpoint.ngrok-free.app/predict";
+
+Make sure the /predict route is included in the URL.
