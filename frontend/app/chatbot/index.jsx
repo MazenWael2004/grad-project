@@ -15,30 +15,82 @@ import { router } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import messages from "../../constants/messages";
+import { Ionicons } from "@expo/vector-icons";
+import { useCameraPermissions } from "expo-camera";
+
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback } from "react";
+
 
 const ChatBot = () => {
+  const params = useLocalSearchParams();
   const { theme } = useContext(ThemeContext);
-  const [prompt, setPrompt] = useState(""); // User input
-  const [messagesList, setMessagesList] = useState(messages); // All messages
+
+  const [prompt, setPrompt] = useState("");
+  const [messagesList, setMessagesList] = useState(messages);
   const [isPromptSubmitted, setIsPromptSubmitted] = useState(false);
   const [isPromptEmpty, setIsPromptEmpty] = useState(true);
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [predictionAdded, setPredictionAdded] = useState(false);
 
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const scrollViewRef = useRef(null);
 
-  // API Config
   const API_URL = "https://713c114d737a.ngrok-free.app";
   const API_KEY = "secret123";
 
-  // Function to send prompt to backend
+  
+
+useEffect(() => {
+  if (!params?.label) return;
+
+  setMessagesList((prev) => {
+    const alreadyExists = prev.some(
+      (msg) =>
+        msg.text ===
+        `📍 Detected: ${params.label} (${Number(params.confidence).toFixed(1)}%)`
+    );
+
+    if (alreadyExists) return prev;
+
+    return [
+      ...prev,
+      {
+        id: prev.length + 1,
+        text: `📍 Detected: ${params.label} (${Number(params.confidence).toFixed(1)}%)`,
+        role: "bot",
+        photo: require("../../assets/images/chatbot.png"),
+      },
+    ];
+  });
+
+  setIsPromptSubmitted(true);
+}, [params?.label, params?.confidence]);
+
+
+  const handleCameraButton = async () => {
+    console.log("Camera button pressed");
+
+    if (!permission?.granted) {
+      const result = await requestPermission();
+
+      if (!result.granted) {
+        console.log("Camera permission denied");
+        return;
+      }
+    }
+
+    
+    router.push("/camera");
+  };
+
   const handleSendButton = async () => {
     if (!prompt.trim()) return;
 
     setIsPromptSubmitted(true);
     setLoading(true);
 
-    // Add user message
     setMessagesList((prev) => [
       ...prev,
       {
@@ -50,13 +102,13 @@ const ChatBot = () => {
     ]);
 
     const userMessage = prompt;
-    setPrompt(""); // Clear input
+    setPrompt("");
 
     try {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${API_KEY}`,
+          Authorization: `Bearer ${API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -67,14 +119,12 @@ const ChatBot = () => {
 
       if (res.ok) {
         const data = await res.json();
-        const botReply = data.response || "Sorry, I didn’t understand that.";
 
-        // Add bot message
         setMessagesList((prev) => [
           ...prev,
           {
             id: prev.length + 1,
-            text: botReply,
+            text: data.response || "Sorry, I didn’t understand that.",
             role: "bot",
             photo: require("../../assets/images/chatbot.png"),
           },
@@ -105,98 +155,71 @@ const ChatBot = () => {
     }
   };
 
-  const handleRecordButton = () =>{
-    // Future implementation for voice input
+  const handleRecordButton = () => {
     console.log("Record button pressed");
-  }
+  };
 
-  // Auto scroll to bottom
   useEffect(() => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
 
-    if(prompt.trim() !== ""){
-      setIsPromptEmpty(false);
-      
-    }
-    else{
-      setIsPromptEmpty(true);
-    }
-
-
-  // console.log(isPromptEmpty);
-     
+    setIsPromptEmpty(prompt.trim() === "");
   }, [messagesList, prompt]);
 
-  
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
     >
       <View
         style={[styles.container, { backgroundColor: currentTheme.background }]}
       >
-        {/* Header */}
+
         <View style={styles.backAndPersonalInfoTitle}>
           <TouchableOpacity onPress={() => router.back()}>
             <Image
               source={require("../../assets/images/back.png")}
-              style={{ width: 30, height: 30, tintColor: currentTheme.iconColor }}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: currentTheme.iconColor,
+              }}
             />
           </TouchableOpacity>
+
           <Text
             style={{
               fontFamily: "Poppins-Bold",
               fontSize: 20,
               color: currentTheme.text,
               marginLeft: 20,
+              flex: 1,
             }}
           >
             EgyBot
           </Text>
+
+        
+          <TouchableOpacity onPress={handleCameraButton}>
+            <Ionicons
+              name="camera-outline"
+              size={28}
+              color={currentTheme.iconColor}
+            />
+          </TouchableOpacity>
         </View>
 
-        {/* Greeting or Messages */}
+        {/* MESSAGES */}
         {!isPromptSubmitted ? (
           <View style={styles.greetingWrapper}>
             <Image
               source={require("../../assets/images/chatbot.png")}
               style={{ width: 150, height: 150 }}
             />
-            <Text
-              style={{
-                fontFamily: "Poppins-SemiBold",
-                fontSize: 32,
-                color: currentTheme.text,
-              }}
-            >
-              Hello, User!
-            </Text>
-
-            <Text
-              style={{
-                fontFamily: "Poppins-SemiBold",
-                fontSize: 28,
-                color: currentTheme.text,
-                textAlign: "center",
-                marginVertical: 10,
-              }}
-            >
+            <Text style={styles.title}>Hello, User!</Text>
+            <Text style={styles.subtitle}>
               Welcome to EgyBot, your AI tour guide.
-            </Text>
-
-            <Text
-              style={{
-                fontFamily: "Poppins-Medium",
-                fontSize: 16,
-                color: currentTheme.description,
-                textAlign: "center",
-              }}
-            >
-              Ask anything about our beloved country.
             </Text>
           </View>
         ) : (
@@ -204,75 +227,52 @@ const ChatBot = () => {
             ref={scrollViewRef}
             style={{ flex: 1 }}
             contentContainerStyle={styles.answersWrapper}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
           >
-            {messagesList.map((messageItem, index) => {
-              return (
-                <View style={styles.answer} key={index}>
-                  <View style={styles.whoAnsweredWrapper}>
-                    <Image
-                      source={messageItem.photo}
-                      style={{ width: 40, height: 40 }}
-                    />
-                    <Text
-                      style={{
-                        fontFamily: "Poppins-Medium",
-                        fontSize: 18,
-                        color: currentTheme.text,
-                      }}
-                    >
-                      {messageItem.role === "user" ? "Mazen Wael" : "EgyBot"}
-                    </Text>
-                  </View>
-                  <Text
-                    style={{
-                      fontFamily: "Poppins-Medium",
-                      fontSize: 15,
-                      color: currentTheme.text,
-                      marginTop: 5,
-                    }}
-                  >
-                    {messageItem.text}
+            {messagesList.map((msg, index) => (
+              <View key={index} style={styles.answer}>
+                <View style={styles.whoAnsweredWrapper}>
+                  <Image source={msg.photo} style={{ width: 40, height: 40 }} />
+                  <Text style={{ color: currentTheme.text }}>
+                    {msg.role === "user" ? "You" : "EgyBot"}
                   </Text>
                 </View>
-              );
-            })}
+
+                <Text style={{ color: currentTheme.text }}>{msg.text}</Text>
+              </View>
+            ))}
+
             {loading && (
               <View style={styles.loaderWrapper}>
                 <ActivityIndicator size="large" color="#D4AF37" />
-                <Text style={{ color: currentTheme.text, marginTop: 5 }}>EgyBot is typing...</Text>
+                <Text style={{ color: currentTheme.text }}>
+                  EgyBot is typing...
+                </Text>
               </View>
             )}
           </ScrollView>
         )}
 
-        {/* Input bar */}
-        <View
-          style={[
-            styles.promptWrapper,
-            { backgroundColor: currentTheme.background },
-          ]}
-        >
+        {/* INPUT */}
+        <View style={styles.promptWrapper}>
           <TextInput
-            style={[
-              styles.textInput,
-              {
-                color: currentTheme.text,
-                backgroundColor: currentTheme.searchBackground,
-                borderColor: currentTheme.borderColor,
-              },
-            ]}
-            placeholder="Ask me anything about Egypt..."
-            placeholderTextColor={currentTheme.description}
-            multiline
-            onChangeText={(text) => setPrompt(text)}
+            style={styles.textInput}
+            placeholder="Ask me anything..."
             value={prompt}
+            onChangeText={setPrompt}
+            multiline
           />
-          <TouchableOpacity onPress={!isPromptEmpty?handleSendButton:handleRecordButton} style={styles.sendButton}>
+
+          <TouchableOpacity
+            onPress={isPromptEmpty ? handleRecordButton : handleSendButton}
+            style={styles.sendButton}
+          >
             <Image
-              source={!isPromptEmpty?require("../../assets/images/send.png"):require("../../assets/images/voice.png")}
-              style={[styles.sendIcon, { tintColor: currentTheme.background }]}
+              source={
+                isPromptEmpty
+                  ? require("../../assets/images/voice.png")
+                  : require("../../assets/images/send.png")
+              }
+              style={styles.sendIcon}
             />
           </TouchableOpacity>
         </View>
@@ -284,63 +284,58 @@ const ChatBot = () => {
 export default ChatBot;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 70,
-    paddingHorizontal: 20,
-  },
-  loaderWrapper: {
-  marginVertical: 10,
-  alignItems: "center",
-  justifyContent: "center",
- },
+  container: { flex: 1, paddingTop: 70, paddingHorizontal: 20 },
+
   backAndPersonalInfoTitle: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
   },
+
   greetingWrapper: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
   },
-  answersWrapper: {
-    paddingBottom: 20,
-  },
-  answer: {
-    flexDirection: "column",
-    paddingVertical: 5,
-  },
+
+  title: { fontSize: 32, fontWeight: "bold" },
+  subtitle: { fontSize: 18, textAlign: "center", marginTop: 10 },
+
+  answersWrapper: { paddingBottom: 20 },
+
+  answer: { marginVertical: 10 },
+
   whoAnsweredWrapper: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
   },
+
+  loaderWrapper: {
+    alignItems: "center",
+    marginVertical: 10,
+  },
+
   promptWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderTopWidth: 1,
-    borderColor: "#ddd",
+    padding: 10,
   },
+
   textInput: {
     flex: 1,
-    fontFamily: "Poppins-Medium",
-    fontSize: 16,
-    padding: 12,
+    backgroundColor: "#eee",
     borderRadius: 20,
-    maxHeight: 120,
+    padding: 10,
   },
+
   sendButton: {
     marginLeft: 10,
     backgroundColor: "#D4AF37",
     padding: 12,
     borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
   },
+
   sendIcon: {
     width: 20,
     height: 20,
