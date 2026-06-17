@@ -178,7 +178,7 @@ class AuthTests(BaseSubscriptionSetup):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class AddMemberTests(BaseSubscriptionSetup):
+class MemberTests(BaseSubscriptionSetup):
     def setUp(self):
         super().setUp()
 
@@ -206,7 +206,7 @@ class AddMemberTests(BaseSubscriptionSetup):
 
     def test_owner_can_add_member(self):
         response = self.client.post(
-            reverse("add-member"),
+            reverse("members-list"),
             {"user_email": self.member.email},
             format="json",
         )
@@ -225,7 +225,7 @@ class AddMemberTests(BaseSubscriptionSetup):
 
     def test_add_nonexistent_user(self):
         response = self.client.post(
-            reverse("add-member"),
+            reverse("members-list"),
             {"user_email": "missing@test.com"},
             format="json",
         )
@@ -253,7 +253,7 @@ class AddMemberTests(BaseSubscriptionSetup):
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {other_token.key}")
 
         response = self.client.post(
-            reverse("add-member"),
+            reverse("members-list"),
             {"user_email": self.member.email},
             format="json",
         )
@@ -279,7 +279,7 @@ class AddMemberTests(BaseSubscriptionSetup):
         )
 
         response = self.client.post(
-            reverse("add-member"),
+            reverse("members-list"),
             {"user_email": self.member.email},
             format="json",
         )
@@ -294,7 +294,7 @@ class AddMemberTests(BaseSubscriptionSetup):
         self.plan.save()
 
         response = self.client.post(
-            reverse("add-member"),
+            reverse("members-list"),
             {"user_email": self.member.email},
             format="json",
         )
@@ -304,16 +304,132 @@ class AddMemberTests(BaseSubscriptionSetup):
             status.HTTP_400_BAD_REQUEST,
         )
 
-    def test_add_member_requires_authentication(self):
-        self.client.credentials()
+    def test_list_members(self):
+        response = self.client.get(reverse("members-list"))
 
-        response = self.client.post(
-            reverse("add-member"),
-            {"user_email": self.member.email},
-            format="json",
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertIn(
+            self.user.email,
+            response.data["members"],
+        )
+
+    def test_remove_member_success(self):
+
+        SubscriptionMember.objects.create(
+            subscription=self.subscription,
+            user=self.member,
+        )
+        response = self.client.delete(
+            reverse("members-remove") + f"?email={self.member.email}",
         )
 
         self.assertEqual(
             response.status_code,
-            status.HTTP_401_UNAUTHORIZED,
+            status.HTTP_200_OK,
         )
+
+        self.assertFalse(
+            SubscriptionMember.objects.filter(
+                subscription=self.subscription,
+                user=self.member,
+            ).exists()
+        )
+
+    def test_remove_non_member(self):
+        response = self.client.delete(
+            reverse("members-remove") + f"?email=notfound@test.com",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_404_NOT_FOUND,
+        )
+
+    def test_cannot_remove_owner(self):
+        response = self.client.delete(
+            reverse("members-remove") + f"?email={self.user.email}"
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+
+class MySubscriptionTests(BaseSubscriptionSetup):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse("my-subscription")
+
+    def test_no_subscription(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {"plan": None})
+
+    def test_owner_subscription(self):
+        now = timezone.now()
+
+        subscription = Subscription.objects.create(
+            owner=self.user,
+            plan=self.plan,
+            status="active",
+            start_date=now,
+            end_date=now + timedelta(days=30),
+        )
+
+        SubscriptionMember.objects.create(
+            subscription=subscription,
+            user=self.user,
+        )
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertEqual(response.data["plan"]["id"], self.plan.id)
+        self.assertEqual(response.data["plan"]["name"], self.plan.name)
+        self.assertEqual(response.data["plan"]["price"], "100.00")
+        self.assertEqual(response.data["plan"]["max_users"], 5)
+
+        self.assertTrue(response.data["is_owner"])
+        self.assertEqual(response.data["members"], 1)
+
+    def test_member_subscription(self):
+        owner = User.objects.create_user(
+            email="owner@test.com",
+            first_name="Owner",
+            last_name="User",
+            password="password123",
+        )
+
+        now = timezone.now()
+
+        subscription = Subscription.objects.create(
+            owner=owner,
+            plan=self.plan,
+            status="active",
+            start_date=now,
+            end_date=now + timedelta(days=30),
+        )
+
+        SubscriptionMember.objects.create(
+            subscription=subscription,
+            user=owner,
+        )
+
+        SubscriptionMember.objects.create(
+            subscription=subscription,
+            user=self.user,
+        )
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertEqual(response.data["plan"]["id"], self.plan.id)
+        self.assertFalse(response.data["is_owner"])
+
+        # owner + current user
+        self.assertEqual(response.data["members"], 2)

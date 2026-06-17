@@ -54,3 +54,22 @@ class IsNotSubscribed(permissions.IsAuthenticated):
         if subscription:
             raise PermissionDenied(self.message)
         return True
+
+
+class IsSubscriptionOwner(IsSubscribed):
+    """
+    Allows access only to users who own an active subscription.
+    Attaches the subscription instance to request.active_subscription.
+    """
+
+    message = "You must own an active subscription to access this endpoint."
+
+    def has_permission(self, request, view):
+        # Ensures the user is authenticated and has an active subscription.
+        if not super().has_permission(request, view):
+            return False
+
+        if request.active_subscription.owner != request.user:
+            raise PermissionDenied(self.message)
+
+        return True
