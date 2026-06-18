@@ -10,7 +10,7 @@ export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "https://1877-35-239-17-149.ngrok-free.app/predict"; 
+  const API_URL = "https://12e1-8-229-115-241.ngrok-free.app/predict"; 
   const API_KEY = "secret123";
 
  
@@ -76,7 +76,7 @@ export default function CameraScreen() {
       router.replace({
         pathname: "/chatbot",
         params: {
-          label: data.response,
+          label: data.label,
           confidence: data.confidence,
         },
       });
