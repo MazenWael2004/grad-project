@@ -1,17 +1,42 @@
 from datetime import timedelta
 from django.utils import timezone
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView, PermissionDenied
+from rest_framework.decorators import action
 from .serializers import PlanSerializer
-from .permissions import IsSubscribed, IsNotSubscribed, get_active_subscription
+from .permissions import (
+    IsSubscribed,
+    IsNotSubscribed,
+    IsSubscriptionOwner,
+    get_active_subscription,
+)
 from .models import Subscription, SubscriptionMember, Plan
 from apps.accounts.models import User
+
 
 class PlanListView(generics.ListAPIView):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class MySubscriptionView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        subscription = get_active_subscription(user)
+        if subscription:
+            plan = subscription.plan
+            serializer = PlanSerializer(plan)
+            members = subscription.members.count()
+            is_owner = subscription.owner == user
+            return Response(
+                {"plan": serializer.data, "is_owner": is_owner, "members": members},
+                status=status.HTTP_200_OK,
+            )
+        return Response({"plan": None}, status=status.HTTP_200_OK)
 
 
 class SubscribeView(APIView):
@@ -84,41 +109,41 @@ class UnsubscribeView(APIView):
             status=status.HTTP_200_OK,
         )
 
-class AddMemberView(APIView):
-    permission_classes = [IsSubscribed]
 
-    def post(self, request):
+class MemberViewSet(viewsets.ViewSet):
+    permission_classes = [IsSubscriptionOwner]
+
+    def list(self, request):
         subscription = request.active_subscription
 
-        # Only owner can add members
-        if subscription.owner != request.user:
-            raise PermissionDenied(
-                "Only the subscription owner can add members."
-            )
+        members = subscription.members.values_list(
+            "user__email",
+            flat=True,
+        )
 
-        user_email = request.data.get("user_email")
+        return Response({"members": list(members)})
+
+    def create(self, request):
+        subscription = request.active_subscription
+        email = request.data.get("user_email")
 
         try:
-            user = User.objects.get(email=user_email)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             return Response(
                 {"error": "User not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        # User already belongs to a subscription
         if get_active_subscription(user):
             return Response(
                 {"error": "User already has an active subscription"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Capacity check
-        current_members = subscription.members.count()
-
-        if current_members >= subscription.plan.max_users:
+        if subscription.members.count() >= subscription.plan.max_users:
             return Response(
-                {"error": "Subscription has reached its member limit"},
+                {"error": "Subscription limit reached"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -128,5 +153,41 @@ class AddMemberView(APIView):
         )
 
         return Response(
-            {"message": "Member added successfully"},
-            status=status.HTTP_201_CREATED,)
+            {"message": "Member added"},
+            status=status.HTTP_201_CREATED,
+        )
+    @action(detail=False, methods=["delete"])
+    def remove(self, request):
+        subscription = request.active_subscription
+        email = request.query_params.get("email")
+        if not email:
+            return Response(
+                {"error": "email is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if email == subscription.owner.email:
+            return Response(
+                {"error": "Cannot remove owner"}, status=status.HTTP_403_FORBIDDEN
+            )
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {"error": "User not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        deleted, _ = SubscriptionMember.objects.filter(
+            subscription=subscription,
+            user=user,
+        ).delete()
+
+        if not deleted:
+            return Response(
+                {"error": "User is not a member"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(
+            {"message": "Member removed"},
+            status=status.HTTP_200_OK,
+        )
