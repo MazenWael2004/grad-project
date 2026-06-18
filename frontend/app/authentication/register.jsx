@@ -14,11 +14,16 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 import Constants from "expo-constants";
 import { Alert } from "react-native";
+import { useUser } from "../contexts/userContext";
+
+
+
 const { API_BASE_URL } = Constants.expoConfig.extra;
 console.log(`${API_BASE_URL}/register/`);
 
 const Register = () => {
   // States...
+  const { user, setUser } = useUser();
   const [email, setEmail] = useState("");
   const { registerFormData, setRegisterFormData } = useRegisterFormContext();
   const [password, setPassword] = useState("");
@@ -219,7 +224,7 @@ const handleSubmitButton = async () => {
   console.log("Submitting form with data: ", registerFormData); // Debug log to check form data before API call
   // Proceed with API request
   try {
-    const response = await axios.post(`http://127.0.0.1:8000/api/accounts/register/`, {
+    const response = await axios.post(`http://10.187.16.161:8000/api/accounts/register/`, {
       first_name: registerFormData.firstName,
       last_name: registerFormData.lastName,
       email: registerFormData.email,
@@ -228,8 +233,17 @@ const handleSubmitButton = async () => {
     });
 
     if (response.status === 201) {
+      const user = response.data.user;
       Alert.alert("Success", "Account created successfully!");
-      router.push("/authentication/login");
+      // Setting user context after registering...
+      setUser({
+       userId:user.id,
+       name:user.first_name+user.last_name,
+       email:user.email,
+       country:user.country,
+       phoneNumber:user.phone_number
+      })
+      router.replace("/main/");
     }
   } catch (error) {
     console.error(error.response?.data || error.message);

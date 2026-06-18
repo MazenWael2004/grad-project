@@ -10,9 +10,12 @@ import React, { use, useState } from "react";
 import { hide } from "expo-splash-screen";
 import {useRouter} from "expo-router";
 import { Alert } from "react-native";
+import axios from "axios";
+import { useUser } from "../contexts/userContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const { user, setUser } = useUser();
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [isPasswordCorrect,setIsPasswordCorrect] = useState(true);
@@ -29,7 +32,7 @@ const Login = () => {
     console.log("Login Form Password:"+text);
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
    if(!email || !password){
     Alert.alert("Please Input Required Fields.")
     return;
@@ -41,9 +44,34 @@ const Login = () => {
      return;
    } 
 
-  router.push('/main')
+  try {
+    const response = await axios.post(`http://10.187.16.161:8000/api/accounts/login/`, {
+     email,
+     password,
+    });
 
-  };
+    if (response.status === 200) {
+      const user = response.data.user;
+      Alert.alert("Success", "Account Successfully Logged In");
+      // Setting user context after registering...
+      setUser({
+       userId:user.id,
+       name:user.first_name+user.last_name,
+       email:user.email,
+       country:user.country,
+       phoneNumber:user.phone_number
+      })
+      router.replace("/main/");
+    }
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    Alert.alert("Error", "Registration failed. Try again.");
+  }
+  
+};
+
+
+
   return (
     <View
       style={{

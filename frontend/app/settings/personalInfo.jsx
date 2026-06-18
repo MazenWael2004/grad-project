@@ -22,7 +22,7 @@ const PersonalInfo = () => {
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
   const [image, setImage] = useState(null);
-  const [fullName, setFullName] = useState(user.fullName || "");
+  const [fullName, setFullName] = useState(user.name || "");
   const [phoneValue, setPhoneValue] = useState(user.phoneNumber || ""); 
   const [formattedValue, setFormattedValue] = useState("");
   const profilePicUri = image || user.profilePic;
@@ -30,11 +30,12 @@ const PersonalInfo = () => {
   const handleSaveChanges = () => {
     const updatedUser = {
       ...user,
-      fullName,
+      name:fullName,
       phoneNumber: phoneValue,
       profilePic: image || user.profilePic,
     };
     setUser(updatedUser);
+    console.log(updatedUser);
 
     // Do api call to save changes in backend here.
   };

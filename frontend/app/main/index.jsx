@@ -19,14 +19,19 @@ import governorates from "../../constants/governorates";
 import {useSavedList} from "../contexts/savedListContext"
 import { useUserTravelPreferences } from "../contexts/userTravelPreferencesContext";
 import articles from "../../constants/articles";
+import { useUser } from "../contexts/userContext";
+
 
 const Home = () => {
+  const { user, setUser } = useUser();
   const {theme} = useContext(ThemeContext);
   const {addGovernorateId} = useUserTravelPreferences();
   const [input,setInput] = useState("");
   const [isInputEmpty,setIsInputEmpty] = useState(false);
   const [filteredGovernorates,setFilteredGovernorates] = useState([]);
   const {savedList,addToSavedList,removeFromSavedList} = useSavedList();
+  console.log("User Data",user);
+
   
 
   const handleGovernoratePress = (id)=>{

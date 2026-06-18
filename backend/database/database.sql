@@ -29,7 +29,7 @@ notes TEXT
 
 -- Table of Subscriptions -- 
 CREATE TABLE subscriptions(
-    ID INT AUTO_INCREMENT PRIMARY_KEY,
+    ID INT AUTO_INCREMENT PRIMARY KEY,
     name varchar(40),
 	price INT
 )

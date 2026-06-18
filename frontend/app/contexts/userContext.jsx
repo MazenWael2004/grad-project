@@ -8,7 +8,6 @@ export const UserProvider = ({ children }) => {
     userId: null,
     name: '',
     email: '',
-    password: '',
     paymentMethods: [],
     currentSubscription: subscriptions[0],
     country: '',

@@ -8,7 +8,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["email", "first_name","last_name", "password"]
+        fields = ["email", "first_name","last_name", "password","country"]
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -24,3 +24,16 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid credentials")
         data["user"] = user
         return data
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "email","country","phone_number","is_active","is_staff"]
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "phone_number"]
