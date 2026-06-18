@@ -45,7 +45,12 @@ research_agent = Agent(
    #      api_key=os.getenv("OPENROUTER_API_KEY"),
    #      api_base="https://openrouter.ai/api/v1"
    #  ),
-    model = "gemini-3-flash-preview",
+   # model = "gemini-3.5-flash",
+    model=LiteLlm(
+      model="openai/custom-model",
+      api_base="https://sd-omar04--vllm-inference-serve.modal.run",
+      api_key="still_havent_secured_it"
+    ), 
     name="research_agent",
     description="Provides travel information including hotels, restaurants, and tourist attractions with prices and locations.",
     instruction=research_prompt,

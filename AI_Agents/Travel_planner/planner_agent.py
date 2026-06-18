@@ -75,9 +75,13 @@ You MUST output a JSON object matching this exact structure, wrapped in ```json 
 
 planner_agent = Agent(
     model=LiteLlm(
-        model="openrouter/z-ai/glm-4.5-air:free",
-        api_key=os.getenv("OPENROUTER_API_KEY"),
-        api_base="https://openrouter.ai/api/v1"
+        #model="nvidia/nemotron-3-ultra-550b-a55b:free",
+        #api_key=os.getenv("OPENROUTER_API_KEY"),
+        #api_base="https://openrouter.ai/api/v1"
+        model="openai/custom-model",
+        api_base="https://sd-omar04--vllm-inference-serve.modal.run",
+        api_key="still_havent_secured_it",
+        
     ),
     name="planner_agent",
     description="Creates detailed day-by-day travel itineraries and formats them to match the TripPlan schema.",
