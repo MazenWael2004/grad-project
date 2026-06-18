@@ -14,6 +14,7 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { useUser } from "../contexts/userContext";
 import * as ImagePicker from "expo-image-picker";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
+import axios from "axios";
 
 const PersonalInfo = () => {
   const { theme } = useContext(ThemeContext);
@@ -22,24 +23,50 @@ const PersonalInfo = () => {
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
   const [image, setImage] = useState(null);
+  const [firstName,setFirstName] = useState(user.first_name || "");
+  const [lastName,setLastName] = useState(user.last_name || "");
   const [fullName, setFullName] = useState(user.name || "");
   const [phoneValue, setPhoneValue] = useState(user.phoneNumber || ""); 
   const [formattedValue, setFormattedValue] = useState("");
   const profilePicUri = image || user.profilePic;
 
-  const handleSaveChanges = () => {
-    const updatedUser = {
-      ...user,
-      name:fullName,
-      phoneNumber: phoneValue,
-      profilePic: image || user.profilePic,
-    };
-    setUser(updatedUser);
-    console.log(updatedUser);
+const handleSaveChanges = async () => {
+  // const updatedUser = {
+  //   ...user,
+  //   first_name: firstName,
+  //   phoneNumber: formattedValue + phoneValue,
+  //   profilePic: image || user.profilePic,
+  // };
 
-    // Do api call to save changes in backend here.
-  };
+  // setUser(updatedUser);
 
+  try {
+    const response = await axios.patch(
+      "http://10.187.16.161:8000/api/accounts/profile/update/",
+      {
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: formattedValue+phoneValue,
+      },
+      {
+        headers: {
+          Authorization: `Token ${user.token}`,
+        },
+      }
+    );
+
+    const userData = response.data.user; // IMPORTANT
+
+    // correct way to update state
+    setUser((prev) => ({
+      ...prev,
+      ...userData,
+    }));
+
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+  }
+};
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -89,12 +116,25 @@ const PersonalInfo = () => {
         {/* Form */}
         <View style={styles.formWrapper}>
 
-          {/* Full Name — FIX: added onChangeText so edits are captured */}
+          {/* First Name — FIX: added onChangeText so edits are captured */}
           <View style={styles.inputWrapper}>
-            <Text style={[styles.inputLabel, { color: currentTheme.text }]}>Full Name</Text>
+            <Text style={[styles.inputLabel, { color: currentTheme.text }]}>First Name</Text>
             <TextInput
-              value={fullName}
-              onChangeText={setFullName}
+              value={firstName}
+              onChangeText={setFirstName}
+              style={[styles.textInput, {
+                backgroundColor: currentTheme.searchBackground,
+                color: currentTheme.text,
+              }]}
+            />
+          </View>
+
+           {/* Last Name — FIX: added onChangeText so edits are captured */}
+          <View style={styles.inputWrapper}>
+            <Text style={[styles.inputLabel, { color: currentTheme.text }]}>Last Name</Text>
+            <TextInput
+              value={lastName}
+              onChangeText={setLastName}
               style={[styles.textInput, {
                 backgroundColor: currentTheme.searchBackground,
                 color: currentTheme.text,

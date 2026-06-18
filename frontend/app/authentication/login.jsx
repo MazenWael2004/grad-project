@@ -52,14 +52,17 @@ const Login = () => {
 
     if (response.status === 200) {
       const user = response.data.user;
+      const token = response.data.token;
       Alert.alert("Success", "Account Successfully Logged In");
       // Setting user context after registering...
       setUser({
        userId:user.id,
-       name:user.first_name+user.last_name,
+       first_name:user.first_name,
+       last_name:user.last_name,
        email:user.email,
        country:user.country,
-       phoneNumber:user.phone_number
+       phoneNumber:user.phone_number,
+       token,
       })
       router.replace("/main/");
     }

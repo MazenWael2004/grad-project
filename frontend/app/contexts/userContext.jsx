@@ -6,11 +6,13 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
     userId: null,
-    name: '',
+    first_name: '',
+    last_name:'',
     email: '',
     paymentMethods: [],
     currentSubscription: subscriptions[0],
     country: '',
+    token:"",
     isLoggedIn: false,
     role: 'user',
     profilePic:null,
