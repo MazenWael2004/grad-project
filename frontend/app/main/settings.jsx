@@ -4,13 +4,41 @@ import { router } from "expo-router";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
+import { useUser } from "../contexts/userContext";
+import axios from "axios";
 
 const Settings = () => {
   const {theme} = useContext(ThemeContext);
+  const {user,setUser,logout} =useUser();
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   // If you're using TypeScript, prefer: const refRBSheet = useRef<RBSheet | null>(null);
   const refRBSheet = useRef();
 
+  console.log(user);
+  const handleLogOut = async () => {
+  try {
+    const response = await axios.post(
+      "http://10.187.16.161:8000/api/accounts/logout/",
+      {}, // empty body
+      {
+        headers: {
+          Authorization: `Token ${user.token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      // optionally clear local storage
+      // await AsyncStorage.removeItem("token");
+      // await AsyncStorage.removeItem("user");
+      await logout();
+
+      router.replace("/authentication/login");
+    }
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+  }
+};
   return (
     <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
       <View style={styles.logoAndSettingsTitle}>
@@ -178,12 +206,7 @@ const Settings = () => {
                 alignItems: "center",
                 width: "40%",
               }}
-              onPress={() => {
-                refRBSheet.current.close();
-                console.log("Logged out");
-                // Add actual logout logic here
-                // router.replace("/");
-              }}
+              onPress={handleLogOut}
             >
               <Text style={{ fontFamily: "Poppins-SemiBold", color: "white" }}>Logout</Text>
             </TouchableOpacity>

@@ -22,6 +22,7 @@ import articles from "../../constants/articles";
 import { useUser } from "../contexts/userContext";
 
 
+
 const Home = () => {
   const { user, setUser } = useUser();
   const {theme} = useContext(ThemeContext);
