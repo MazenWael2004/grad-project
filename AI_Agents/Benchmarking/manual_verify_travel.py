@@ -3,7 +3,6 @@ import os
 import time
 import asyncio
 import json
-import re
 
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
@@ -22,54 +21,12 @@ if os.getenv('OPEN_ROUTER_API_KEY'):
     os.environ['OPENROUTER_API_KEY'] = os.getenv('OPEN_ROUTER_API_KEY')
 
 from AI_Agents.Travel_planner.agent import root_agent
+from AI_Agents.Travel_planner.json_utils import extract_json_from_response
 from google.adk.runners import Runner
 from google.adk.sessions.in_memory_session_service import InMemorySessionService
 from google.genai import types
 from AI_Agents.Benchmarking.benchmark_logger import log_result
 
-
-def extract_json(text: str) -> dict | None:
-    """
-    Robustly extract a JSON object from text that may contain surrounding prose
-    (e.g. LLM chain-of-thought reasoning before/after the JSON block).
-
-    Strategies tried in order:
-      1. Fenced code block  ```json ... ```  or  ``` ... ```
-      2. Balanced-brace scan using JSONDecoder.raw_decode() — finds the first
-         '{' that starts a valid JSON object and stops exactly at the matching
-         closing brace, ignoring all surrounding text.
-      3. Raw parse of the entire text as-is.
-    """
-    text = text.strip()
-
-    # Strategy 1: fenced code block
-    fence_match = re.search(r'```(?:json)?\s*\n?(.*?)\n?```', text, re.DOTALL)
-    if fence_match:
-        candidate = fence_match.group(1).strip()
-        try:
-            return json.loads(candidate)
-        except json.JSONDecodeError:
-            pass  # fall through
-
-    # Strategy 2: balanced-brace scan with raw_decode
-    # This correctly handles prose BEFORE and AFTER the JSON object because
-    # raw_decode() stops exactly at the end of the valid JSON, unlike a greedy
-    # regex that sweeps from the first '{' to the LAST '}' and captures
-    # everything in between (breaking when there is reasoning text after the JSON).
-    decoder = json.JSONDecoder()
-    for i, ch in enumerate(text):
-        if ch == '{':
-            try:
-                obj, _ = decoder.raw_decode(text, i)
-                return obj
-            except json.JSONDecodeError:
-                continue  # this '{' wasn't a JSON object start; keep scanning
-
-    # Strategy 3: try raw text as-is
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        return None
 
 
 async def main():
@@ -116,7 +73,7 @@ async def main():
     print("Verification:")
 
     elapsed = round(time.time() - start_time, 2)
-    data = extract_json(response_text)
+    data = extract_json_from_response(response_text)
 
     if data is None:
         print("FAILED: Could not extract valid JSON from the response.")

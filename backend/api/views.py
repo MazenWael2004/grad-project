@@ -13,12 +13,14 @@ if BASE_DIR not in sys.path:
 
 try:
     from AI_Agents.Travel_planner.agent import root_agent
+    from AI_Agents.Travel_planner.json_utils import extract_json_from_response
     from google.adk.runners import Runner
     from google.adk.sessions.in_memory_session_service import InMemorySessionService
     from google.genai import types
 except ImportError as e:
     logging.error(f"Failed to import Agent: {e}")
     root_agent = None
+    extract_json_from_response = None
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -73,15 +75,15 @@ def generate_itinerary(request):
         print(f"DEBUG: Agent Response: {response_json_str}")
         
         
-        clean_json_str = response_json_str.strip()
-        if clean_json_str.startswith("```json"):
-            clean_json_str = clean_json_str[7:]
-        if clean_json_str.endswith("```"):
-            clean_json_str = clean_json_str[:-3]
-        
-        print("DEBUG: Parsing JSON...")
-        data = json.loads(clean_json_str.strip())
-        print("DEBUG: JSON parsed successfully. Returning response.")
+        print("DEBUG: Extracting JSON from response...")
+        data = extract_json_from_response(response_json_str)
+        if data is None:
+            print(f"ERROR: Could not extract JSON. Raw response: {response_json_str[:500]}")
+            return Response(
+                {"error": "Agent returned a response that could not be parsed as JSON."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        print("DEBUG: JSON extracted successfully. Returning response.")
         return Response(data, status=status.HTTP_200_OK)
         
     except Exception as e:
