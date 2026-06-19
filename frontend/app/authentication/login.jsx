@@ -12,6 +12,8 @@ import {useRouter} from "expo-router";
 import { Alert } from "react-native";
 import axios from "axios";
 import { useUser } from "../contexts/userContext";
+import Constants from "expo-constants";
+const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -45,7 +47,7 @@ const Login = () => {
    } 
 
   try {
-    const response = await axios.post(`http://10.187.16.161:8000/api/accounts/login/`, {
+    const response = await axios.post(`${API_BASE_URL}/api/accounts/login/`, {
      email,
      password,
     });

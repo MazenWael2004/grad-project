@@ -224,7 +224,7 @@ const handleSubmitButton = async () => {
   console.log("Submitting form with data: ", registerFormData); // Debug log to check form data before API call
   // Proceed with API request
   try {
-    const response = await axios.post(`http://10.187.16.161:8000/api/accounts/register/`, {
+    const response = await axios.post(`${API_BASE_URL}/api/accounts/register/`, {
       first_name: registerFormData.firstName,
       last_name: registerFormData.lastName,
       email: registerFormData.email,
