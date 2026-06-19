@@ -3,6 +3,11 @@ from typing import Any
 
 import aiohttp
 import modal
+import os
+
+
+
+
 
 vllm_image = (
     modal.Image.from_registry("nvidia/cuda:12.9.0-devel-ubuntu22.04", add_python="3.12")
@@ -38,12 +43,14 @@ VLLM_PORT =8000
 @app.function(
     image=vllm_image,
     gpu=f"A10:{N_GPU}",
+
     scaledown_window=15 * MINUTES,
     timeout=10 * MINUTES,
     volumes={
         "/root/.cache/huggingface": hf_cache_vol,
         "/root/.cache/vllm": vllm_cache_vol
     },
+    secrets=[modal.Secret.from_name("modal_gemma")]
 )
 
 @modal.concurrent(max_inputs=100)
@@ -52,6 +59,7 @@ VLLM_PORT =8000
 def serve():
     import json
     import subprocess
+    
     cmd = [
         "vllm",
         "serve",
@@ -89,3 +97,4 @@ def serve():
     print(*cmd)
 
     subprocess.Popen(" ".join(cmd), shell=True)
+    

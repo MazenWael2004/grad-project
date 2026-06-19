@@ -39,18 +39,18 @@ Be specific and provide well-known, real locations with accurate information.
 DO NOT ask for clarification or suggest changing the budget. Just provide the best options you found.
 """
 
-research_agent = Agent(
-   #  model=LiteLlm(
-   #      model="openrouter/z-ai/glm-4.5-air:free",
-   #      api_key=os.getenv("OPENROUTER_API_KEY"),
-   #      api_base="https://openrouter.ai/api/v1"
-   #  ),
+research_agent = Agent( 
+   model=LiteLlm(
+      model="openrouter/nvidia/nemotron-3-super-120b-a12b:free",
+      api_key=os.getenv("OPENROUTER_API_KEY"),
+      api_base="https://openrouter.ai/api/v1"
+   ),
    # model = "gemini-3.5-flash",
-    model=LiteLlm(
-      model="openai/custom-model",
-      api_base="https://sd-omar04--vllm-inference-serve.modal.run",
-      api_key="still_havent_secured_it"
-    ), 
+   #  model=LiteLlm(
+   #    model="openai/custom-model",
+   #    api_base="https://sd-omar04--vllm-inference-serve.modal.run",
+   #    api_key="still_havent_secured_it"
+   #  ), 
     name="research_agent",
     description="Provides travel information including hotels, restaurants, and tourist attractions with prices and locations.",
     instruction=research_prompt,
