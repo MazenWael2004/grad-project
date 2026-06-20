@@ -45,6 +45,8 @@ from google.genai import types
 from AI_Agents.Benchmarking.judge import judge_agent
 from AI_Agents.Benchmarking.verify_spatial import analyze_spatial_coherence, print_spatial_report
 from AI_Agents.Benchmarking.benchmark_logger import log_result
+from pydantic import ValidationError
+from AI_Agents.schemas import TripPlan
 
 
 def extract_json_from_response(response_text):
@@ -183,16 +185,23 @@ async def main():
         print(response_text[:500])
         return
 
-    required_keys = ["trip_summary", "itinerary", "budget_breakdown", "landmarks"]
-    missing = [k for k in required_keys if k not in plan_data]
-    if missing:
-        print(f"\n[FAIL] Missing keys in plan JSON: {missing}")
-    else:
-        print(f"\n[OK] Plan JSON is valid.")
+    # Validate against Pydantic schema
+    schema_valid = False
+    validation_errors = []
+    try:
+        TripPlan.model_validate(plan_data)
+        schema_valid = True
+        print(f"\n[OK] Plan JSON passes full Pydantic schema validation.")
         print(f"  Trip name:      {plan_data.get('trip_name', 'N/A')}")
         print(f"  Dates:          {plan_data.get('trip_dates', 'N/A')}")
         print(f"  Landmarks:      {len(plan_data.get('landmarks', []))}")
         print(f"  Itinerary days: {len(plan_data.get('itinerary', []))}")
+    except ValidationError as e:
+        print(f"\n[FAIL] Pydantic schema validation failed:")
+        for err in e.errors():
+            loc = ' -> '.join(str(l) for l in err['loc'])
+            print(f"  - {loc}: {err['msg']}")
+        validation_errors = [f"{' -> '.join(str(l) for l in err['loc'])}: {err['msg']}" for err in e.errors()]
 
     # ── Step 3: Deterministic spatial check ──────────────────────────────
     print("\n" + "=" * 70)
@@ -249,7 +258,8 @@ async def main():
         query=query,
         results={
             "plan_valid_json": plan_data is not None,
-            "plan_missing_keys": missing if plan_data else None,
+            "plan_missing_keys": validation_errors if plan_data else None,
+            "schema_valid": schema_valid if plan_data else False,
             "trip_name": plan_data.get("trip_name") if plan_data else None,
             "landmarks_count": len(plan_data.get("landmarks", [])) if plan_data else 0,
             "itinerary_days": len(plan_data.get("itinerary", [])) if plan_data else 0,

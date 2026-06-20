@@ -26,6 +26,8 @@ from google.adk.runners import Runner
 from google.adk.sessions.in_memory_session_service import InMemorySessionService
 from google.genai import types
 from AI_Agents.Benchmarking.benchmark_logger import log_result
+from pydantic import ValidationError
+from AI_Agents.schemas import TripPlan
 
 
 
@@ -90,22 +92,33 @@ async def main():
             extra={"elapsed_seconds": elapsed, "raw_response": response_text},
         )
     else:
-        required_keys = ["trip_summary", "itinerary", "budget_breakdown", "landmarks"]
-        missing = [k for k in required_keys if k not in data]
-        if missing:
-            print(f"FAILED: Missing keys in JSON: {missing}")
+        # Full Pydantic schema validation
+        try:
+            TripPlan.model_validate(data)
+            schema_valid = True
+            validation_errors = []
+        except ValidationError as e:
+            schema_valid = False
+            validation_errors = [f"{' -> '.join(str(l) for l in err['loc'])}: {err['msg']}" for err in e.errors()]
+
+        if not schema_valid:
+            print(f"FAILED: Pydantic schema validation failed:")
+            for err_msg in validation_errors:
+                print(f"  - {err_msg}")
             log_result(
                 script_name="manual_verify_travel",
                 query=query,
                 results={
                     "passed": False,
-                    "reason": f"Missing keys: {missing}",
+                    "reason": f"Schema validation failed: {validation_errors}",
                     "valid_json": True,
+                    "schema_valid": False,
+                    "validation_errors": validation_errors,
                 },
                 extra={"elapsed_seconds": elapsed, "raw_response": response_text},
             )
         else:
-            print("PASSED: Output contains all required JSON keys.")
+            print("PASSED: Output passes full Pydantic schema validation.")
             landmarks_count = len(data.get('landmarks', []))
             itinerary_days = len(data.get('itinerary', []))
             print(f"Landmarks count: {landmarks_count}")
@@ -118,6 +131,7 @@ async def main():
                 results={
                     "passed": True,
                     "valid_json": True,
+                    "schema_valid": True,
                     "landmarks_count": landmarks_count,
                     "itinerary_days": itinerary_days,
                 },
