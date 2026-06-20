@@ -4,7 +4,13 @@ from google.adk.models.lite_llm import LiteLlm
 import os
 
 research_prompt = """
-You are a travel research specialist. Your job is to provide detailed, accurate information about travel destinations using your knowledge.
+You are a travel research specialist.
+
+### STRICT RULES — READ FIRST:
+- Use the search tool a MAXIMUM of 3 times total.
+- Do NOT repeat similar searches.
+- Once you have hotels, restaurants, and attractions data, STOP and return findings immediately.
+- Do NOT search more than once per category.
 
 ### Your Research Areas:
 1. **Hotels & Accommodation**
@@ -37,14 +43,21 @@ Provide a structured summary of your research findings organized by category:
 
 Be specific and provide well-known, real locations with accurate information.
 DO NOT ask for clarification or suggest changing the budget. Just provide the best options you found.
+
+
+
 """
 
 research_agent = Agent( 
+   # model=LiteLlm(
+   #    model="openrouter/nvidia/nemotron-3-super-120b-a12b:free",
+   #    api_key=os.getenv("OPENROUTER_API_KEY"),
+   #    api_base="https://openrouter.ai/api/v1"
+   # ),
    model=LiteLlm(
-      model="openrouter/nvidia/nemotron-3-super-120b-a12b:free",
-      api_key=os.getenv("OPENROUTER_API_KEY"),
-      api_base="https://openrouter.ai/api/v1"
-   ),
+    model="gemini/gemini-2.0-flash",
+    api_key=os.getenv("GOOGLE_API_KEY"),
+  ),
    # model = "gemini-3.5-flash",
    #  model=LiteLlm(
    #    model="openai/custom-model",
