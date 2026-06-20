@@ -243,10 +243,14 @@ const StartTripQuestions = () => {
           <View style={styles.preferencesContainer}>
             {preferences.map((item, index) => {
               return (
-                <PreferenceItem key={index} title={item.title} isSelected={selectedPreferences.includes(index)}
-                  onPress={() => togglePreference(index)} />
+                <PreferenceItem
+                  key={item.id}
+                  title={item.title}
+                  isSelected={selectedPreferences.includes(item.id)}  
+                  onPress={() => togglePreference(item.id)}          
+                />
               );
-            })}
+          })}
           </View>
         )
       };
