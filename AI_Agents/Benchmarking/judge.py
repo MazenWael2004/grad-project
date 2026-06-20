@@ -1,7 +1,7 @@
 from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.tools import FunctionTool
-from AI_Agents.schemas import criterion
+from AI_Agents.schemas import Criterion
 from AI_Agents.Travel_planner.tools import calculate_distance_tool
 import os
 from dotenv import load_dotenv
@@ -66,5 +66,5 @@ judge_agent = Agent(
     description="Evaluates whether a generated travel plan satisfies user constraints and checks spatial coherence.",
     instruction=judge_prompt,
     tools=[distance_tool],
-    output_schema=criterion
+    output_schema=Criterion
 )

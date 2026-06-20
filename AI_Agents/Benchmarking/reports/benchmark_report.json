@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-06-20T19:08:55.029619",
+  "total_runs": 4,
+  "validation": {
+    "json_valid": 2,
+    "json_invalid": 2,
+    "schema_passes": 2,
+    "schema_fails": 2,
+    "json_valid_rate": 0.5,
+    "schema_pass_rate": 0.5
+  },
+  "judge": {
+    "passed": 1,
+    "failed": 2,
+    "unavailable": 1,
+    "pass_rate": 0.3333333333333333
+  },
+  "spatial": {
+    "scores": [
+      1.0
+    ],
+    "avg_score": 1.0,
+    "min_score": 1.0,
+    "max_score": 1.0,
+    "avg_coverage": 0.77
+  },
+  "performance": {
+    "latencies": [
+      452.83,
+      1032.29,
+      508.75,
+      1266.85
+    ],
+    "avg_latency": 815.18,
+    "min_latency": 452.83,
+    "max_latency": 1266.85,
+    "median_latency": 770.52,
+    "p95_latency": 1231.6659999999997,
+    "avg_tool_calls": 0.0,
+    "avg_total_tokens": 0.0
+  },
+  "failures": {
+    "constraint_counts": {},
+    "total_spatial_issues": 0
+  },
+  "per_script": {
+    "run_judge_flow": {
+      "total": 1,
+      "passed": 0,
+      "failed": 0,
+      "avg_latency": 452.83,
+      "avg_spatial_score": 1.0
+    },
+    "manual_verify_travel": {
+      "total": 3,
+      "passed": 1,
+      "failed": 2,
+      "avg_latency": 935.9633333333333,
+      "avg_spatial_score": 0.0
+    }
+  }
+}

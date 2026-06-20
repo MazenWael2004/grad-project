@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class criterion(BaseModel):
+class Criterion(BaseModel):
     passed: bool = Field(description="Whether the travel plan satisfies all constraints.")
     reason: str = Field(description="A brief explanation of why it passed or failed.")
     failed_constraints: list[str] = Field(description="List of specific constraints that were not met.")
