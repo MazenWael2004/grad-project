@@ -129,6 +129,7 @@ async def run_travel_planner(query):
     )
 
     response_text = ""
+    agent_turns = 0
     start_time = time.time()
     first_token_time = None
 
@@ -143,21 +144,35 @@ async def run_travel_planner(query):
                     if first_token_time is None:
                         first_token_time = time.time()
                     response_text += part.text
+            agent_turns += 1
 
     end_time = time.time()
 
     time_to_first = (first_token_time - start_time) if first_token_time else 0.0
     time_to_last = end_time - start_time
     
-    # Estimate token count (1 word ≈ 1.33 tokens)
-    input_tokens = int(len(query.split()) * 1.33)
-    output_tokens = int(len(response_text.split()) * 1.33)
+    # Count tokens using the model's tokenizer
+    try:
+        from google import genai
+        client = genai.Client()
+        input_token_count = client.models.count_tokens(
+            model=MODEL_NAME, contents=query
+        )
+        output_token_count = client.models.count_tokens(
+            model=MODEL_NAME, contents=response_text
+        )
+        input_tokens = input_token_count.total_tokens
+        output_tokens = output_token_count.total_tokens
+    except Exception:
+        # Fallback to estimation if token counting fails
+        input_tokens = int(len(query.split()) * 1.33)
+        output_tokens = int(len(response_text.split()) * 1.33)
     total_tokens = input_tokens + output_tokens
     
     tokens_per_sec = output_tokens / time_to_last if time_to_last > 0 else 0.0
 
     metrics = {
-        "n_turns": 1,
+        "n_turns": agent_turns,
         "n_toolcalls": main_tool_calls,
         "n_total_tokens": total_tokens,
         "latency": {

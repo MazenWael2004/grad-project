@@ -1,11 +1,14 @@
 import os
+import sys
 import pandas as pd
 import ast 
 
-from evaluations import evaluate_plan
-from judge.agent import judge_agent
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-def verify_judge():
+from AI_Agents.Benchmarking.evaluations import evaluate_plan
+from AI_Agents.Benchmarking.judge import judge_agent
+
+async def verify_judge():
     print("Inspecting judge_agent attributes:")
     try:
         print(f"Output Schema: {judge_agent.output_schema}")
@@ -16,7 +19,7 @@ def verify_judge():
     except Exception as e:
         print(f"Error accessing model_config: {e}")
 
-    dataset_path = os.path.join(os.path.dirname(__file__), 'dataset.csv')
+    dataset_path = os.path.join(os.path.dirname(__file__), 'travel_planner.csv')
     try:
         df = pd.read_csv(dataset_path)
     except FileNotFoundError:
@@ -49,7 +52,7 @@ def verify_judge():
     print(f"Query: {query}")
     print(f"Plan (snippet): {str(plan)[:100]}...")
     
-    result = evaluate_plan(query, str(plan))
+    result = await evaluate_plan(query, str(plan))
     print(f"Result: {result}")
     
     if result.get('pass') is True:
@@ -65,7 +68,7 @@ def verify_judge():
     print(f"Query: {query}")
     print(f"Bad Plan: {bad_plan}")
     
-    result = evaluate_plan(query, bad_plan)
+    result = await evaluate_plan(query, bad_plan)
     print(f"Result: {result}")
     
     if result.get('pass') is False:
@@ -74,4 +77,5 @@ def verify_judge():
         print("FAIL: Incorrectly accepted invalid plan.")
 
 if __name__ == "__main__":
-    verify_judge()
+    import asyncio
+    asyncio.run(verify_judge())
