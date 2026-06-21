@@ -1,6 +1,6 @@
 from google.adk.agents.llm_agent import Agent
 from google.adk.tools import FunctionTool
-from AI_Agents.schemas import criterion
+from AI_Agents.schemas import Criterion
 from AI_Agents.Travel_planner.tools import calculate_distance_tool
 
 
@@ -62,5 +62,5 @@ judge_agent = Agent(
     description='An agent that evaluates travel plans against user queries and checks spatial coherence of itineraries.',
     instruction=judge_prompt,
     tools=[distance_tool],
-    output_schema=criterion
+    output_schema=Criterion
 )

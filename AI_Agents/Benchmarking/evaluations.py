@@ -6,7 +6,7 @@ import asyncio
 # Add the project root to the python path to import judge.agent
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from judge.agent import judge_agent
+from AI_Agents.Benchmarking.judge import judge_agent
 
 
 async def call_judge(prompt: str) -> str:
@@ -21,7 +21,7 @@ async def call_judge(prompt: str) -> str:
     return str(response)
 
 
-def evaluate_plan(query, plan):
+async def evaluate_plan(query, plan):
     """
     Evaluates a travel plan against a user query using the Judge Agent.
 
@@ -43,7 +43,7 @@ Travel Plan:
 
     try:
         # Run the async judge call
-        response_text = asyncio.run(call_judge(prompt))
+        response_text = await call_judge(prompt)
     except Exception as e:
         return {
             "pass": False,

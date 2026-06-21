@@ -27,6 +27,7 @@ print(f"DEBUG: API Key loaded: {bool(_key)} | Starts with: {str(_key)[:15] if _k
 
 try:
     from AI_Agents.Travel_planner.agent import root_agent
+    from AI_Agents.Travel_planner.json_utils import extract_json_from_response
     from google.adk.runners import Runner
     from google.adk.sessions.in_memory_session_service import InMemorySessionService
     from google.genai import types
@@ -34,6 +35,7 @@ try:
 except ImportError as e:
     logging.error(f"Failed to import Agent: {e}")
     root_agent = None
+    extract_json_from_response = None
 
 GOVERNORATES = {
     1: "Cairo",

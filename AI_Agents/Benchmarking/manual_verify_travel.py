@@ -3,7 +3,6 @@ import os
 import time
 import asyncio
 import json
-import re
 
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
@@ -22,54 +21,14 @@ if os.getenv('OPEN_ROUTER_API_KEY'):
     os.environ['OPENROUTER_API_KEY'] = os.getenv('OPEN_ROUTER_API_KEY')
 
 from AI_Agents.Travel_planner.agent import root_agent
+from AI_Agents.Travel_planner.json_utils import extract_json_from_response
 from google.adk.runners import Runner
 from google.adk.sessions.in_memory_session_service import InMemorySessionService
 from google.genai import types
 from AI_Agents.Benchmarking.benchmark_logger import log_result
+from pydantic import ValidationError
+from AI_Agents.schemas import TripPlan
 
-
-def extract_json(text: str) -> dict | None:
-    """
-    Robustly extract a JSON object from text that may contain surrounding prose
-    (e.g. LLM chain-of-thought reasoning before/after the JSON block).
-
-    Strategies tried in order:
-      1. Fenced code block  ```json ... ```  or  ``` ... ```
-      2. Balanced-brace scan using JSONDecoder.raw_decode() — finds the first
-         '{' that starts a valid JSON object and stops exactly at the matching
-         closing brace, ignoring all surrounding text.
-      3. Raw parse of the entire text as-is.
-    """
-    text = text.strip()
-
-    # Strategy 1: fenced code block
-    fence_match = re.search(r'```(?:json)?\s*\n?(.*?)\n?```', text, re.DOTALL)
-    if fence_match:
-        candidate = fence_match.group(1).strip()
-        try:
-            return json.loads(candidate)
-        except json.JSONDecodeError:
-            pass  # fall through
-
-    # Strategy 2: balanced-brace scan with raw_decode
-    # This correctly handles prose BEFORE and AFTER the JSON object because
-    # raw_decode() stops exactly at the end of the valid JSON, unlike a greedy
-    # regex that sweeps from the first '{' to the LAST '}' and captures
-    # everything in between (breaking when there is reasoning text after the JSON).
-    decoder = json.JSONDecoder()
-    for i, ch in enumerate(text):
-        if ch == '{':
-            try:
-                obj, _ = decoder.raw_decode(text, i)
-                return obj
-            except json.JSONDecodeError:
-                continue  # this '{' wasn't a JSON object start; keep scanning
-
-    # Strategy 3: try raw text as-is
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        return None
 
 
 async def main():
@@ -116,7 +75,7 @@ async def main():
     print("Verification:")
 
     elapsed = round(time.time() - start_time, 2)
-    data = extract_json(response_text)
+    data = extract_json_from_response(response_text)
 
     if data is None:
         print("FAILED: Could not extract valid JSON from the response.")
@@ -133,22 +92,33 @@ async def main():
             extra={"elapsed_seconds": elapsed, "raw_response": response_text},
         )
     else:
-        required_keys = ["trip_summary", "itinerary", "budget_breakdown", "landmarks"]
-        missing = [k for k in required_keys if k not in data]
-        if missing:
-            print(f"FAILED: Missing keys in JSON: {missing}")
+        # Full Pydantic schema validation
+        try:
+            TripPlan.model_validate(data)
+            schema_valid = True
+            validation_errors = []
+        except ValidationError as e:
+            schema_valid = False
+            validation_errors = [f"{' -> '.join(str(l) for l in err['loc'])}: {err['msg']}" for err in e.errors()]
+
+        if not schema_valid:
+            print(f"FAILED: Pydantic schema validation failed:")
+            for err_msg in validation_errors:
+                print(f"  - {err_msg}")
             log_result(
                 script_name="manual_verify_travel",
                 query=query,
                 results={
                     "passed": False,
-                    "reason": f"Missing keys: {missing}",
+                    "reason": f"Schema validation failed: {validation_errors}",
                     "valid_json": True,
+                    "schema_valid": False,
+                    "validation_errors": validation_errors,
                 },
                 extra={"elapsed_seconds": elapsed, "raw_response": response_text},
             )
         else:
-            print("PASSED: Output contains all required JSON keys.")
+            print("PASSED: Output passes full Pydantic schema validation.")
             landmarks_count = len(data.get('landmarks', []))
             itinerary_days = len(data.get('itinerary', []))
             print(f"Landmarks count: {landmarks_count}")
@@ -161,6 +131,7 @@ async def main():
                 results={
                     "passed": True,
                     "valid_json": True,
+                    "schema_valid": True,
                     "landmarks_count": landmarks_count,
                     "itinerary_days": itinerary_days,
                 },
