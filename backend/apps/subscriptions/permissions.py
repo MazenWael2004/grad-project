@@ -1,21 +1,8 @@
-from django.utils import timezone
-from .models import Subscription
 from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
 
+from apps.subscriptions.helpers import get_active_subscription
 
-def get_active_subscription(user):
-    """
-    Returns the user's active subscription if exists, otherwise None.
-    """
-    now = timezone.now()
-    return (
-        Subscription.objects.filter(
-            status="active", start_date__lte=now, end_date__gte=now
-        )
-        .filter(members__user=user)
-        .first()
-    )
 
 
 class IsSubscribed(permissions.IsAuthenticated):
