@@ -29,7 +29,7 @@ const ReviewSummary = () => {
   const endTripDate = new Date(endDate);
   const interests = userTravelPreferences['interests']; // [3,5,6]
   // console.log("Interests Array: ",interests);
-  const userInterests = preferences.filter(pref => interests.includes(pref.id-1));
+  const userInterests = preferences.filter(pref => interests.includes(pref.id));
   console.log("User Interests: ", userInterests);
   const {governorateId} = userTravelPreferences;
   const governorate = governorates.find((item)=>{
