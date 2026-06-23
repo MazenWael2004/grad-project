@@ -1,10 +1,10 @@
 const messages = [
-    {
-        id:1,
-        text:"What is the capital of Egypt?",
-        role:"user",
-        photo:require("../assets/images/avatar.png"),
-    },
+    // {
+    //     id:1,
+    //     text:"What is the capital of Egypt?",
+    //     role:"user",
+    //     photo:require("../assets/images/avatar.png"),
+    // },
     // {
     //     id:2,
     //     text:"The capital of Egypt is Cairo.",
