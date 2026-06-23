@@ -6,6 +6,8 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import axios from "axios";
+import Constants from "expo-constants";
+const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const Settings = () => {
   const {theme} = useContext(ThemeContext);
@@ -16,9 +18,11 @@ const Settings = () => {
 
   console.log(user);
   const handleLogOut = async () => {
+    console.log("user object",user)
+    console.log("Token",user?.token)
   try {
     const response = await axios.post(
-      "http://10.187.16.161:8000/api/accounts/logout/",
+      `${API_BASE_URL}/api/accounts/logout/`,
       {}, // empty body
       {
         headers: {
