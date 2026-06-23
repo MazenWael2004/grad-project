@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from dotenv import load_dotenv
-env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Travel_planner', '.env'))
+env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env'))
 load_dotenv(env_path)
 
 load_dotenv()
