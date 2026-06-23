@@ -37,7 +37,7 @@ const ChatBot = () => {
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const scrollViewRef = useRef(null);
 
-  const API_URL = "https://7570-34-21-71-3.ngrok-free.app/generate";
+  const API_URL = "https://c708-104-196-125-244.ngrok-free.app/generate";
   const API_KEY = "secret123";
 
   
