@@ -25,8 +25,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 
 from dotenv import load_dotenv
 
-# Load env from Travel_planner and project root
-env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Travel_planner', '.env'))
+# Load env from AI_Agents root and project root
+env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env'))
 load_dotenv(env_path)
 load_dotenv()
 

@@ -32,20 +32,10 @@ You are an expert Travel Planner. Your goal is to create detailed, practical, an
 """
 
 schema_formatter_agent = Agent(
-    model=LiteLlm(
-        model="openrouter/nvidia/nemotron-3-super-120b-a12b:free",
-        api_key=os.getenv("OPENROUTER_API_KEY"),
-        api_base="https://openrouter.ai/api/v1"
-        #model="gemini/gemini-2.0-flash",
-        #api_key=os.getenv("GOOGLE_API_KEY"),
-
-
-        # model="openai/custom-model",
-        # api_base="https://sd-omar04--vllm-inference-serve.modal.run",
-        # api_key="still_havent_secured_it",
-    ),
+    model="gemini-2.5-flash",
     name="schema_formatter_agent",
     description="Formats travel plans to strictly match the TripPlan Pydantic schema with accurate coordinates and proper structure.",
     instruction=schema_formatter_prompt,
     output_schema=TripPlan
 )
+
