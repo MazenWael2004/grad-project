@@ -106,6 +106,33 @@ def extract_json(text: str) -> dict | None:
         return None
 
 
+def extract_last_json(text: str) -> dict | None:
+    """Find the LAST valid JSON object in the text — the final agent's output."""
+    text = text.strip()
+    last_obj = None
+
+    # Strategy 1: find ALL fenced code blocks and use the last one
+    fence_matches = re.findall(r'```(?:json)?\s*\n?(.*?)\n?```', text, re.DOTALL)
+    for candidate in reversed(fence_matches):
+        try:
+            last_obj = json.loads(candidate.strip())
+            return last_obj
+        except json.JSONDecodeError:
+            continue
+
+    # Strategy 2: scan all valid JSON objects and keep the last
+    decoder = json.JSONDecoder()
+    for i, ch in enumerate(text):
+        if ch == '{':
+            try:
+                obj, _ = decoder.raw_decode(text, i)
+                last_obj = obj
+            except json.JSONDecodeError:
+                continue
+
+    return last_obj
+
+
 # ── View ──────────────────────────────────────────────────────────────────────
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -165,7 +192,9 @@ wrapped in a ```json ... ``` code block.
         )
 
         print("DEBUG: Session created. Running agent...")
-        response_text = ""
+        all_response_text = ""
+        last_agent_text = ""
+        current_author = ""
 
         async for event in runner.run_async(
             user_id=user_id,
@@ -176,12 +205,21 @@ wrapped in a ```json ... ``` code block.
             )
         ):
             if event.content and event.content.parts:
+                # Track which agent authored this event
+                author = getattr(event, 'author', '') or ''
                 for part in event.content.parts:
                     if part.text:
-                        response_text += part.text
+                        text_chunk = part.text
+                        all_response_text += text_chunk
+                        # Reset last_agent_text when a new agent starts producing output
+                        if author != current_author:
+                            current_author = author
+                            last_agent_text = ""
+                        last_agent_text += text_chunk
 
         print("DEBUG: Agent finished.")
-        return response_text
+        print(f"DEBUG: Last responding agent: {current_author}")
+        return all_response_text, last_agent_text
 
     try:
         try:
@@ -191,23 +229,37 @@ wrapped in a ```json ... ``` code block.
             pass
 
         print("DEBUG: Calling asyncio.run(run_agent())")
-        response_json_str = asyncio.run(asyncio.wait_for(run_agent(), timeout=3000) )
-        print(f"DEBUG: Raw agent response (first 500 chars):\n{response_json_str[:500]}")
+        all_response_text, last_agent_text = asyncio.run(asyncio.wait_for(run_agent(), timeout=3000))
 
-        data = extract_json(response_json_str)
+        # ── Dump full response for debugging ──
+        print("=" * 80)
+        print("DEBUG: FULL RAW RESPONSE FROM ALL AGENTS:")
+        print("=" * 80)
+        print(all_response_text)
+        print("=" * 80)
+        print(f"DEBUG: Last agent text (first 1000 chars):\n{last_agent_text[:1000]}")
+        print("=" * 80)
+
+        # Try extracting from the last agent's output first (most likely to be the final formatted plan)
+        data = extract_json(last_agent_text)
+        if data is None:
+            print("DEBUG: Could not extract JSON from last agent output. Trying full response...")
+            # Fallback: try extracting the LAST JSON block from the full response
+            data = extract_last_json(all_response_text)
 
         if data is None:
-            print(f"ERROR: Could not extract JSON. Full response:\n{response_json_str}")
+            print(f"ERROR: Could not extract JSON. Full response:\n{all_response_text}")
             return Response(
                 {
                     "error": "Agent returned a response but it could not be parsed as JSON.",
-                    "raw_response": response_json_str[:2000]
+                    "raw_response": all_response_text[:2000]
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
         print("DEBUG: JSON extracted successfully. Returning response.")
         return Response(data, status=status.HTTP_200_OK)
+
 
     except Exception as e:
         import traceback
