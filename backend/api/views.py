@@ -191,7 +191,7 @@ wrapped in a ```json ... ``` code block.
             pass
 
         print("DEBUG: Calling asyncio.run(run_agent())")
-        response_json_str = asyncio.run(asyncio.wait_for(run_agent(), timeout=300) )
+        response_json_str = asyncio.run(asyncio.wait_for(run_agent(), timeout=3000) )
         print(f"DEBUG: Raw agent response (first 500 chars):\n{response_json_str[:500]}")
 
         data = extract_json(response_json_str)

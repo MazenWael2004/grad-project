@@ -37,7 +37,7 @@ const GeneratingTripLoader = () => {
         const response = await axios.post(
           `${API_BASE_URL}/api/itinerary/generate/`,
           currentItem.userPreferences,
-          { timeout: 180000}
+          { timeout: 6600000 }
         );
 
         if (response.status === 200) {
