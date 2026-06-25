@@ -342,7 +342,51 @@ const ItineraryDetails = () => {
           )}
         </ScrollView>
       </ScrollView>
-      {/* <View
+      {/* tour-guide */}
+
+      <View
+        style={{
+          backgroundColor: currentTheme.background,
+          padding: 20,
+          paddingBottom: 35, 
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            borderRadius: 30,
+            backgroundColor: "#D4AF37",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 15,
+            flexDirection: "row", 
+            gap: 10,
+          }}
+          onPress={() => {
+            router.push({ 
+              pathname: "/tourGuide", 
+              params: { itineraryId: itineraryId } 
+            });
+          }}
+        >
+          <Text style={{ fontSize: 18 }}>📸</Text>
+          <Text
+            style={{
+              fontFamily: "Poppins-Medium",
+              color: "white",
+              fontSize: 16,
+            }}
+          >
+            Open Tour Guide
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/* ------------------------------------- */}
+
+    </View>
+      /* <View
         style={{
           backgroundColor: currentTheme.background,
           padding: 20,
@@ -373,8 +417,8 @@ const ItineraryDetails = () => {
             Start a trip
           </Text>
         </TouchableOpacity>
-      </View> */}
-    </View>
+      </View> */
+    // </View>
   );
 };
 

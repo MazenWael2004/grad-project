@@ -170,6 +170,11 @@ export default function RootLayout() {
       name="currencyConverter/index"
       options={{headerShown:false}}
       />
+
+      <Stack.Screen
+      name = "tourGuide/index"
+      options={{headerShown:false}}
+      />
      
     </Stack>
   
