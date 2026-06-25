@@ -88,3 +88,5 @@ class UpdateProfileView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+    # def tour_guidView():
+    #     pass
