@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "core",
     "apps.accounts",
     "apps.subscriptions",
+    "apps.attractions",
 ]
 
 MIDDLEWARE = [

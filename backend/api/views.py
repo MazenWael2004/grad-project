@@ -28,14 +28,16 @@ print(f"DEBUG: API Key loaded: {bool(_key)} | Starts with: {str(_key)[:15] if _k
 try:
     from AI_Agents.Travel_planner.agent import root_agent
     from AI_Agents.Travel_planner.json_utils import extract_json_from_response
+    from AI_Agents.Travel_planner.clustering import get_clustered_itinerary
     from google.adk.runners import Runner
     from google.adk.sessions.in_memory_session_service import InMemorySessionService
     from google.genai import types
-    print("✅ Travel agent loaded successfully.")
+    print("[OK] Travel agent and clustering loaded successfully.")
 except ImportError as e:
-    logging.error(f"Failed to import Agent: {e}")
+    logging.error(f"Failed to import Agent/Clustering: {e}")
     root_agent = None
     extract_json_from_response = None
+    get_clustered_itinerary = None
 
 GOVERNORATES = {
     1: "Cairo",
@@ -134,6 +136,57 @@ def extract_last_json(text: str) -> dict | None:
 
 
 # ── View ──────────────────────────────────────────────────────────────────────
+def format_clusters_for_prompt(data):
+    hotel = data.get("hotel")
+    hotel_str = "No hotel selected"
+    if hotel:
+        hotel_str = (
+            f"Hotel: {hotel['name']} in {hotel['city']}\n"
+            f"- Price: EGP {hotel['price_per_night']}/night\n"
+            f"- Rating: {hotel['rating']}/5\n"
+            f"- Category: {hotel['category']}\n"
+            f"- Coordinates: Latitude {hotel['latitude']}, Longitude {hotel['longitude']}"
+        )
+
+    days_str = []
+    for c in data.get("clusters", []):
+        day_info = [f"### Day {c['day']}:"]
+        
+        day_info.append("  Attractions to visit:")
+        for idx, a in enumerate(c["attractions"], 1):
+            day_info.append(
+                f"  {idx}. {a['name']} in {a['city']}\n"
+                f"     - Categories: {', '.join(a['categories'])}\n"
+                f"     - Average Cost: EGP {a['average_cost']}\n"
+                f"     - Visit Duration: {a['visit_duration_hours']} hours\n"
+                f"     - Opening/Closing: {a['opening_time']} - {a['closing_time']}\n"
+                f"     - Best Time: {a['best_time']}\n"
+                f"     - Popularity: {a['popularity']}/5\n"
+                f"     - Coordinates: Latitude {a['latitude']}, Longitude {a['longitude']}\n"
+                f"     - Description: {a['description']}"
+            )
+            
+        day_info.append("  Restaurants for meals:")
+        for idx, r in enumerate(c["restaurants"], 1):
+            day_info.append(
+                f"  {idx}. {r['name']} in {r['city']}\n"
+                f"     - Cuisine: {r['cuisine']}\n"
+                f"     - Average Meal Cost: EGP {r['average_meal_cost']}\n"
+                f"     - Rating: {r['rating']}/5\n"
+                f"     - Specialty: {r['specialty']}\n"
+                f"     - Coordinates: Latitude {r['latitude']}, Longitude {r['longitude']}"
+            )
+            
+        days_str.append("\n".join(day_info))
+
+    full_itinerary_context = (
+        f"{hotel_str}\n\n"
+        "Day Clusters:\n" + "\n\n".join(days_str)
+    )
+    return full_itinerary_context
+
+
+# ── View ──────────────────────────────────────────────────────────────────────
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def generate_itinerary(request):
@@ -150,6 +203,23 @@ def generate_itinerary(request):
     budget_id    = user_preferences.get('budgetId')
     party_id     = user_preferences.get('partyId')
     interest_ids = user_preferences.get('interests', [])
+    start_date   = user_preferences.get('startTripDate', 'Not specified')
+    end_date     = user_preferences.get('endTripDate', 'Not specified')
+
+    if get_clustered_itinerary:
+        try:
+            clustering_data = get_clustered_itinerary(gov_id, budget_id, interest_ids, start_date, end_date)
+        except Exception as ce:
+            print(f"ERROR in spatial clustering: {ce}")
+            clustering_data = None
+    else:
+        clustering_data = None
+
+    if not clustering_data or not clustering_data.get("clusters"):
+        return Response(
+            {"error": "Failed to query and cluster travel data for the specified governorate."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
     destination     = GOVERNORATES.get(gov_id,    f"Egyptian governorate (id={gov_id})")
     budget_label    = BUDGETS.get(budget_id,       f"Budget level {budget_id}")
@@ -157,17 +227,27 @@ def generate_itinerary(request):
     interest_labels = [INTERESTS[i] for i in interest_ids if i in INTERESTS]
     interests_str   = ", ".join(interest_labels) if interest_labels else "General sightseeing"
 
+    clustered_context = format_clusters_for_prompt(clustering_data)
+
     query = f"""
 Plan a trip with the following preferences:
 - Origin: Cairo, Egypt
 - Destination: {destination}, Egypt
-- Dates: {user_preferences.get('startTripDate', 'Not specified')} to {user_preferences.get('endTripDate', 'Not specified')}
+- Dates: {start_date} to {end_date}
 - Budget level: {budget_label}
 - Travelers: {party_label}
 - Interests: {interests_str}
 
-Please return the full itinerary as a JSON object matching the TripPlan schema,
-wrapped in a ```json ... ``` code block.
+Use ONLY the pre-filtered, pre-clustered database travel data provided below:
+
+{clustered_context}
+
+RULES:
+1. Use ONLY the attractions, hotel, and restaurants listed in the day clusters above.
+2. Use the EXACT prices, names, and coordinates provided. Do NOT change them.
+3. Arrange the activities for each day into a logical, enjoyable timeline (morning, afternoon, evening) with times, matching the attraction opening/closing times.
+4. Include check-in and meals at the specified restaurants.
+5. Return the full itinerary as a JSON object matching the TripPlan schema, wrapped in a ```json ... ``` code block.
 """
 
     print(f"DEBUG: Agent query:\n{query}")
@@ -205,13 +285,11 @@ wrapped in a ```json ... ``` code block.
             )
         ):
             if event.content and event.content.parts:
-                # Track which agent authored this event
                 author = getattr(event, 'author', '') or ''
                 for part in event.content.parts:
                     if part.text:
                         text_chunk = part.text
                         all_response_text += text_chunk
-                        # Reset last_agent_text when a new agent starts producing output
                         if author != current_author:
                             current_author = author
                             last_agent_text = ""
@@ -239,12 +317,11 @@ wrapped in a ```json ... ``` code block.
         print("=" * 80)
         print(f"DEBUG: Last agent text (first 1000 chars):\n{last_agent_text[:1000]}")
         print("=" * 80)
+        print(f"DEBUG: Warnings from clustering: {clustering_data.get('warnings')}")
 
-        # Try extracting from the last agent's output first (most likely to be the final formatted plan)
         data = extract_json(last_agent_text)
         if data is None:
             print("DEBUG: Could not extract JSON from last agent output. Trying full response...")
-            # Fallback: try extracting the LAST JSON block from the full response
             data = extract_last_json(all_response_text)
 
         if data is None:
@@ -259,7 +336,6 @@ wrapped in a ```json ... ``` code block.
 
         print("DEBUG: JSON extracted successfully. Returning response.")
         return Response(data, status=status.HTTP_200_OK)
-
 
     except Exception as e:
         import traceback

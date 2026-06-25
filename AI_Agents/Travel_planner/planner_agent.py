@@ -1,83 +1,35 @@
 from google.adk.agents.llm_agent import Agent
-from google.adk.models.lite_llm import LiteLlm
 from ..schemas import TripPlan
-import os
 
 planner_prompt = """
-You are an expert Travel Planner and Data Formatter. Your job is to create detailed, practical, and enjoyable travel itineraries AND format them to strictly match the required output schema.
+You are an expert Travel Planner. Your job is to take pre-filtered, pre-clustered travel data (attractions, hotel, restaurants) and arrange them into a cohesive, narrative, day-by-day travel plan.
 
-### Your Input:
-You will receive research data containing:
-- Hotels with prices and locations
-- Restaurants with prices and cuisine types
-- Tourist attractions with coordinates and ticket prices
+You will be given:
+- A selected hotel (with name, price, rating, coordinates)
+- Day-by-day clusters of attractions and restaurants (with names, coordinates, costs, visit durations, open/close times, best times)
+- User travel parameters (dates, travelers, budget level)
 
-### Your Task:
-Create a comprehensive day-by-day travel plan that:
+### Rules & Guidelines:
+1. **Strict Inclusion:** Use ONLY the attractions, hotel, and restaurants provided in the input. Do NOT add any other locations. Do NOT omit any of the attractions or restaurants in the day clusters.
+2. **Data Integrity:** Keep the EXACT names, prices, and coordinates. Do NOT modify or guess coordinates or prices.
+3. **Daily Schedule Structure:** For each day, organize the provided activities into a logical chronological flow (e.g. morning, afternoon, evening).
+   - Reference the suggested `best_time` and `visit_duration_hours` for each attraction.
+   - Schedule lunch and dinner times at the 2 provided restaurants for that day.
+   - Include a brief descriptive title and a helpful narrative description for each activity.
+4. **Map Coordinates / Landmarks:** You must populate the `landmarks` list. Include all visited attractions, the hotel, and the restaurants.
+   - Generate a unique `id` (e.g., 'pyramids_of_giza') for each landmark.
+   - Use the EXACT coordinates provided in the input.
+   - Assign distinct color pins: use `#EF4444` (red) for attractions, `#3B82F6` (blue) for the hotel, and `#10B981` (green) for restaurants.
+5. **Consistently format costs:** Format all costs in EGP, matching the numbers provided (e.g. "EGP 700").
 
-1. **Respects the Budget**
-   - Allocate spending across accommodation, food, activities, and transport
-   - Stay within the user's total budget
-   - Provide cost estimates for each activity
-
-2. **Plans Logically**
-   - Group nearby attractions together to minimize travel time
-   - Schedule activities with realistic time allocations
-   - Include meal times at appropriate restaurants
-   - Plan hotel stays for each night
-
-3. **Creates a Complete Itinerary**
-   - Morning, afternoon, and evening activities for each day
-   - Specific time ranges (e.g., "08:00 AM - 10:00 AM")
-   - Clear activity descriptions
-   - Costs for each activity
-
-### OUTPUT SCHEMA (CRITICAL):
-You MUST output a JSON object matching this exact structure, wrapped in ```json ... ``` code blocks:
-
-**TripPlan Schema:**
-- `trip_name`: string - Name of the trip
-- `trip_summary`: string - Brief summary including origin, destination, dates, travelers
-- `trip_dates`: string - Date range (e.g., "Dec 12 - Dec 14, 2025")
-- `travelers_type`: string - Type of travelers (e.g., "Couple", "Family")
-- `luxury_level`: string - Budget level (e.g., "Budget", "Mid-range", "Luxury")
-- `itinerary`: list of DayPlan objects
-- `budget_breakdown`: list of strings with cost summaries
-- `landmarks`: list of Landmark objects
-
-**DayPlan Schema:**
-- `day`: string - Day title (e.g., "Day 1" or "December 1")
-- `activities`: list of Activity objects
-
-**Activity Schema:**
-- `time`: string - Time range (e.g., "08:00 AM - 3:00 PM")
-- `title`: string - Activity name
-- `description`: string - Activity description
-- `cost`: string - Cost (e.g., "USD 50" or "EUR 30")
-- `rating`: float - Rating out of 5 (default 4.5)
-- `reviews_count`: int - Number of reviews (default 100)
-- `google_maps_url`: string - Google Maps link (default "https://maps.google.com")
-
-**Landmark Schema:**
-- `id`: string - Unique snake_case identifier (e.g., "eiffel_tower")
-- `title`: string - Landmark name
-- `description`: string - Short description
-- `coordinate`: object with `latitude` (float) and `longitude` (float) - MUST BE ACCURATE
-- `color`: string - Hex color for map pin (e.g., "#F59E0B")
-
-### Critical Requirements:
-1. **Coordinates MUST be accurate real-world coordinates**
-2. All required fields must be present
-3. Costs should be formatted consistently with currency
-4. Each landmark needs a unique color for map differentiation
-5. Time ranges should be properly formatted
+### Output Schema:
+Format your final response as a JSON object matching the TripPlan schema, wrapped in a ```json ... ``` code block.
 """
 
 planner_agent = Agent(
-     model="gemini-2.5-flash",
+    model="gemini-2.5-flash",
     name="planner_agent",
-    description="Creates detailed day-by-day travel itineraries and formats them to match the TripPlan schema.",
+    description="Arranges pre-clustered travel data into a day-by-day travel plan and formats it to the TripPlan schema.",
     instruction=planner_prompt,
     output_schema=TripPlan
 )
-
