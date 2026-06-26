@@ -15,6 +15,8 @@ import { useUser } from "../contexts/userContext";
 import * as ImagePicker from "expo-image-picker";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import axios from "axios";
+import Constants from "expo-constants";
+const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const PersonalInfo = () => {
   const { theme } = useContext(ThemeContext);
@@ -42,11 +44,11 @@ const handleSaveChanges = async () => {
 
   try {
     const response = await axios.patch(
-      "http://10.187.16.161:8000/api/accounts/profile/update/",
+      `${API_BASE_URL}/api/accounts/profile/update/`,
       {
         first_name: firstName,
         last_name: lastName,
-        phone_number: formattedValue+phoneValue,
+        phone_number: formattedValue,
       },
       {
         headers: {
@@ -98,19 +100,20 @@ const handleSaveChanges = async () => {
         {/* Profile Picture */}
         <View style={styles.profilePictureWrapper}>
           {/* FIX: profilePicUri reflects newly picked image immediately */}
-          {profilePicUri ? (
+          {/* {profilePicUri ? (
             <Image source={{ uri: profilePicUri }} style={styles.profilePicture} />
           ) : (
             <View style={styles.profilePicture} />
-          )}
-          <TouchableOpacity
+          )} */}
+           <Image source={require("../../assets/images/avatar.png")} style={styles.profilePicture} />
+          {/* <TouchableOpacity
             style={[styles.changePicButton, { backgroundColor: currentTheme.searchBackground }]}
             onPress={pickImage}
           >
             <Text style={{ fontFamily: "Poppins-Medium", color: currentTheme.text }}>
               Change Profile Picture
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {/* Form */}

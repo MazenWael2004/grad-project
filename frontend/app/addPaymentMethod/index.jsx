@@ -11,7 +11,10 @@ import { router } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
+import axios from "axios";
 import { useNavigation } from "expo-router";
+import Constants from "expo-constants";
+const { API_BASE_URL } = Constants.expoConfig.extra;
 
 
 
@@ -154,7 +157,40 @@ const AddPaymentMethod = () => {
 
     // console.log(user);
     
+  };
+
+  const handleSaveChanges = async () => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/accounts/payment-methods/add/`,
+      {
+        payment_type:"card",
+        card_holder:accountHolderName,
+        card_last4: cardNumber.slice(-4),
+        expiry_month:expiryDate.expiryMonth,
+        expiry_year:expiryDate.expiryYear,
+      },
+      {
+        headers: {
+          Authorization: `Token ${user.token}`,
+        },
+      }
+    );
+
+    const paymentMethod = response.data;
+
+    // correct way to update state
+    setUser((prev) => ({
+  ...prev,
+  paymentMethods: [...prev.paymentMethods, paymentMethod],
+}));
+
+router.push("settings/paymentMethods");
+
+  } catch (error) {
+    console.error(error.response?.data || error.message);
   }
+};
 
   return (
     <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
@@ -300,7 +336,7 @@ const AddPaymentMethod = () => {
         }}
         onPress={
           // Handle form submission here
-          handleSaveMethod
+          handleSaveChanges
         }
       >
         <Text

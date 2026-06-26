@@ -63,6 +63,8 @@ const Login = () => {
        last_name:user.last_name,
        email:user.email,
        country:user.country,
+       subscriptionID:1,
+       paymentMethods: [],
        phoneNumber:user.phone_number,
        token,
       })

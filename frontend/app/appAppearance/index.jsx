@@ -129,7 +129,7 @@ const AppAppearance = () => {
         />
         </View>
         </RBSheet>
-        <TouchableOpacity style={styles.appPreferenceItem}>
+        {/* <TouchableOpacity style={styles.appPreferenceItem}>
           <Text
             style={{
               fontFamily: "Poppins-Medium",
@@ -161,7 +161,7 @@ const AppAppearance = () => {
               }}
             />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

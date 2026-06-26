@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
     last_name:'',
     email: '',
     paymentMethods: [],
-    currentSubscription: subscriptions[0],
+    subscriptionID:1,
     country: '',
     token:"",
     isLoggedIn: false,

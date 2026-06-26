@@ -56,7 +56,7 @@ const Plans = () => {
         }}
       >
         {subscriptions.map((item, indx) => {
-           const isCurrentPlan = user?.currentSubscription?.id === item.id;
+           const isCurrentPlan = user?.subscriptionID === item.id;
           return (
             <View
               key={indx}
@@ -91,7 +91,7 @@ const Plans = () => {
                     color: currentTheme.text,
                   }}
                 >
-                  {item.price === 0 ? "Free" : `${Math.floor(item.price * user.exchangeRate)}/month`}
+                  {item.price === 0 ? "Free" : `${Math.floor(item.price)}/month`}
                 </Text>
               </View>
 

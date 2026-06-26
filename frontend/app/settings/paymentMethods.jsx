@@ -12,32 +12,45 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import { useNavigation } from "expo-router";
+import axios from "axios";
+import Constants from "expo-constants";
+const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const PaymentMethods = () => {
   const [isPaymentMethodExists, setIsPaymentMethodExists] = useState(false);
   const nav  = useNavigation();
   const {user,setUser} = useUser();
+  const [paymentMethods, setPaymentMethods] = useState([]);
   const { theme } = useContext(ThemeContext);
   const [cardTypeImage,setCardTypeImage] = useState(null);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
-  useEffect(()=>{
-    if(user.paymentMethods.length === 0){
-      setIsPaymentMethodExists(false);
-    }
-    else{
-      setIsPaymentMethodExists(true);
-    }
-    console.log(JSON.stringify(user.paymentMethods, null,2));
-
-  },[user.paymentMethods]);
+  useEffect(() => {
+  loadPaymentMethods();
+}, []);
 
 
-  const maskCard = (cardNumber = "") => {
-  const digits = String(cardNumber).replace(/\D/g, ""); // keep only numbers
-  const last4 = digits.slice(-4); // get last 4
-  return "**** "+"**** "+"**** "+last4;
+  const maskCard = (last4) => `**** **** **** ${last4}`;
+  
+  const loadPaymentMethods = async ()=>{
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/api/accounts/payment-methods/`,
+      {
+        headers: {
+          Authorization: `Token ${user.token}`,
+        },
+      }
+    );
+
+    setPaymentMethods(response.data);
+    setIsPaymentMethodExists(response.data.length > 0);
+
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+  }
 };
+
 
  
 
@@ -114,7 +127,7 @@ const PaymentMethods = () => {
           contentContainerStyle={{ flexDirection: "column", gap: "15" }}
         >
 
-{user.paymentMethods.map((item,indx) =>{
+{paymentMethods.map((item,indx) =>{
   return (
     
     <TouchableOpacity
@@ -144,7 +157,7 @@ const PaymentMethods = () => {
                   fontSize:10,
                 }}
               >
-                {maskCard(item.cardNumber)}
+                {maskCard(item.card_last4)}
                 </Text>
             </View>
            <Text style={{fontFamily:"Poppins-Medium",color:currentTheme.description,fontSize:17,}}>
