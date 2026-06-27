@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "apps.accounts",
     "apps.subscriptions",
     "apps.attractions",
+    "apps.tours",
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,12 @@ import os
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# LiveKit and Guest Token Configuration for AI Tour Guide
+LIVEKIT_URL = os.getenv("LIVEKIT_URL", "")
+LIVEKIT_API_KEY = os.getenv("LIVEKIT_API_KEY", "")
+LIVEKIT_API_SECRET = os.getenv("LIVEKIT_API_SECRET", "")
+LIVEKIT_AGENT_NAME = os.getenv("LIVEKIT_AGENT_NAME", "my-agent")
+GUEST_TOKEN_HASH_SECRET = os.getenv("GUEST_TOKEN_HASH_SECRET", SECRET_KEY)
+GUEST_SESSION_TTL_HOURS = int(os.getenv("GUEST_SESSION_TTL_HOURS", 4))
+LIVEKIT_TOKEN_TTL_MINUTES = int(os.getenv("LIVEKIT_TOKEN_TTL_MINUTES", 15))
