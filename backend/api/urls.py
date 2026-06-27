@@ -5,6 +5,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("core.urls")), 
     path("", include("apps.accounts.urls")),
+    path("", include("apps.tours.urls")),
 ]
 from .views import generate_itinerary
 urlpatterns += [
