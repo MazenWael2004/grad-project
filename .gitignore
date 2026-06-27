@@ -1,5 +1,6 @@
 # Python cache
 __pycache__/
+ai-tour-guide/
 *.py[cod]
 *$py.class
 db.sqlite3
