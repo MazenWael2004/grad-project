@@ -1,1 +1,2 @@
-AI_Models/
+AI_Models/*
+!AI_Models/readme.md
