@@ -25,9 +25,7 @@ class RegisterViewTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
-        self.assertTrue(
-            User.objects.filter(email="test@example.com").exists()
-        )
+        self.assertTrue(User.objects.filter(email="test@example.com").exists())
 
     def test_register_existing_email(self):
         User.objects.create_user(
@@ -127,9 +125,7 @@ class LogoutViewTests(APITestCase):
         self.refresh_token = str(refresh)
 
     def test_logout_success(self):
-        self.client.credentials(
-            HTTP_AUTHORIZATION=f"Bearer {self.access_token}"
-        )
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
 
         response = self.client.post(
             self.url,
@@ -140,9 +136,7 @@ class LogoutViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_logout_invalid_refresh_token(self):
-        self.client.credentials(
-            HTTP_AUTHORIZATION=f"Bearer {self.access_token}"
-        )
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
 
         response = self.client.post(
             self.url,
@@ -153,4 +147,41 @@ class LogoutViewTests(APITestCase):
         self.assertEqual(
             response.status_code,
             status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class TokenRefreshTests(APITestCase):
+    def setUp(self):
+        self.url = reverse("token_refresh")
+
+        self.user = User.objects.create_user(
+            email="test@example.com",
+            first_name="John",
+            last_name="Doe",
+            password="password123",
+        )
+
+        refresh = RefreshToken.for_user(self.user)
+        self.refresh_token = str(refresh)
+
+    def test_refresh_token_success(self):
+        response = self.client.post(
+            self.url,
+            {"refresh": self.refresh_token},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("access", response.data)
+
+    def test_refresh_token_invalid(self):
+        response = self.client.post(
+            self.url,
+            {"refresh": "invalid-refresh-token"},
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_401_UNAUTHORIZED,
         )
