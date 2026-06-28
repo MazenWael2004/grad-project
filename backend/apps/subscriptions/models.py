@@ -9,14 +9,17 @@ class Plan(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     max_users = models.IntegerField(default=1)
     duration_months = models.PositiveSmallIntegerField(default=1)
+
     def __str__(self):
         return self.name
 
 
 class Subscription(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
-    owner = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="owned_subscriptions",
     )
     status = models.CharField(max_length=50, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
@@ -30,9 +33,15 @@ class SubscriptionMember(models.Model):
     subscription = models.ForeignKey(
         Subscription, on_delete=models.CASCADE, related_name="members"
     )
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["subscription", "user"],
+                name="unique_subscription_member",
+            )
+        ]
 
     def __str__(self):
         return f"{self.user} in {self.subscription}"
@@ -46,23 +55,16 @@ class PaymentMethod(models.Model):
     )
 
     card_holder_name = models.CharField(max_length=255)
-    card_number = models.CharField(max_length=19)  
+    card_number = models.CharField(max_length=19)
     expiration_month = models.PositiveSmallIntegerField()
     expiration_year = models.PositiveSmallIntegerField()
 
     def clean(self):
         if not 1 <= self.expiration_month <= 12:
-            raise ValidationErr(
-                {"expiration_month": "Month must be between 1 and 12."}
-            )
+            raise ValidationErr({"expiration_month": "Month must be between 1 and 12."})
 
-        if (
-            self.pk is None
-            and self.user.payment_methods.count() >= 3
-        ):
-            raise ValidationErr(
-                "A user can have at most 3 payment methods."
-            )
+        if self.pk is None and self.user.payment_methods.count() >= 3:
+            raise ValidationErr("A user can have at most 3 payment methods.")
 
     def save(self, *args, **kwargs):
         self.clean()

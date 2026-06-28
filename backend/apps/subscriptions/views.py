@@ -43,6 +43,8 @@ class MySubscriptionView(APIView):
                     "status": subscription.status,
                     "is_owner": is_owner,
                     "members": members,
+                    "start_date":subscription.start_date,
+                    "end_date":subscription.end_date
                 },
                 status=status.HTTP_200_OK,
             )

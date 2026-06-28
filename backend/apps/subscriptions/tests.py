@@ -97,6 +97,44 @@ class SubscribeTests(BaseSubscriptionSetup):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_subscribe_after_cancelled_subscription(self):
+        now = timezone.now()
+
+        old_subscription = Subscription.objects.create(
+            owner=self.user,
+            plan=self.plan,
+            status="cancelled",
+            start_date=now - timedelta(days=30),
+            end_date=now,
+        )
+
+        SubscriptionMember.objects.create(
+            subscription=old_subscription,
+            user=self.user,
+        )
+
+        response = self.client.post(
+            reverse("subscribe"),
+            {"plan_id": self.plan.id},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        new_subscription = Subscription.objects.exclude(id=old_subscription.id).get(
+            owner=self.user
+        )
+
+        self.assertEqual(new_subscription.plan, self.plan)
+        self.assertEqual(new_subscription.status, "pending")
+
+        self.assertTrue(
+            SubscriptionMember.objects.filter(
+                subscription=new_subscription,
+                user=self.user,
+            ).exists()
+        )
+
 
 class UnsubscribeTests(BaseSubscriptionSetup):
     def setUp(self):
@@ -656,7 +694,7 @@ class PaySubscriptionTests(BaseSubscriptionSetup):
             reverse("pay-subscription"),
             {
                 "payment_method_id": self.payment_method.id,
-                "cvv": "200",  
+                "cvv": "200",
             },
             format="json",
         )
