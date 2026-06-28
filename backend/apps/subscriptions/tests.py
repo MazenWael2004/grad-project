@@ -8,7 +8,7 @@ from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
 from apps.accounts.models import User
-from .models import Plan, Subscription, SubscriptionMember
+from .models import PaymentMethod, Plan, Subscription, SubscriptionMember
 
 
 class BaseSubscriptionSetup(APITestCase):
@@ -55,7 +55,7 @@ class SubscribeTests(BaseSubscriptionSetup):
         subscription = Subscription.objects.get(owner=self.user)
 
         self.assertEqual(subscription.plan, self.plan)
-        self.assertEqual(subscription.status, "active")
+        self.assertEqual(subscription.status, "pending")
 
         self.assertTrue(
             SubscriptionMember.objects.filter(
@@ -433,3 +433,260 @@ class MySubscriptionTests(BaseSubscriptionSetup):
 
         # owner + current user
         self.assertEqual(response.data["members"], 2)
+
+
+class PaymentMethodTests(BaseSubscriptionSetup):
+
+    def test_create_payment_method(self):
+        response = self.client.post(
+            reverse("payment-methods-list"),
+            {
+                "card_holder_name": "John Doe",
+                "card_number": "4111111111111111",
+                "expiration_month": 12,
+                "expiration_year": 2030,
+            },
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED,
+        )
+
+        self.assertTrue(
+            PaymentMethod.objects.filter(
+                user=self.user,
+                card_number="4111111111111111",
+            ).exists()
+        )
+
+    def test_list_payment_methods(self):
+        PaymentMethod.objects.create(
+            user=self.user,
+            card_holder_name="John Doe",
+            card_number="4111111111111111",
+            expiration_month=12,
+            expiration_year=2030,
+        )
+
+        response = self.client.get(reverse("payment-methods-list"))
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK,
+        )
+
+        self.assertEqual(len(response.data), 1)
+
+        self.assertEqual(
+            response.data[0]["card_holder_name"],
+            "John Doe",
+        )
+
+    def test_delete_payment_method(self):
+        payment_method = PaymentMethod.objects.create(
+            user=self.user,
+            card_holder_name="John Doe",
+            card_number="4111111111111111",
+            expiration_month=12,
+            expiration_year=2030,
+        )
+
+        response = self.client.delete(
+            reverse(
+                "payment-methods-detail",
+                args=[payment_method.id],
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_204_NO_CONTENT,
+        )
+
+        self.assertFalse(PaymentMethod.objects.filter(id=payment_method.id).exists())
+
+    def test_cannot_create_more_than_three_payment_methods(self):
+        # Create 3 existing payment methods
+        for i in range(3):
+            PaymentMethod.objects.create(
+                user=self.user,
+                card_holder_name=f"User {i}",
+                card_number=f"41111111111111{i}",
+                expiration_month=12,
+                expiration_year=2030,
+            )
+
+        response = self.client.post(
+            reverse("payment-methods-list"),
+            {
+                "card_holder_name": "Extra Card",
+                "card_number": "4111111111119999",
+                "expiration_month": 12,
+                "expiration_year": 2030,
+            },
+            format="json",
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+        )
+
+        self.assertEqual(
+            PaymentMethod.objects.filter(user=self.user).count(),
+            3,
+        )
+
+    def test_cannot_delete_other_users_payment_method(self):
+        other_user = User.objects.create_user(
+            email="other@test.com",
+            first_name="Other",
+            last_name="User",
+            password="password123",
+        )
+
+        other_payment_method = PaymentMethod.objects.create(
+            user=other_user,
+            card_holder_name="Other User",
+            card_number="4111111111111111",
+            expiration_month=12,
+            expiration_year=2030,
+        )
+
+        response = self.client.delete(
+            reverse(
+                "payment-methods-detail",
+                args=[other_payment_method.id],
+            )
+        )
+
+        # Because queryset is filtered by user, DRF returns 404 (not 403)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_404_NOT_FOUND,
+        )
+
+        self.assertTrue(
+            PaymentMethod.objects.filter(id=other_payment_method.id).exists()
+        )
+
+
+class PaySubscriptionTests(BaseSubscriptionSetup):
+
+    def setUp(self):
+        super().setUp()
+
+        # Create payment method for user
+        self.payment_method = PaymentMethod.objects.create(
+            user=self.user,
+            card_holder_name="John Doe",
+            card_number="4111111111111111",
+            expiration_month=12,
+            expiration_year=2030,
+        )
+
+    def test_no_pending_subscription(self):
+        response = self.client.post(
+            reverse("pay-subscription"),
+            {
+                "payment_method_id": self.payment_method.id,
+                "cvv": "100",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_payment_method_not_found(self):
+        subscription = Subscription.objects.create(
+            owner=self.user,
+            plan=self.plan,
+            status="pending",
+        )
+        SubscriptionMember.objects.create(
+            subscription=subscription,
+            user=self.user,
+        )
+        response = self.client.post(
+            reverse("pay-subscription"),
+            {
+                "payment_method_id": 9999,
+                "cvv": "100",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_payment_failed_wrong_cvv(self):
+        subscription = Subscription.objects.create(
+            owner=self.user,
+            plan=self.plan,
+            status="pending",
+        )
+        SubscriptionMember.objects.create(
+            subscription=subscription,
+            user=self.user,
+        )
+        response = self.client.post(
+            reverse("pay-subscription"),
+            {
+                "payment_method_id": self.payment_method.id,
+                "cvv": "999",  # wrong CVV
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_payment_failed_insufficient_fund(self):
+        subscription = Subscription.objects.create(
+            owner=self.user,
+            plan=self.plan,
+            status="pending",
+        )
+        SubscriptionMember.objects.create(
+            subscription=subscription,
+            user=self.user,
+        )
+
+        response = self.client.post(
+            reverse("pay-subscription"),
+            {
+                "payment_method_id": self.payment_method.id,
+                "cvv": "200",  
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_402_PAYMENT_REQUIRED)
+        self.assertEqual(response.data["error"], "Insufficient funds")
+
+    def test_payment_success(self):
+        subscription = Subscription.objects.create(
+            owner=self.user,
+            plan=self.plan,
+            status="pending",
+        )
+        SubscriptionMember.objects.create(
+            subscription=subscription,
+            user=self.user,
+        )
+        response = self.client.post(
+            reverse("pay-subscription"),
+            {
+                "payment_method_id": self.payment_method.id,
+                "cvv": "100",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        subscription.refresh_from_db()
+
+        self.assertEqual(subscription.status, "active")
+        self.assertIsNotNone(subscription.start_date)
+        self.assertIsNotNone(subscription.end_date)

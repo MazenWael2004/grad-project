@@ -4,15 +4,20 @@ from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView, PermissionDenied
 from rest_framework.decorators import action
-from .serializers import PlanSerializer
+
+from apps.subscriptions.helpers import get_active_subscription, get_pending_subscription
+from core import serializers
+from .serializers import PaymentMethodSerializer, PlanSerializer
 from .permissions import (
     IsSubscribed,
     IsNotSubscribed,
     IsSubscriptionOwner,
-    get_active_subscription,
 )
-from .models import Subscription, SubscriptionMember, Plan
+from .models import PaymentMethod, Subscription, SubscriptionMember, Plan
 from apps.accounts.models import User
+from rest_framework.exceptions import ValidationError
+
+from dateutil.relativedelta import relativedelta
 
 
 class PlanListView(generics.ListAPIView):
@@ -26,16 +31,22 @@ class MySubscriptionView(APIView):
 
     def get(self, request):
         user = request.user
-        subscription = get_active_subscription(user)
+        subscription = get_active_subscription(user) or get_pending_subscription(user)
         if subscription:
             plan = subscription.plan
             serializer = PlanSerializer(plan)
             members = subscription.members.count()
             is_owner = subscription.owner == user
             return Response(
-                {"plan": serializer.data, "is_owner": is_owner, "members": members},
+                {
+                    "plan": serializer.data,
+                    "status": subscription.status,
+                    "is_owner": is_owner,
+                    "members": members,
+                },
                 status=status.HTTP_200_OK,
             )
+
         return Response({"plan": None}, status=status.HTTP_200_OK)
 
 
@@ -45,7 +56,11 @@ class SubscribeView(APIView):
     def post(self, request):
         plan_id = request.data.get("plan_id")
         user = request.user
-
+        if get_pending_subscription(user):
+            return Response(
+                {"error": "You already have a pending subscription."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         try:
             plan = Plan.objects.get(id=plan_id)
         except Plan.DoesNotExist:
@@ -53,11 +68,8 @@ class SubscribeView(APIView):
                 {"error": "Plan not found"}, status=status.HTTP_404_NOT_FOUND
             )
 
-        now = timezone.now()
-        end_date = now + timedelta(days=30)  # 1 month subscription
-
         subscription = Subscription.objects.create(
-            plan=plan, owner=user, status="active", start_date=now, end_date=end_date
+            plan=plan, owner=user, status="pending"
         )
         SubscriptionMember.objects.create(subscription=subscription, user=user)
 
@@ -66,10 +78,32 @@ class SubscribeView(APIView):
                 "message": "Subscription created",
                 "subscription_id": subscription.id,
                 "plan": plan.name,
-                "start_date": now,
-                "end_date": end_date,
             },
             status=status.HTTP_201_CREATED,
+        )
+
+
+class CancelPendingSubscriptionView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+
+        subscription = get_pending_subscription(user)
+
+        if not subscription:
+            return Response(
+                {"error": "No pending subscription found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        subscription.members.all().delete()
+        subscription.status = "canceled"
+        subscription.save()
+
+        return Response(
+            {"message": "Pending subscription cancelled."},
+            status=status.HTTP_200_OK,
         )
 
 
@@ -141,6 +175,12 @@ class MemberViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        if get_pending_subscription(user):
+            return Response(
+                {"error": "User already has a pending subscription"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         if subscription.members.count() >= subscription.plan.max_users:
             return Response(
                 {"error": "Subscription limit reached"},
@@ -156,6 +196,7 @@ class MemberViewSet(viewsets.ViewSet):
             {"message": "Member added"},
             status=status.HTTP_201_CREATED,
         )
+
     @action(detail=False, methods=["delete"])
     def remove(self, request):
         subscription = request.active_subscription
@@ -191,3 +232,80 @@ class MemberViewSet(viewsets.ViewSet):
             {"message": "Member removed"},
             status=status.HTTP_200_OK,
         )
+
+
+class PaymentMethodViewSet(viewsets.ModelViewSet):
+    serializer_class = PaymentMethodSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return PaymentMethod.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        if self.request.user.payment_methods.count() >= 3:
+            raise ValidationError({"error": "You can have at most 3 payment methods."})
+
+        serializer.save(user=self.request.user)
+
+
+class PayPendingSubscriptionView(APIView):
+    permission_classes = [IsNotSubscribed]
+
+    def post(self, request):
+        user = request.user
+
+        payment_method_id = request.data.get("payment_method_id")
+        cvv = request.data.get("cvv")
+
+        if not payment_method_id or not cvv:
+            return Response(
+                {"error": "payment_method_id and cvv are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            payment_method = PaymentMethod.objects.get(
+                id=payment_method_id,
+                user=user,
+            )
+        except PaymentMethod.DoesNotExist:
+            return Response(
+                {"error": "Payment method not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        subscription = get_pending_subscription(user)
+
+        if not subscription:
+            return Response(
+                {"error": "No pending subscription found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # ---- FAKE PAYMENT LOGIC (TEST ONLY) ----
+        cvv = request.data.get("cvv")
+
+        if cvv == "100":
+            subscription.status = "active"
+            subscription.start_date = timezone.now()
+            subscription.end_date = subscription.start_date + relativedelta(
+                months=subscription.plan.duration_months
+            )
+            subscription.save()
+
+            return Response(
+                {"message": "Payment successful"},
+                status=status.HTTP_200_OK,
+            )
+
+        elif cvv == "200":
+            return Response(
+                {"error": "Insufficient funds"},
+                status=status.HTTP_402_PAYMENT_REQUIRED,
+            )
+
+        else:
+            return Response(
+                {"error": "Invalid CVV"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
