@@ -6,17 +6,68 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { router } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import subscriptions from "../../constants/subscriptions";
 import { useUser } from "../contexts/userContext";
+import axios from "axios";
+import Constants from "expo-constants";
+const { API_BASE_URL } = Constants.expoConfig.extra;
 // import {useUser} from '../contexts/userContext'
 
 const Plans = () => {
+  const [plans, setPlans] = useState([]);
+  const handleSubscribe = async (planId) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/subscriptions/subscribe/`,
+        {
+          plan_id: planId,
+        },
+        {
+          headers: {
+            Authorization: `Token ${user.token}`, // if your API requires JWT
+          },
+        },
+      );
+
+      console.log(response.data);
+
+      // Update local user state if you have setUser
+      // setUser(prev => ({
+      //   ...prev,
+      //   subscriptionID: response.data.subscription_id,
+      // }));
+
+      alert(`Subscribed to ${response.data.plan}!`);
+      router.push({
+        pathname: "paymentProcess/selectPayment",
+      })
+    } catch (err) {
+      console.error(err.response?.data || err);
+      alert("Failed to subscribe.");
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/api/subscriptions/plans/`,
+        );
+        setPlans(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const { theme } = useContext(ThemeContext);
-  const {user} = useUser();
+  const { user } = useUser();
   // console.log(user);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   return (
@@ -55,8 +106,8 @@ const Plans = () => {
           width: 320,
         }}
       >
-        {subscriptions.map((item, indx) => {
-           const isCurrentPlan = user?.subscriptionID === item.id;
+        {plans.map((item, indx) => {
+          const isCurrentPlan = user?.subscriptionID === item.id;
           return (
             <View
               key={indx}
@@ -91,7 +142,9 @@ const Plans = () => {
                     color: currentTheme.text,
                   }}
                 >
-                  {item.price === 0 ? "Free" : `${Math.floor(item.price)}/month`}
+                  {item.price === 0
+                    ? "Free"
+                    : `${Math.floor(Number(item.price))}/month`}
                 </Text>
               </View>
 
@@ -105,7 +158,7 @@ const Plans = () => {
               />
 
               <View style={{ flexDirection: "column", gap: 10, padding: 25 }}>
-                {item.features.map((feature, indx2) => {
+                {/* {item.features.map((feature, indx2) => {
                   return (
                     <View
                       key={indx2}
@@ -135,7 +188,7 @@ const Plans = () => {
                       </Text>
                     </View>
                   );
-                })}
+                })} */}
 
                 <View
                   style={{
@@ -146,41 +199,28 @@ const Plans = () => {
                     marginBottom: 10,
                   }}
                 />
-                {isCurrentPlan ? (
+
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log("Item:", item);
+                    handleSubscribe(item.id);
+                  }}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#D4AF37",
+                    paddingHorizontal: 15,
+                    paddingVertical: 10,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 20,
+                  }}
+                >
                   <Text
-                    style={{
-                      textAlign: "center",
-                      fontFamily: "Poppins-Medium",
-                      color: "#b7b7b7ff",
-                    }}
+                    style={{ fontFamily: "Poppins-Medium", color: "white" }}
                   >
-                    Your current plan
+                    Select Plan
                   </Text>
-                ) : (
-                  <TouchableOpacity
-                    onPress={() => {
-                      router.push({
-                        pathname: "paymentProcess/selectPayment",
-                        params: { subscription:JSON.stringify(item)  },
-                      });
-                    }}
-                    style={{
-                      width: "100%",
-                      backgroundColor: "#D4AF37",
-                      paddingHorizontal: 15,
-                      paddingVertical: 10,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderRadius: 20,
-                    }}
-                  >
-                    <Text
-                      style={{ fontFamily: "Poppins-Medium", color: "white" }}
-                    >
-                      Select Plan
-                    </Text>
-                  </TouchableOpacity>
-                )}
+                </TouchableOpacity>
               </View>
             </View>
           );

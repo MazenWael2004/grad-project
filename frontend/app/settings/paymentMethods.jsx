@@ -13,46 +13,42 @@ import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import { useNavigation } from "expo-router";
 import axios from "axios";
+
 import Constants from "expo-constants";
 const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const PaymentMethods = () => {
   const [isPaymentMethodExists, setIsPaymentMethodExists] = useState(false);
-  const nav  = useNavigation();
-  const {user,setUser} = useUser();
+  const nav = useNavigation();
+  const { user, setUser } = useUser();
   const [paymentMethods, setPaymentMethods] = useState([]);
   const { theme } = useContext(ThemeContext);
-  const [cardTypeImage,setCardTypeImage] = useState(null);
+  const [cardTypeImage, setCardTypeImage] = useState(null);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
   useEffect(() => {
-  loadPaymentMethods();
-}, []);
-
+    loadPaymentMethods();
+  }, []);
 
   const maskCard = (last4) => `**** **** **** ${last4}`;
-  
-  const loadPaymentMethods = async ()=>{
-  try {
-    const response = await axios.get(
-      `${API_BASE_URL}/api/accounts/payment-methods/`,
-      {
-        headers: {
-          Authorization: `Token ${user.token}`,
+
+  const loadPaymentMethods = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/api/subscriptions/payment-methods/`,
+        {
+          headers: {
+            Authorization: `Token ${user.token}`,
+          },
         },
-      }
-    );
+      );
 
-    setPaymentMethods(response.data);
-    setIsPaymentMethodExists(response.data.length > 0);
-
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-  }
-};
-
-
- 
+      setPaymentMethods(response.data);
+      setIsPaymentMethodExists(response.data.length > 0);
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+    }
+  };
 
   return (
     <View
@@ -126,53 +122,63 @@ const PaymentMethods = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexDirection: "column", gap: "15" }}
         >
-
-{paymentMethods.map((item,indx) =>{
-  return (
-    
-    <TouchableOpacity
-    key={indx}
-            style={[styles.countryItem,{backgroundColor:currentTheme.searchBackground}]}
-            onPress={() => {
-              console.log("Payment Selected!");
-            }}
-          >
-            <View
-              style={{ flexDirection: "row", gap: 15, alignItems: "center" }}
-            >
-              {/* Use FastImage for better performance if needed */}
-              {/* <FastImage
+          {paymentMethods.map((item, indx) => {
+            return (
+              <TouchableOpacity
+                key={indx}
+                style={[
+                  styles.countryItem,
+                  { backgroundColor: currentTheme.searchBackground },
+                ]}
+                onPress={() => {
+                  setUser((prevUser) => ({
+                    ...prevUser,
+                    payment_method_id: indx + 1,
+                  }));
+                  console.log(`Payment Method" ${indx+1}" Selected!`);
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    gap: 15,
+                    alignItems: "center",
+                  }}
+                >
+                  {/* Use FastImage for better performance if needed */}
+                  {/* <FastImage
                                   source={{ uri: item.flags.png }}
                                   style={{ width: 80, height: 60 }}
                                   resizeMode={FastImage.resizeMode.contain}
                                 /> */}
-              <Image
-                source={require("../../assets/images/visa.png")}
-                style={{ width: 50, height: 50 }}
-              />
-              <Text
-                style={{
-                  fontFamily: "Poppins-SemiBold",
-                  color: currentTheme.text,
-                  fontSize:10,
-                }}
-              >
-                {maskCard(item.card_last4)}
+                  <Image
+                    source={require("../../assets/images/visa.png")}
+                    style={{ width: 50, height: 50 }}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: "Poppins-SemiBold",
+                      color: currentTheme.text,
+                      fontSize: 10,
+                    }}
+                  >
+                    {maskCard(item.card_number.slice(-4))}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    fontFamily: "Poppins-Medium",
+                    color: currentTheme.description,
+                    fontSize: 17,
+                  }}
+                >
+                  Connected
                 </Text>
-            </View>
-           <Text style={{fontFamily:"Poppins-Medium",color:currentTheme.description,fontSize:17,}}>
-            Connected
-           </Text>
-          </TouchableOpacity>
+              </TouchableOpacity>
+            );
+          })}
 
-  )
-})}
-
-
-
-        
-
-            <TouchableOpacity
+          <TouchableOpacity
             style={{
               backgroundColor: "#D4AF37",
               justifyContent: "center",
@@ -189,15 +195,13 @@ const PaymentMethods = () => {
                 fontFamily: "Poppins-SemiBold",
                 color: "white",
                 width: "100%",
-                textAlign:"center",
+                textAlign: "center",
               }}
             >
               Add Payment Method
             </Text>
           </TouchableOpacity>
-          
         </ScrollView>
-        
       )}
     </View>
   );
@@ -217,7 +221,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "90%",
-    marginBottom:35,
+    marginBottom: 35,
   },
   noPaymentAddedContainer: {
     height: "85%",
@@ -234,6 +238,6 @@ const styles = StyleSheet.create({
     borderColor: "#888",
     borderWidth: 0.2,
     borderRadius: 10,
-    marginBottom:20,
+    marginBottom: 20,
   },
 });

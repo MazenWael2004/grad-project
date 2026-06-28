@@ -1,17 +1,23 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext,useState,useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { router } from "expo-router";
 import { useUser } from "../contexts/userContext";
+import axios from "axios";
+import Constants from "expo-constants";
+const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const ReviewSummary = () => {
-  const { subscription, selectedPayment } = useLocalSearchParams();
+  // useEffect(() => {
+  //     loadCurrentPlan();
+  //   }, []);
+
+  const {  paymentMethodID,plan } = useLocalSearchParams();
   const {user,setUser} = useUser();
-  const sub = subscription ? JSON.parse(subscription) : null;
-  const paymentMethod = selectedPayment ? JSON.parse(selectedPayment) : null;
   const { theme } = useContext(ThemeContext);
+  // const [currentPlan,setCurrentPlan] = useState(null);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
   const maskCard = (cardNumber = "") => {
@@ -20,21 +26,39 @@ const ReviewSummary = () => {
     return "**** " + "**** " + "**** " + last4;
   };
 
-  console.log("Subscription", JSON.stringify(sub, null, 2));
   console.log("\n\n\n\n\n");
-  console.log("Payment", JSON.stringify(paymentMethod, null, 2));
+
+  // const loadCurrentPlan = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${API_BASE_URL}/api/subscriptions/my-subscription/`,
+  //       {
+  //         headers: {
+  //           Authorization: `Token ${user.token}`,
+  //         },
+  //       },
+  //     );
+
+  //     setCurrentPlan(response.data);
+  //     console.log(currentPlan);
+
+  //   } catch (error) {
+  //     console.error(error.response?.data || error.message);
+  //   }
+  // };
+
 
   const handleConfirmPayment = () =>{
-    if(paymentMethod.amount < sub.price){
-      alert("Insufficient balance.");
-      return;
-    }
-    setUser((prev)=>{
-        return {
-            ...prev,
-            currentSubscription:sub,
-        }
-    })
+    // if(paymentMethod.amount < sub.price){
+    //   alert("Insufficient balance.");
+    //   return;
+    // }
+    // setUser((prev)=>{
+    //     return {
+    //         ...prev,
+    //         currentSubscription:sub,
+    //     }
+    // })
     alert("Payment Successful! Subscription Updated.");
     router.replace("main/settings");
   };
@@ -84,7 +108,7 @@ const ReviewSummary = () => {
               color: currentTheme.text,
             }}
           >
-            {sub.name}
+            {plan.name}
           </Text>
 
           <Text
@@ -95,7 +119,7 @@ const ReviewSummary = () => {
               color: currentTheme.text,
             }}
           >
-            {sub.price === 0 ? "0.00 EGP " : `${sub.price} EGP`}
+            {plan.price === 0 ? "0.00 EGP " : `${plan.price} EGP`}
           </Text>
         </View>
 
@@ -109,37 +133,7 @@ const ReviewSummary = () => {
         />
 
         <View style={{ flexDirection: "column", gap: 10, padding: 25 }}>
-          {sub.features.map((feature, indx2) => {
-            return (
-              <View
-                key={indx2}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 10,
-                }}
-              >
-                <Image
-                  source={require("../../assets/images/check.png")}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    tintColor: currentTheme.iconColor,
-                  }}
-                />
-
-                <Text
-                  style={{
-                    fontFamily: "Poppins-Medium",
-                    fontSize: 13,
-                    color: currentTheme.text,
-                  }}
-                >
-                  {feature}
-                </Text>
-              </View>
-            );
-          })}
+  
 
           <View
             style={{
@@ -225,7 +219,7 @@ const ReviewSummary = () => {
               fontSize: 12,
             }}
           >
-            {maskCard(paymentMethod.cardNumber)}
+            {/* {maskCard(paymentMethod.cardNumber)} */}
           </Text>
         </View>
       </TouchableOpacity>
@@ -242,7 +236,7 @@ const ReviewSummary = () => {
         }}
       >
         <Text style={{ fontFamily: "Poppins-SemiBold", color: "white" }}>
-          Confirm Payment - {sub.price} EGP
+          Confirm Payment - {plan.price} EGP
         </Text>
       </TouchableOpacity>
     </View>

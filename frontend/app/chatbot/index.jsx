@@ -17,6 +17,7 @@ import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import messages from "../../constants/messages";
 import { Ionicons } from "@expo/vector-icons";
 import { useCameraPermissions } from "expo-camera";
+import { useUser } from "../contexts/userContext";
 
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback } from "react";
@@ -24,6 +25,7 @@ import { useCallback } from "react";
 
 const ChatBot = () => {
   const params = useLocalSearchParams();
+  const {user} = useUser();
   const { theme } = useContext(ThemeContext);
 
   const [prompt, setPrompt] = useState("");
@@ -219,7 +221,7 @@ useEffect(() => {
               source={require("../../assets/images/chatbot.png")}
               style={{ width: 150, height: 150 }}
             />
-            <Text style={styles.title}>Hello, User!</Text>
+            <Text style={styles.title}>Hello, {user.first_name}!</Text>
             <Text style={styles.subtitle}>
               Welcome to EgyBot, your AI tour guide.
             </Text>

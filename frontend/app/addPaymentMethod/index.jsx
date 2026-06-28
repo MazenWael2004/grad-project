@@ -129,46 +129,45 @@ const AddPaymentMethod = () => {
 };
 
 
-  const handleSaveMethod = ()=>{
-    if(isValidate()){
-    setUser((prev)=>{
-      return {
-        ...prev,
-        paymentMethods: [
-          ...prev.paymentMethods,
-          {
-             id: prev.paymentMethods.length + 1,
-             cardHolderName: accountHolderName,
-             cardNumber,
-             expiryDate,
-             cardType,
-             amount,
-             CVV: cvv
-          }
-        ]
-      }
-    })
-    // Do api call to save new payment method in backend here. or update user.
-    router.push("settings/paymentMethods");
-  }
-  else{
-    console.log("Validation Error!");
-  }
+  // const handleSaveMethod = ()=>{
+  //   if(isValidate()){
+  //   setUser((prev)=>{
+  //     return {
+  //       ...prev,
+  //       paymentMethods: [
+  //         ...prev.paymentMethods,
+  //         {
+  //            id: prev.paymentMethods.length + 1,
+  //            cardHolderName: accountHolderName,
+  //            cardNumber,
+  //            expiryDate,
+  //            cardType,
+  //            amount,
+  //            CVV: cvv
+  //         }
+  //       ]
+  //     }
+  //   })
+  //   // Do api call to save new payment method in backend here. or update user.
+  //   router.push("settings/paymentMethods");
+  // }
+  // else{
+  //   console.log("Validation Error!");
+  // }
 
-    // console.log(user);
+  //   // console.log(user);
     
-  };
+  // };
 
   const handleSaveChanges = async () => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/api/accounts/payment-methods/add/`,
+      `${API_BASE_URL}/api/subscriptions/payment-methods/`,
       {
-        payment_type:"card",
-        card_holder:accountHolderName,
-        card_last4: cardNumber.slice(-4),
-        expiry_month:expiryDate.expiryMonth,
-        expiry_year:expiryDate.expiryYear,
+        card_holder_name:accountHolderName,
+        card_number: cardNumber,
+        expiration_month:expiryDate.expiryMonth,
+        expiration_year:expiryDate.expiryYear,
       },
       {
         headers: {
@@ -180,10 +179,10 @@ const AddPaymentMethod = () => {
     const paymentMethod = response.data;
 
     // correct way to update state
-    setUser((prev) => ({
-  ...prev,
-  paymentMethods: [...prev.paymentMethods, paymentMethod],
-}));
+//     setUser((prev) => ({
+//   ...prev,
+//   paymentMethods: [...prev.paymentMethods, paymentMethod],
+// }));
 
 router.push("settings/paymentMethods");
 
@@ -273,7 +272,7 @@ router.push("settings/paymentMethods");
           </View>
 
           {/* CVV */}
-          <View style={styles.colRight}>
+          {/* <View style={styles.colRight}>
             <Text style={[styles.label,{color:currentTheme.text}]}>CVV</Text>
             <TextInput
               value={cvv}
@@ -285,7 +284,7 @@ router.push("settings/paymentMethods");
               secureTextEntry
               maxLength={3}
             />
-          </View>
+          </View> */}
         </View>
       </View>
       <View

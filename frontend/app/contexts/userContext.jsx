@@ -9,7 +9,7 @@ export const UserProvider = ({ children }) => {
     first_name: '',
     last_name:'',
     email: '',
-    paymentMethods: [],
+   
     subscriptionID:1,
     country: '',
     token:"",

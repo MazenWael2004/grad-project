@@ -12,10 +12,14 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import { useNavigation } from "expo-router";
+import subscriptions from "../../constants/subscriptions";
 
 const Billing = () => {
   const { theme } = useContext(ThemeContext);
   const { user } = useUser();
+  const subscription_id = user.subscriptionID;
+  const subscription = subscriptions.find((item)=>item.id === subscription_id);
+
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   return (
     <View
@@ -60,7 +64,7 @@ const Billing = () => {
               color: currentTheme.text,
             }}
           >
-            {user.currentSubscription.name}
+            {subscription.name}
           </Text>
 
           <Text
@@ -71,9 +75,9 @@ const Billing = () => {
               color: currentTheme.text,
             }}
           >
-            {user.currentSubscription.price === 0
+            {subscription.price === 0
               ? "Free"
-              : `${user.currentSubscription.price}/month`}
+              : `${subscription.price}/month`}
           </Text>
         </View>
 
@@ -87,7 +91,7 @@ const Billing = () => {
         />
 
         <View style={{ flexDirection: "column", gap: 10, padding: 25 }}>
-          {user.currentSubscription.features.map((item, indx) => {
+          {subscription.features.map((item, indx) => {
             return (
               <View
                 key={indx}

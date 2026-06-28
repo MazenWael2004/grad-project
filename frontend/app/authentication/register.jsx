@@ -244,7 +244,7 @@ const handleSubmitButton = async () => {
        email:user.email,
        country:user.country,
        phoneNumber:user.phone_number,
-       token,
+       token:token,
       })
       router.replace("/main/");
     }

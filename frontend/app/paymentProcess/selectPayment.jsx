@@ -13,32 +13,97 @@ import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import { useNavigation } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
+import axios from "axios";
+import Constants from "expo-constants";
+const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const SelectPayment = () => {
-  const {subscription} = useLocalSearchParams();
+//   const params = useLocalSearchParams();
+
+// console.log("Params:", params);
+// console.log("Plan param:", params.plan);
+// const plan = params.plan ? JSON.parse(params.plan) : null;
+
+// console.log("Parsed plan:", plan);
   const [isPaymentMethodExists, setIsPaymentMethodExists] = useState(false);
   const nav  = useNavigation();
   const {user,setUser} = useUser();
   const { theme } = useContext(ThemeContext);
   const [selectedPaymentMethod,setSelectedPaymentMethod] = useState(null);
+  const [paymentMethods, setPaymentMethods] = useState([]);
   const [cardTypeImage,setCardTypeImage] = useState(null);
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
 
-  useEffect(()=>{
-    if(user.paymentMethods.length === 0){
-      setIsPaymentMethodExists(false);
+ useEffect(() => {
+     loadPaymentMethods();
+   }, []);
+ 
+    const loadPaymentMethods = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/api/subscriptions/payment-methods/`,
+        {
+          headers: {
+            Authorization: `Token ${user.token}`,
+          },
+        },
+      );
+
+      setPaymentMethods(response.data);
+      setIsPaymentMethodExists(response.data.length > 0);
+    } catch (error) {
+      console.error(error.response?.data || error.message);
     }
-    else{
-      setIsPaymentMethodExists(true);
-    }
-    console.log(JSON.stringify(user.paymentMethods, null,2));
+  };
 
-  },[user.paymentMethods]);
+ const processPaymentAndSubscribe = async (paymentMethodItem) => {
+  try {
+    // // Optional: check that a plan exists
+    // if (!plan) {
+    //   alert("No plan selected.");
+    //   return;
+    // }
 
- const sub = subscription ? JSON.parse(subscription) : null;
+    // Optional: check payment method balance
+    // if (paymentMethod.amount < Number(plan.price)) {
+    //   alert("Insufficient balance.");
+    //   return;
+    // }
 
-  console.log(sub); // full object you passed
+    const response = await axios.post(
+      `${API_BASE_URL}/api/subscriptions/pay-subscription/`,
+      {
+        payment_method_id:paymentMethodItem.id,
+        cvv:"100",
+      },
+      {
+        headers: {
+          Authorization: `Token ${user.token}`,
+        },
+      }
+    );
 
+    console.log(response.data);
+    router.replace("/main/settings/")
+
+    // Update user context
+    setUser((prev) => ({
+      ...prev,
+    
+    }));
+
+    // alert(`Successfully subscribed to ${plan.name}!`);
+
+    router.replace("main/settings");
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+
+    alert(
+      error.response?.data?.message ||
+        "Failed to subscribe. Please try again."
+    );
+  }
+};
 
   const maskCard = (cardNumber = "") => {
   const digits = String(cardNumber).replace(/\D/g, ""); // keep only numbers
@@ -47,15 +112,15 @@ const SelectPayment = () => {
 };
 
 
-const handlePaymentSelection = (item)=>{
- setSelectedPaymentMethod(item);
- console.log("Payment Selected!",item);
- router.push({
-    pathname: "paymentProcess/reviewSummary",
-    params: { subscription: JSON.stringify(sub),selectedPayment:JSON.stringify(item) }, // 👈 better: stringify object
-  });
+// const handlePaymentSelection = (item)=>{
+//  setSelectedPaymentMethod(item);
+//  console.log("Payment Selected!",item);
+//  router.push({
+//     pathname: "paymentProcess/reviewSummary",
+//     params: { paymentMethodID:item.id,plan:JSON.stringify(plan) }, // 👈 better: stringify object
+//   });
 
-} 
+// };
 
  
 
@@ -111,7 +176,7 @@ const handlePaymentSelection = (item)=>{
               borderRadius: 15,
             }}
             onPress={() => {
-              router.push("addPaymentMethod");
+              router.replace("/main/settings/");
             }}
           >
             <Text
@@ -121,7 +186,7 @@ const handlePaymentSelection = (item)=>{
                 width: "100%",
               }}
             >
-              Add Payment Method
+              Go back To Settings
             </Text>
           </TouchableOpacity>
         </View>
@@ -132,12 +197,12 @@ const handlePaymentSelection = (item)=>{
           contentContainerStyle={{ flexDirection: "column", gap: "15" }}
         >
 
-{user.paymentMethods.map((item,indx) =>{
+{paymentMethods.map((item,indx) =>{
   return (
     <TouchableOpacity
     key={indx}
             style={[styles.countryItem,{backgroundColor:currentTheme.searchBackground}]}
-            onPress={() => handlePaymentSelection(item)  }
+            onPress={() => processPaymentAndSubscribe(item) }
           >
             <View
               style={{ flexDirection: "row", gap: 15, alignItems: "center" }}

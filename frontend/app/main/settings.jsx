@@ -104,14 +104,14 @@ const Settings = () => {
 
       
 
-        <TouchableOpacity style={styles.settingItem} onPress={() =>{router.push('currencyConverter')}}>
+        {/* <TouchableOpacity style={styles.settingItem} onPress={() =>{router.push('currencyConverter')}}>
           <Image source={require("../../assets/images/exchange.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
           <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Live Currency Converter</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
             style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.settingItem}
