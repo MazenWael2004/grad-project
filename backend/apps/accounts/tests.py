@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 
 
@@ -87,7 +88,15 @@ class LoginViewTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("token", response.data)
+
+        self.assertIn("access", response.data)
+        self.assertIn("refresh", response.data)
+        self.assertIn("user", response.data)
+
+        self.assertEqual(
+            response.data["user"]["email"],
+            "test@example.com",
+        )
 
     def test_login_wrong_password(self):
         response = self.client.post(
@@ -113,24 +122,35 @@ class LogoutViewTests(APITestCase):
             password="password123",
         )
 
-        self.token = Token.objects.create(user=self.user)
+        refresh = RefreshToken.for_user(self.user)
+        self.access_token = str(refresh.access_token)
+        self.refresh_token = str(refresh)
 
     def test_logout_success(self):
         self.client.credentials(
-            HTTP_AUTHORIZATION=f"Token {self.token.key}"
+            HTTP_AUTHORIZATION=f"Bearer {self.access_token}"
         )
 
-        response = self.client.post(self.url)
+        response = self.client.post(
+            self.url,
+            {"refresh": self.refresh_token},
+            format="json",
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertFalse(
-            Token.objects.filter(key=self.token.key).exists()
+
+    def test_logout_invalid_refresh_token(self):
+        self.client.credentials(
+            HTTP_AUTHORIZATION=f"Bearer {self.access_token}"
         )
 
-    def test_logout_unauthenticated(self):
-        response = self.client.post(self.url)
+        response = self.client.post(
+            self.url,
+            {"refresh": "invalid-token"},
+            format="json",
+        )
 
         self.assertEqual(
             response.status_code,
-            status.HTTP_401_UNAUTHORIZED,
+            status.HTTP_400_BAD_REQUEST,
         )

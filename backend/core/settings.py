@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from datetime import timedelta
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -30,7 +31,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+}
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,13 +47,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "rest_framework.authtoken",
     "corsheaders",
     "core",
     "apps.accounts",
     "apps.subscriptions",
     "apps.attractions",
     "apps.tours",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
@@ -98,7 +104,7 @@ DATABASES = {
 }
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
 
