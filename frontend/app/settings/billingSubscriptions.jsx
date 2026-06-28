@@ -1,37 +1,108 @@
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Image,
-  ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
-import React, { useState, useContext, useEffect } from "react";
+import axios from "axios";
+import Constants from "expo-constants";
+
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
-import { useNavigation } from "expo-router";
-import subscriptions from "../../constants/subscriptions";
+
+const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const Billing = () => {
   const { theme } = useContext(ThemeContext);
   const { user } = useUser();
-  const subscription_id = user.subscriptionID;
-  const subscription = subscriptions.find((item)=>item.id === subscription_id);
 
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
+
+  const [plan, setPlan] = useState(null);
+  const [planStatus, setPlanStatus] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user?.token) {
+      loadCurrentPlan();
+    }
+  }, [user?.token]);
+
+  const loadCurrentPlan = async () => {
+    try {
+      setLoading(true);
+
+      const response = await axios.get(
+        `${API_BASE_URL}/api/subscriptions/my-subscription/`,
+        {
+          headers: {
+            Authorization: `Token ${user.token}`,
+          },
+        }
+      );
+
+      setPlan(response.data.plan);
+      setPlanStatus(response.data.status);
+    } catch (error) {
+      console.error(
+        "Failed to load subscription:",
+        error.response?.data || error.message
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: currentTheme.background,
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        ]}
+      >
+        <ActivityIndicator size="large" color="#D4AF37" />
+        <Text
+          style={{
+            marginTop: 15,
+            color: currentTheme.text,
+            fontFamily: "Poppins-Medium",
+          }}
+        >
+          Loading subscription...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View
-      style={[styles.container, { backgroundColor: currentTheme.background }]}
+      style={[
+        styles.container,
+        { backgroundColor: currentTheme.background },
+      ]}
     >
       <View style={styles.backAndPersonalInfoTitle}>
         <TouchableOpacity onPress={() => router.back()}>
           <Image
             source={require("../../assets/images/back.png")}
-            style={{ width: 30, height: 30, tintColor: currentTheme.iconColor }}
+            style={{
+              width: 30,
+              height: 30,
+              tintColor: currentTheme.iconColor,
+            }}
           />
         </TouchableOpacity>
+
         <Text
           style={{
             fontFamily: "Poppins-SemiBold",
@@ -40,13 +111,16 @@ const Billing = () => {
             margin: "auto",
           }}
         >
-          Billing & Subscriptions
+          Billing & Plans
         </Text>
       </View>
+
       <View
         style={[
           styles.subscriptionWrapper,
-          { backgroundColor: currentTheme.searchBackground },
+          {
+            backgroundColor: currentTheme.searchBackground,
+          },
         ]}
       >
         <View
@@ -62,9 +136,10 @@ const Billing = () => {
               marginBottom: 10,
               marginTop: 19,
               color: currentTheme.text,
+              fontSize: 22,
             }}
           >
-            {subscription.name}
+            {plan?.name ?? "No Active Plan"}
           </Text>
 
           <Text
@@ -75,9 +150,24 @@ const Billing = () => {
               color: currentTheme.text,
             }}
           >
-            {subscription.price === 0
-              ? "Free"
-              : `${subscription.price}/month`}
+            {plan
+              ? plan.price === 0
+                ? "Free"
+                : `${plan.price} L.E/month`
+              : "--"}
+          </Text>
+
+          <Text
+            style={{
+              fontFamily: "Poppins-Medium",
+              color:
+                planStatus === "active"
+                  ? "#28a745"
+                  : "#e24646",
+              marginBottom: 15,
+            }}
+          >
+            Status: {planStatus ?? "Unknown"}
           </Text>
         </View>
 
@@ -86,57 +176,24 @@ const Billing = () => {
             borderBottomColor: currentTheme.borderBottomColor,
             borderBottomWidth: 1,
             width: "100%",
-            height: 10,
+            marginBottom: 20,
           }}
         />
 
-        <View style={{ flexDirection: "column", gap: 10, padding: 25 }}>
-          {subscription.features.map((item, indx) => {
-            return (
-              <View
-                key={indx}
-                style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
-              >
-                <Image
-                  source={require("../../assets/images/check.png")}
-                  style={{
-                    width: 15,
-                    height: 15,
-                    tintColor: currentTheme.iconColor,
-                  }}
-                />
-
-                <Text
-                  style={{
-                    fontFamily: "Poppins-Medium",
-                    fontSize: 13,
-                    color: currentTheme.text,
-                  }}
-                >
-                  {item}
-                </Text>
-              </View>
-            );
-          })}
-
-          <View
-            style={{
-              borderBottomColor: currentTheme.borderBottomColor,
-              borderBottomWidth: 1,
-              width: "100%",
-              height: 10,
-              marginBottom: 10,
-            }}
-          />
-
+        <View
+          style={{
+            paddingHorizontal: 25,
+            paddingBottom: 25,
+          }}
+        >
           <Text
             style={{
               textAlign: "center",
               fontFamily: "Poppins-Medium",
-              color: "#b7b7b7ff",
+              color: "#9b9b9b",
             }}
           >
-            Your current plan
+            Your current subscription plan
           </Text>
         </View>
       </View>
@@ -151,21 +208,19 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 70,
     paddingHorizontal: 30,
-    flexDirection: "column",
-    // backgroundColor:"#fff",
   },
+
   backAndPersonalInfoTitle: {
     flexDirection: "row",
     alignItems: "center",
     width: "90%",
     marginBottom: 35,
   },
+
   subscriptionWrapper: {
-    position: "relative",
     width: "100%",
-    height: "auto",
-    // backgroundColor: "#e7e7e7ff",
     borderRadius: 10,
-    borderWidth: 0.1,
+    borderWidth: 0.5,
+    overflow: "hidden",
   },
 });
