@@ -1,10 +1,9 @@
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
-from .models import User,PaymentMethod
 from rest_framework.response import Response
 from rest_framework import status, permissions,generics
 from django.contrib.auth import login, logout
-from .serializers import RegisterSerializer, LoginSerializer,UserSerializer,UserUpdateSerializer,PaymentMethodSerializer
+from .serializers import RegisterSerializer, LoginSerializer,UserSerializer,UserUpdateSerializer
 
 
 class RegisterView(APIView):
@@ -91,19 +90,3 @@ class UpdateProfileView(APIView):
     # def tour_guidView():
     #     pass
 
-
-class PaymentMethodCreateView(generics.CreateAPIView):
-    serializer_class = PaymentMethodSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-class PaymentMethodListView(generics.ListAPIView):
-    serializer_class = PaymentMethodSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return PaymentMethod.objects.filter(
-            user=self.request.user
-        )

@@ -49,36 +49,3 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-class PaymentMethod(models.Model):
-    CARD = "card"
-    PAYPAL = "paypal"
-
-    PAYMENT_TYPES = [
-        (CARD, "Card"),
-        (PAYPAL, "PayPal"),
-    ]
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="payment_methods"
-    )
-
-    payment_type = models.CharField(max_length=20, choices=PAYMENT_TYPES)
-
-    card_holder = models.CharField(max_length=100)
-    card_last4 = models.CharField(max_length=4)
-    expiry_month = models.PositiveSmallIntegerField()
-    expiry_year = models.PositiveSmallIntegerField()
-    amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        default=Decimal("1000.00")
-    )
-
-    is_default = models.BooleanField(default=False)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.card_holder} ({self.card_last4})"

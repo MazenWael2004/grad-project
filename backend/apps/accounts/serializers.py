@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import User,PaymentMethod
 from django.contrib.auth import authenticate
+
+from apps.accounts.models import User
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -37,20 +38,3 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["first_name", "last_name", "phone_number"]
-
-
-class PaymentMethodSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PaymentMethod
-        fields = "__all__"
-        read_only_fields = ["user"]
-    def validate(self, attrs):
-        user = self.context["request"].user
-
-        if self.instance is None and user.payment_methods.count() >= 3:
-            raise serializers.ValidationError(
-                "Maximum of 3 payment methods allowed."
-            )
-
-        return attrs
