@@ -5,7 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView, PermissionDenied
 from rest_framework.decorators import action
 
-from apps.subscriptions.helpers import get_active_subscription, get_pending_subscription
+from apps.subscriptions.helpers import (
+    get_active_subscription,
+    get_pending_subscription,
+    has_active_subscription,
+)
 from core import serializers
 from .serializers import PaymentMethodSerializer, PlanSerializer
 from .permissions import (
@@ -43,8 +47,8 @@ class MySubscriptionView(APIView):
                     "status": subscription.status,
                     "is_owner": is_owner,
                     "members": members,
-                    "start_date":subscription.start_date,
-                    "end_date":subscription.end_date
+                    "start_date": subscription.start_date,
+                    "end_date": subscription.end_date,
                 },
                 status=status.HTTP_200_OK,
             )
@@ -311,3 +315,15 @@ class PayPendingSubscriptionView(APIView):
                 {"error": "Invalid CVV"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
+class IsSubscribedView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request):
+        has_subscription = has_active_subscription(request.user)
+        return Response(
+            {
+                "subscribed": has_subscription,
+            },
+            status=status.HTTP_200_OK,
+        )
