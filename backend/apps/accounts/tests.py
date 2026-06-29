@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 
 
@@ -24,9 +25,7 @@ class RegisterViewTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 1)
-        self.assertTrue(
-            User.objects.filter(email="test@example.com").exists()
-        )
+        self.assertTrue(User.objects.filter(email="test@example.com").exists())
 
     def test_register_existing_email(self):
         User.objects.create_user(
@@ -87,7 +86,15 @@ class LoginViewTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("token", response.data)
+
+        self.assertIn("access", response.data)
+        self.assertIn("refresh", response.data)
+        self.assertIn("user", response.data)
+
+        self.assertEqual(
+            response.data["user"]["email"],
+            "test@example.com",
+        )
 
     def test_login_wrong_password(self):
         response = self.client.post(
@@ -113,22 +120,66 @@ class LogoutViewTests(APITestCase):
             password="password123",
         )
 
-        self.token = Token.objects.create(user=self.user)
+        refresh = RefreshToken.for_user(self.user)
+        self.access_token = str(refresh.access_token)
+        self.refresh_token = str(refresh)
 
     def test_logout_success(self):
-        self.client.credentials(
-            HTTP_AUTHORIZATION=f"Token {self.token.key}"
-        )
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
 
-        response = self.client.post(self.url)
+        response = self.client.post(
+            self.url,
+            {"refresh": self.refresh_token},
+            format="json",
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertFalse(
-            Token.objects.filter(key=self.token.key).exists()
+
+    def test_logout_invalid_refresh_token(self):
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
+
+        response = self.client.post(
+            self.url,
+            {"refresh": "invalid-token"},
+            format="json",
         )
 
-    def test_logout_unauthenticated(self):
-        response = self.client.post(self.url)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST,
+        )
+
+
+class TokenRefreshTests(APITestCase):
+    def setUp(self):
+        self.url = reverse("token_refresh")
+
+        self.user = User.objects.create_user(
+            email="test@example.com",
+            first_name="John",
+            last_name="Doe",
+            password="password123",
+        )
+
+        refresh = RefreshToken.for_user(self.user)
+        self.refresh_token = str(refresh)
+
+    def test_refresh_token_success(self):
+        response = self.client.post(
+            self.url,
+            {"refresh": self.refresh_token},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("access", response.data)
+
+    def test_refresh_token_invalid(self):
+        response = self.client.post(
+            self.url,
+            {"refresh": "invalid-refresh-token"},
+            format="json",
+        )
 
         self.assertEqual(
             response.status_code,
