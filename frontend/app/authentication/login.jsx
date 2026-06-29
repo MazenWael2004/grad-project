@@ -48,7 +48,7 @@ const Login = () => {
    } 
 
   try {
-    const response = await api.post(`${API_BASE_URL}/api/accounts/login/`, {
+    const response = await api.post("/api/accounts/login/", {
      email,
      password,
     });
@@ -62,7 +62,7 @@ const Login = () => {
 
       await AsyncStorage.setItem("access", access);
       await AsyncStorage.setItem("refresh", refresh);
-      await AsyncStorage.setItem("user", JSON.stringify(userData));
+      await AsyncStorage.setItem("user", JSON.stringify(user));
 
 
       Alert.alert("Success", "Account Successfully Logged In");

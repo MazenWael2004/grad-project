@@ -31,6 +31,12 @@ export const UserProvider = ({ children }) => {
     const loadUser = async () => {
       try {
         const storedUser = await AsyncStorage.getItem("user");
+        const access = await AsyncStorage.getItem("access");
+        const refresh = await AsyncStorage.getItem("refresh");
+
+        console.log("Stored User:", storedUser);
+        console.log("Stored Access:", access);
+        console.log("Stored Refresh:", refresh);
 
         if (storedUser) {
           setUser({
@@ -49,6 +55,8 @@ export const UserProvider = ({ children }) => {
   const login = async (userData) => {
   await AsyncStorage.setItem("access", userData.access);
   await AsyncStorage.setItem("refresh", userData.refresh);
+  console.log("access:",userData.access)
+  console.log("refresh:",userData.refresh)
   await AsyncStorage.setItem("user", JSON.stringify(userData));
 
   setUser({
