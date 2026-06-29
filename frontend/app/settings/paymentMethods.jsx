@@ -38,7 +38,7 @@ const PaymentMethods = () => {
         `${API_BASE_URL}/api/subscriptions/payment-methods/`,
         {
           headers: {
-            Authorization: `Token ${user.token}`,
+            Authorization: `Bearer ${user.access}`,
           },
         },
       );

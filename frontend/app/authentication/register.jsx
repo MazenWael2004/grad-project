@@ -234,7 +234,8 @@ const handleSubmitButton = async () => {
 
     if (response.status === 201) {
       const user = response.data.user;
-      const token = response.data.token;
+      const access = response.data.access;
+      const refresh = response.data.refresh;
       Alert.alert("Success", "Account created successfully!");
       // Setting user context after registering...
       setUser({
@@ -244,7 +245,8 @@ const handleSubmitButton = async () => {
        email:user.email,
        country:user.country,
        phoneNumber:user.phone_number,
-       token:token,
+       access,
+       refresh,
       })
       router.replace("/main/");
     }

@@ -26,7 +26,7 @@ const Settings = () => {
       {}, // empty body
       {
         headers: {
-          Authorization: `Token ${user.token}`,
+          Authorization: `Bearer ${user.access}`,
         },
       }
     );

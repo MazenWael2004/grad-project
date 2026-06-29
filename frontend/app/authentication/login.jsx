@@ -54,7 +54,11 @@ const Login = () => {
 
     if (response.status === 200) {
       const user = response.data.user;
-      const token = response.data.token;
+      // const token = response.data.token;
+
+      const access = response.data.access;
+      const refresh = response.data.refresh;
+
       Alert.alert("Success", "Account Successfully Logged In");
       // Setting user context after registering...
       setUser({
@@ -66,7 +70,8 @@ const Login = () => {
        subscriptionID:1,
        paymentMethods: [],
        phoneNumber:user.phone_number,
-       token,
+       access,
+       refresh,
       })
       router.replace("/main/");
     }

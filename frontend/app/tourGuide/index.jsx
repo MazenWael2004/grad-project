@@ -427,19 +427,68 @@ const styles = StyleSheet.create({
   speakBtnText: { fontSize: 20 },
 
 
-  tabs: { flexDirection: "row", marginBottom: 14, gap: 8 },
-  tab: { flex: 1, paddingVertical: 8, borderRadius: 20, backgroundColor: "#f0f0f0", alignItems: "center" },
-  activeTab: { backgroundColor: "#D4AF37" },
-  tabText: { fontFamily: "Poppins-Medium", fontSize: 12, color: "#666" },
-  activeTabText: { color: "#fff" },
+  tabs: { 
+     flexDirection: "row",
+     marginBottom: 14,
+     gap: 8 
+    },
+  tab: { 
+    flex: 1, 
+    paddingVertical: 8, 
+    borderRadius: 20, 
+    backgroundColor: "#f0f0f0", 
+    alignItems: "center" 
+  },
+  activeTab: { 
+    backgroundColor: "#D4AF37"
+   },
+  tabText: { 
+    fontFamily: "Poppins-Medium", 
+    fontSize: 12, 
+    color: "#666" 
+  },
+  activeTabText: { 
+    color: "#fff" 
+  },
+  tabContent: { 
+    minHeight: 80 
+  },
+  narrationText: { 
+    fontFamily: "Poppins-Regular", 
+    fontSize: 14, 
+    color: "#333", 
+    lineHeight: 22 
+  },
+  nearbySite: { 
+    flexDirection: "row", 
+    gap: 8, 
+    marginBottom: 10, 
+    alignItems: "flex-start" 
+  },
+  nearbyBullet: { 
+    fontSize: 14, 
+    marginTop: 2 
+  },
+  nearbySiteText: { 
+    fontFamily: "Poppins-Regular", 
+    fontSize: 14, 
+    color: "#333", 
+    flex: 1, 
+    lineHeight: 20 
+  },
 
-  
-  tabContent: { minHeight: 80 },
-  narrationText: { fontFamily: "Poppins-Regular", fontSize: 14, color: "#333", lineHeight: 22 },
-  nearbySite: { flexDirection: "row", gap: 8, marginBottom: 10, alignItems: "flex-start" },
-  nearbyBullet: { fontSize: 14, marginTop: 2 },
-  nearbySiteText: { fontFamily: "Poppins-Regular", fontSize: 14, color: "#333", flex: 1, lineHeight: 20 },
-
-  rescanBtn: { marginTop: 16, alignSelf: "center", paddingHorizontal: 24, paddingVertical: 10, borderRadius: 20, borderWidth: 1.5, borderColor: "#D4AF37" },
-  rescanBtnText: { fontFamily: "Poppins-Medium", fontSize: 14, color: "#D4AF37" },
+  rescanBtn: { 
+    marginTop: 16, 
+    alignSelf: "center", 
+    paddingHorizontal: 24, 
+    paddingVertical: 10, 
+    borderRadius: 20, 
+    borderWidth: 1.5, 
+    borderColor: "#D4AF37" 
+  },
+  rescanBtnText: { 
+    fontFamily: "Poppins-Medium", 
+    fontSize: 14, 
+    color: "#D4AF37" 
+  },
 });

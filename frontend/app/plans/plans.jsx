@@ -43,7 +43,7 @@ const Plans = () => {
             `${API_BASE_URL}/api/subscriptions/my-subscription/`,
             {
               headers: {
-                Authorization: `Token ${user.token}`,
+                Authorization: `Bearer ${user.access}`,
               },
             }
           );
@@ -67,7 +67,7 @@ const Plans = () => {
         },
         {
           headers: {
-            Authorization: `Token ${user.token}`,
+            Authorization: `Bearer ${user.access}`,
           },
         }
       );
@@ -90,7 +90,7 @@ const Plans = () => {
         {},
         {
           headers: {
-            Authorization: `Token ${user.token}`,
+            Authorization: `Bearer ${user.access}`,
           },
         }
       );

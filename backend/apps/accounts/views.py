@@ -4,41 +4,51 @@ from rest_framework.response import Response
 from rest_framework import status, permissions,generics
 from django.contrib.auth import login, logout
 from .serializers import RegisterSerializer, LoginSerializer,UserSerializer,UserUpdateSerializer
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user  = serializer.save()
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response(
-                {"message": "User created successfully","user": UserSerializer(user).data,"token":token.key}, status=status.HTTP_201_CREATED
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        if serializer.is_valid():
+            user = serializer.save()
+
+            refresh = RefreshToken.for_user(user)
+
+            return Response({
+                "message": "User created successfully",
+                "user": UserSerializer(user).data,
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+            }, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
+
         if serializer.is_valid():
             user = serializer.validated_data["user"]
 
-            # Generate or get token for user
-            token, created = Token.objects.get_or_create(user=user)
+            refresh = RefreshToken.for_user(user)
 
-            return Response(
-                {"message": "Logged in successfully", "token": token.key,"user": UserSerializer(user).data},
-                status=status.HTTP_200_OK,
-            )
+            return Response({
+                "message": "Logged in successfully",
+                "user": UserSerializer(user).data,
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+            })
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
+    
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

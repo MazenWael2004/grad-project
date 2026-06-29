@@ -12,7 +12,8 @@ export const UserProvider = ({ children }) => {
    
     subscriptionID:1,
     country: '',
-    token:"",
+    access:"",
+    refresh:"",
     isLoggedIn: false,
     role: 'user',
     profilePic:null,
