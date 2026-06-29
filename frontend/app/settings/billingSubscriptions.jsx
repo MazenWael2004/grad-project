@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
-import axios from "axios";
+import api from "../../src/services/api";
 import Constants from "expo-constants";
 
 import { ThemeContext } from "../../theme/ThemeContext";
@@ -37,7 +37,7 @@ const Billing = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/subscriptions/my-subscription/`,
         {
           headers: {

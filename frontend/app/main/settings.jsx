@@ -5,7 +5,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
-import axios from "axios";
+import api from "../../src/services/api";
 import Constants from "expo-constants";
 const { API_BASE_URL } = Constants.expoConfig.extra;
 
@@ -21,7 +21,7 @@ const Settings = () => {
     console.log("user object",user)
     console.log("Token",user?.token)
   try {
-    const response = await axios.post(
+    const response = await api.post(
       `${API_BASE_URL}/api/accounts/logout/`,
       {}, // empty body
       {

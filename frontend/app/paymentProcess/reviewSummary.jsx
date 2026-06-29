@@ -5,7 +5,7 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { router } from "expo-router";
 import { useUser } from "../contexts/userContext";
-import axios from "axios";
+import api from "../../src/services/api";
 import Constants from "expo-constants";
 const { API_BASE_URL } = Constants.expoConfig.extra;
 

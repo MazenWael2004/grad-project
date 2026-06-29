@@ -4,7 +4,7 @@ import LottieView from 'lottie-react-native';
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from '../../constants/themes'
 import { useRouter } from 'expo-router';
-import axios from 'axios';
+import api from "../../src/services/api";
 import Constants from 'expo-constants';
 import { useItinerary } from "../contexts/itineraryContext";
 
@@ -34,7 +34,7 @@ const GeneratingTripLoader = () => {
       console.log("Generating itinerary for preferences:", currentItem.userPreferences);
 
       try {
-        const response = await axios.post(
+        const response = await api.post(
           `${API_BASE_URL}/api/itinerary/generate/`,
           currentItem.userPreferences,
           { timeout: 6600000 }

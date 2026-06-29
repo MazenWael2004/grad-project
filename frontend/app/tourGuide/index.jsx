@@ -4,7 +4,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Speech from "expo-speech";
 import * as Location from "expo-location";
 import { router, useLocalSearchParams } from "expo-router";
-import axios from "axios";
+import api from "../../src/services/api";
 import Constants from "expo-constants";
 
 const API_BASE_URL = Constants.expoConfig?.extra?.API_BASE_URL;
@@ -51,7 +51,7 @@ const TourGuide = () => {
         skipProcessing: true,
       });
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_BASE_URL}/api/tour-guide/`,
         {
           image: photo.base64,

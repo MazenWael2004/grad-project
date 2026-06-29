@@ -11,7 +11,7 @@ import {
 import React, { use, useEffect, useState } from "react";
 import { hide } from "expo-splash-screen";
 import { useRouter } from "expo-router";
-import axios from "axios";
+import api from "../../src/services/api";
 import Constants from "expo-constants";
 import { Alert } from "react-native";
 import { useUser } from "../contexts/userContext";
@@ -224,7 +224,7 @@ const handleSubmitButton = async () => {
   console.log("Submitting form with data: ", registerFormData); // Debug log to check form data before API call
   // Proceed with API request
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/accounts/register/`, {
+    const response = await api.post(`${API_BASE_URL}/api/accounts/register/`, {
       first_name: registerFormData.firstName,
       last_name: registerFormData.lastName,
       email: registerFormData.email,

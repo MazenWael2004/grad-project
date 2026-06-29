@@ -11,7 +11,7 @@ import { router } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
-import axios from "axios";
+import api from "../../src/services/api";
 import Constants from "expo-constants";
 
 const { API_BASE_URL } = Constants.expoConfig.extra;
@@ -31,7 +31,7 @@ const Plans = () => {
 
   const loadData = async () => {
     try {
-      const plansResponse = await axios.get(
+      const plansResponse = await api.get(
         `${API_BASE_URL}/api/subscriptions/plans/`
       );
 
@@ -60,7 +60,7 @@ const Plans = () => {
 
   const handleSubscribe = async (planId) => {
     try {
-      const response = await axios.post(
+      const response = await api.post(
         `${API_BASE_URL}/api/subscriptions/subscribe/`,
         {
           plan_id: planId,

@@ -14,7 +14,7 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { useUser } from "../contexts/userContext";
 import * as ImagePicker from "expo-image-picker";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
-import axios from "axios";
+import api from "../../src/services/api";
 import Constants from "expo-constants";
 const { API_BASE_URL } = Constants.expoConfig.extra;
 
@@ -43,7 +43,7 @@ const handleSaveChanges = async () => {
   // setUser(updatedUser);
 
   try {
-    const response = await axios.patch(
+    const response = await api.patch(
       `${API_BASE_URL}/api/accounts/profile/update/`,
       {
         first_name: firstName,

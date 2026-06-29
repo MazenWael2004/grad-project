@@ -12,7 +12,8 @@ import { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import governorates from "../../constants/governorates";
-import axios from "axios";
+import api from "../../src/services/api";
+
 import articles from "../../constants/articles";
 
 const TripDetails = () => {

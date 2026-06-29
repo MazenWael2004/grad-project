@@ -11,7 +11,8 @@ import { router } from "expo-router";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
-import axios from "axios";
+// import axios from "axios";
+import api from "../../src/services/api";
 import { useNavigation } from "expo-router";
 import Constants from "expo-constants";
 const { API_BASE_URL } = Constants.expoConfig.extra;
@@ -161,7 +162,7 @@ const AddPaymentMethod = () => {
 
   const handleSaveChanges = async () => {
   try {
-    const response = await axios.post(
+    const response = await api.post(
       `${API_BASE_URL}/api/subscriptions/payment-methods/`,
       {
         card_holder_name:accountHolderName,

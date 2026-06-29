@@ -12,7 +12,7 @@ import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import { useNavigation } from "expo-router";
-import axios from "axios";
+import api from "../../src/services/api";
 
 const CurrencyConverter = () => {
   const { theme } = useContext(ThemeContext);
@@ -23,7 +23,7 @@ const CurrencyConverter = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           "https://open.er-api.com/v6/latest/EGP"
         );
         setCurrencyData(response.data);

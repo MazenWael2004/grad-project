@@ -12,7 +12,7 @@ import { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import governorates from "../../constants/governorates";
-import axios from "axios";
+import api from "../../src/services/api";
 
 const TripDetails = () => {
   const API_KEY = "ae7b6216e0c44cd6a3f163836252909";
@@ -26,7 +26,7 @@ const TripDetails = () => {
 
   const fetchWeather = async (city) => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `http://api.weatherapi.com/v1/current.json`,
         {
           params: {

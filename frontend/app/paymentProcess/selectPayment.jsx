@@ -13,7 +13,7 @@ import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import { useNavigation } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
-import axios from "axios";
+import api from "../../src/services/api";
 import Constants from "expo-constants";
 const { API_BASE_URL } = Constants.expoConfig.extra;
 
@@ -40,7 +40,7 @@ const SelectPayment = () => {
  
     const loadPaymentMethods = async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/subscriptions/payment-methods/`,
         {
           headers: {
@@ -70,7 +70,7 @@ const SelectPayment = () => {
     //   return;
     // }
 
-    const response = await axios.post(
+    const response = await api.post(
       `${API_BASE_URL}/api/subscriptions/pay-subscription/`,
       {
         payment_method_id:paymentMethodItem.id,

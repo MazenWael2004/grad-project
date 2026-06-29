@@ -10,9 +10,10 @@ import React, { use, useState } from "react";
 import { hide } from "expo-splash-screen";
 import {useRouter} from "expo-router";
 import { Alert } from "react-native";
-import axios from "axios";
+import api from "../../src/services/api";
 import { useUser } from "../contexts/userContext";
 import Constants from "expo-constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const Login = () => {
@@ -47,7 +48,7 @@ const Login = () => {
    } 
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/accounts/login/`, {
+    const response = await api.post(`${API_BASE_URL}/api/accounts/login/`, {
      email,
      password,
     });
@@ -58,6 +59,11 @@ const Login = () => {
 
       const access = response.data.access;
       const refresh = response.data.refresh;
+
+      await AsyncStorage.setItem("access", access);
+      await AsyncStorage.setItem("refresh", refresh);
+      await AsyncStorage.setItem("user", JSON.stringify(userData));
+
 
       Alert.alert("Success", "Account Successfully Logged In");
       // Setting user context after registering...
