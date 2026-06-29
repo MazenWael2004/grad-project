@@ -1,2 +1,3 @@
-AI_Models/*
-!AI_Models/readme.md
+AI_Models/faiss_index
+AI_Models/mistral_nemo_instruct_2407_4bit_bnb
+AI_Models/clip_classifier_v2.pth
