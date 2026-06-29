@@ -231,6 +231,26 @@ async def giza_guide(ctx: JobContext) -> None:
         room_options=room_io.RoomOptions(),
     )
 
+    # Listen to data messages from the room (e.g. photo recognition results)
+    @ctx.room.on("data_received")
+    def on_data_received(data_packet):
+        import json
+        try:
+            payload = json.loads(data_packet.data.decode("utf-8"))
+            if payload.get("type") == "photo_recognition":
+                landmark = payload.get("landmark", "Unknown")
+                description = payload.get("description", "")
+                print(f"[Agent] Received photo recognition: {landmark}")
+                
+                # Instruct the agent to react to the photo
+                reaction_instructions = (
+                    f"The visitor just took a photo of: {landmark}. Description: {description}. "
+                    f"Acknowledge this image and explain this landmark to them in your natural tour guide voice (Arabic or English depending on context)."
+                )
+                session.generate_reply(instructions=reaction_instructions)
+        except Exception as e:
+            print(f"[Agent] Error handling data packet: {e}")
+
     await ctx.connect()
 
     # Bilingual welcome — the agent will read the room language from the

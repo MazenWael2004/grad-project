@@ -224,6 +224,32 @@ def create_app(
                 created_at=datetime.now(UTC),
             )
 
+            # Broadcast the result to the LiveKit room
+            try:
+                from livekit import api as lk_api
+                lk_client = lk_api.LiveKitAPI(
+                    settings.livekit_url,
+                    settings.livekit_api_key,
+                    settings.livekit_api_secret
+                )
+                payload_data = json.dumps({
+                    "type": "photo_recognition",
+                    "landmark": ai_result.get("landmark", "Unknown"),
+                    "description": ai_result.get("description", ""),
+                    "confidence": ai_result.get("confidence", 0.0),
+                }).encode('utf-8')
+                await lk_client.room.send_data(
+                    lk_api.SendDataRequest(
+                        room=session.livekit_room,
+                        data=payload_data,
+                        kind=lk_api.DataPacket.Kind.RELIABLE,
+                    )
+                )
+                await lk_client.close()
+                print(f"[API] Broadcasted photo result to LiveKit room: {session.livekit_room}")
+            except Exception as lk_err:
+                print(f"[API] Failed to broadcast photo result: {lk_err}")
+
             return {
                 "recognition_id": recognition.id,
                 "status": "completed",
