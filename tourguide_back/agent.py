@@ -17,8 +17,15 @@ from livekit.agents import (
 )
 from pathlib import Path
 from livekit.agents.voice import SpeechHandle
-from livekit.plugins.openai import realtime
-from openai.types.beta.realtime.session import TurnDetection
+from livekit.plugins import google
+import google.auth as gauth
+
+# Fetch credentials globally so it doesn't block the event loop when a user connects
+try:
+    gcp_credentials, _ = gauth.default()
+except Exception as e:
+    logger.warning(f"Could not load Google ADC credentials: {e}")
+    gcp_credentials = None
 
 logger = logging.getLogger("agent")
 _speech_observer_tasks: set[asyncio.Task[Literal["completed", "interrupted"]]] = set()
@@ -208,14 +215,13 @@ async def giza_guide(ctx: JobContext) -> None:
     print("OPENAI_API_KEY =", os.getenv("OPENAI_API_KEY"))
 
     session = AgentSession(
-        llm=realtime.RealtimeModel(
-            voice="marin",
-            turn_detection=TurnDetection(
-                type="semantic_vad",
-                eagerness="high",
-                create_response=True,
-                interrupt_response=True,
-            ),
+        llm=google.beta.realtime.RealtimeModel(
+            model="gemini-live-2.5-flash-native-audio",
+            vertexai=True,
+            project=os.getenv("GOOGLE_CLOUD_PROJECT"),
+            location=os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1"),
+            voice="Puck",
+            credentials=gcp_credentials,
         ),
         turn_handling=TurnHandlingOptions(turn_detection="realtime_llm"),
     )

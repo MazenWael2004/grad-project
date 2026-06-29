@@ -180,6 +180,8 @@ const TourGuide = () => {
    * ============================================================== */
   const handlePhotoCapture = useCallback(async () => {
     if (!sessionInfo) return;
+    // Reset any previous recognition state so the button isn't stuck
+    resetRecognition();
     await captureAndSubmit(
       cameraRef,
       sessionInfo.sessionId,
@@ -187,7 +189,7 @@ const TourGuide = () => {
       location
     );
     setShowCamera(false);
-  }, [sessionInfo, location, captureAndSubmit]);
+  }, [sessionInfo, location, captureAndSubmit, resetRecognition]);
 
   const handleDisconnect = useCallback(async () => {
     await disconnect();
@@ -357,7 +359,7 @@ const TourGuide = () => {
                       : <View style={s.shutterInner} />
                     }
                   </TouchableOpacity>
-                  <TouchableOpacity style={s.closeCamBtn} onPress={() => setShowCamera(false)}>
+                  <TouchableOpacity style={s.closeCamBtn} onPress={() => { resetRecognition(); setShowCamera(false); }}>
                     <Text style={s.closeCamTxt}>✕  Close · اغلق</Text>
                   </TouchableOpacity>
                 </View>

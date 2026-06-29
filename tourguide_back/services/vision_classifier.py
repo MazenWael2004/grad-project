@@ -1,34 +1,30 @@
-
-from openai import OpenAI
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 import os
 import json
-import base64
 
 load_dotenv(".env.local")
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+# Initialize the new Google GenAI client pointing to Vertex AI using ADC
+client = genai.Client(
+    vertexai=True,
+    project=os.getenv("GOOGLE_CLOUD_PROJECT"),
+    location=os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 )
 
-
 def classify_landmark(image_path: str):
-
     with open(image_path, "rb") as image_file:
-        image_base64 = base64.b64encode(
-            image_file.read()
-        ).decode("utf-8")
+        image_bytes = image_file.read()
 
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        response_format={ "type": "json_object" },
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": """
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=[
+            types.Part.from_bytes(
+                data=image_bytes,
+                mime_type="image/jpeg",
+            ),
+            """
 You are an expert Egyptologist.
 
 Identify the landmark shown in this image.
@@ -49,22 +45,15 @@ Return ONLY valid JSON:
   "confidence": 0.0
 }
 """
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/jpeg;base64,{image_base64}"
-                        }
-                    }
-                ]
-            }
-        ]
+        ],
+        config=types.GenerateContentConfig(
+            response_mime_type="application/json",
+        ),
     )
 
     try:
-        content = response.choices[0].message.content
+        content = response.text
         return json.loads(content)
-
     except Exception:
         return {
             "landmark": "Unknown",
