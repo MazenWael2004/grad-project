@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.accounts.models import User
 from .models import PaymentMethod, Plan, Subscription, SubscriptionMember
@@ -21,9 +21,11 @@ class BaseSubscriptionSetup(APITestCase):
             password="password123",
         )
 
-        self.token = Token.objects.create(user=self.user)
+        refresh = RefreshToken.for_user(self.user)
+        self.access_token = str(refresh.access_token)
+        self.refresh_token = str(refresh)
 
-        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token.key}")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
 
         # Plan
         self.plan = Plan.objects.create(
@@ -286,9 +288,11 @@ class MemberTests(BaseSubscriptionSetup):
             user=other_user,
         )
 
-        other_token = Token.objects.create(user=other_user)
+        refresh = RefreshToken.for_user(other_user)
+        self.access_token = str(refresh.access_token)
+        self.refresh_token = str(refresh)
 
-        self.client.credentials(HTTP_AUTHORIZATION=f"Token {other_token.key}")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
 
         response = self.client.post(
             reverse("members-list"),
