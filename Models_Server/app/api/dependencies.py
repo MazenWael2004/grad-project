@@ -4,16 +4,11 @@ import httpx
 
 from app.core.config import DJANGO_URL
 from app.core.security import verify_access_token
-
-from pydantic import BaseModel
+from app.schemas.auth import CurrentUser
 
 security = HTTPBearer()
 
 
-class CurrentUser(BaseModel):
-    user_id: int
-    payload: dict
-    access_token: str
 
 
 def get_current_user(
