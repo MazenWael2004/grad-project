@@ -1,4 +1,4 @@
-model = None
-preprocess = None
-class_names = None
-device = None
+from app.AI_Models.ImageClassifier import ImageClassifier
+
+
+image_classifier:ImageClassifier | None = None
