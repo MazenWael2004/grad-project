@@ -1,6 +1,17 @@
+
+import '@livekit/react-native';
+import 'react-native-get-random-values';
+
+
+import {
+  registerGlobals,
+} from '@livekit/react-native';
+registerGlobals();
+
 import { Stack } from "expo-router";
 import { ThemeProvider } from "../theme/ThemeContext";
 import {UserTravelPreferencesProvider} from "./contexts/userTravelPreferencesContext"
+
 import {ArabicLanguageProvider} from "./contexts/arabicLanguageContext"
 import {ItineraryProvider} from "./contexts/itineraryContext"
 import {SavedListProvider} from "./contexts/savedListContext"
@@ -172,7 +183,7 @@ export default function RootLayout() {
       />
 
       <Stack.Screen
-      name = "tourGuide/index"
+      name = "tourGuide"
       options={{headerShown:false}}
       />
      

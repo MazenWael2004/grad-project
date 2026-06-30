@@ -135,6 +135,7 @@ const ItineraryDetails = () => {
             </View>
           </View>
           {/* All trips marked on Google Maps */}
+          {/* MapView temporarily disabled
           <MapView
             style={{
               width: "100%",
@@ -171,6 +172,19 @@ const ItineraryDetails = () => {
             ))}
 
           </MapView>
+          */}
+          <View style={{
+              width: "100%",
+              height: 250,
+              backgroundColor: currentTheme.searchBackground,
+              borderRadius: 15,
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 15,
+              marginBottom: 15,
+            }}>
+            <Text style={{ color: currentTheme.description }}>Map temporarily disabled</Text>
+          </View>
         </View>
 
         <ScrollView
