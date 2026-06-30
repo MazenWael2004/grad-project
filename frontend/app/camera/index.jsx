@@ -29,7 +29,7 @@ export default function CameraScreen() {
   // const API_KEY = "secret123";
 
   const ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgyODMzODA0LCJpYXQiOjE3ODI4MzIwMDQsImp0aSI6IjAyYzljMjhjNWQ3NDQ1YmZiMGE0NTZkY2QxMjY4MzZkIiwidXNlcl9pZCI6IjE0In0.DFP-mTjHvhjTSZe5wbZz2cidZX1GAfsguivA7q6Na5Y";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgyODM3MDYyLCJpYXQiOjE3ODI4MzUyNjIsImp0aSI6ImViMGVkMTQ4ZDYxYjRmNWFiNmJiOTg3MWE0MjNmYjU5IiwidXNlcl9pZCI6IjE2In0.Cr-pWKgyzvETu8EDTLn9XMJwbhf9vrXK_iFtLM7xNxc";
   
   const flashAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;

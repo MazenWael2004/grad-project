@@ -25,7 +25,10 @@ import { useCallback } from "react";
 
 const ChatBot = () => {
   const params = useLocalSearchParams();
-  const {user} = useUser();
+  const { user } = useUser();
+  console.log("TOKEN =", user.access);
+  console.log("USER =", user);
+  console.log("ACCESS =", user?.access);
   const { theme } = useContext(ThemeContext);
 
   const [prompt, setPrompt] = useState("");
@@ -39,36 +42,40 @@ const ChatBot = () => {
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const scrollViewRef = useRef(null);
 
-  const API_URL = "https://c708-104-196-125-244.ngrok-free.app/generate";
+  const API_URL = "http://192.168.100.17:8001/api/chat/";
   const API_KEY = "secret123";
 
   
 
-useEffect(() => {
-  if (!params?.label) return;
 
-  setMessagesList((prev) => {
-    const alreadyExists = prev.some(
-      (msg) =>
-        msg.text ===
-        `📍 Detected: ${params.label} (${Number(params.confidence).toFixed(1)}%)`
-    );
+  const accessToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgyODM3MDYyLCJpYXQiOjE3ODI4MzUyNjIsImp0aSI6ImViMGVkMTQ4ZDYxYjRmNWFiNmJiOTg3MWE0MjNmYjU5IiwidXNlcl9pZCI6IjE2In0.Cr-pWKgyzvETu8EDTLn9XMJwbhf9vrXK_iFtLM7xNxc"
 
-    if (alreadyExists) return prev;
 
-    return [
-      ...prev,
-      {
-        id: prev.length + 1,
-        text: `📍 Detected: ${params.label} (${Number(params.confidence).toFixed(1)}%)`,
-        role: "bot",
-        photo: require("../../assets/images/chatbot.png"),
-      },
-    ];
-  });
+  useEffect(() => {
+    if (!params?.label) return;
 
-  setIsPromptSubmitted(true);
-}, [params?.label, params?.confidence]);
+    setMessagesList((prev) => {
+      const alreadyExists = prev.some(
+        (msg) =>
+          msg.text ===
+          `📍 Detected: ${params.label} (${Number(params.confidence).toFixed(1)}%)`
+      );
+
+      if (alreadyExists) return prev;
+
+      return [
+        ...prev,
+        {
+          id: prev.length + 1,
+          text: `📍 Detected: ${params.label} (${Number(params.confidence).toFixed(1)}%)`,
+          role: "bot",
+          photo: require("../../assets/images/chatbot.png"),
+        },
+      ];
+    });
+
+    setIsPromptSubmitted(true);
+  }, [params?.label, params?.confidence]);
 
 
   const handleCameraButton = async () => {
@@ -83,81 +90,109 @@ useEffect(() => {
       }
     }
 
-    
+
     router.push("/camera");
   };
 
-  const handleSendButton = async () => {
-    if (!prompt.trim()) return;
+ const handleSendButton = async () => {
+  if (!prompt.trim()) return;
 
-    setIsPromptSubmitted(true);
-    setLoading(true);
+  setIsPromptSubmitted(true);
+  setLoading(true);
+
+  setMessagesList((prev) => [
+    ...prev,
+    {
+      id: prev.length + 1,
+      text: prompt,
+      role: "user",
+      photo: require("../../assets/images/avatar.png"),
+    },
+  ]);
+
+  const userMessage = prompt;
+  setPrompt("");
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${user.access}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: userMessage,
+      }),
+    });
+
+    const responseText = await res.text();
+
+    console.log("========== CHATBOT ==========");
+    console.log("Status:", res.status);
+    console.log("Response:", responseText);
+    console.log("============================");
+
+   if (res.ok) {
+  const data = JSON.parse(responseText);
+
+  let botReply = "No response";
+
+  try {
+  
+    if (typeof data.response === "string") {
+      const match = data.response.match(/\{[\s\S]*"answer"\s*:\s*"([^"]+)"[\s\S]*\}/);
+
+      if (match && match[1]) {
+        botReply = match[1];
+      } else {
+        botReply = data.response;
+      }
+    }
+
+   
+    if (data.answer) {
+      botReply = data.answer;
+    }
+  } catch (e) {
+    botReply = "Unable to parse response";
+  }
+
+  setMessagesList((prev) => [
+    ...prev,
+    {
+      id: prev.length + 1,
+      text: botReply,
+      role: "bot",
+      photo: require("../../assets/images/chatbot.png"),
+    },
+  ]);
+} else {
+      setMessagesList((prev) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          text: `Server Error (${res.status}): ${responseText}`,
+          role: "bot",
+          photo: require("../../assets/images/chatbot.png"),
+        },
+      ]);
+    }
+  } catch (err) {
+    console.log("CHATBOT ERROR:", err);
 
     setMessagesList((prev) => [
       ...prev,
       {
         id: prev.length + 1,
-        text: prompt,
-        role: "user",
-        photo: require("../../assets/images/avatar.png"),
+        text: `Network Error: ${err.message}`,
+        role: "bot",
+        photo: require("../../assets/images/chatbot.png"),
       },
     ]);
-
-    const userMessage = prompt;
-    setPrompt("");
-
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: userMessage,
-          max_length: 400,
-        }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-
-        setMessagesList((prev) => [
-          ...prev,
-          {
-            id: prev.length + 1,
-            text: data.response || "Sorry, I didn’t understand that.",
-            role: "bot",
-            photo: require("../../assets/images/chatbot.png"),
-          },
-        ]);
-      } else {
-        setMessagesList((prev) => [
-          ...prev,
-          {
-            id: prev.length + 1,
-            text: "Error connecting to EgyBot API.",
-            role: "bot",
-            photo: require("../../assets/images/chatbot.png"),
-          },
-        ]);
-      }
-    } catch (err) {
-      console.log("CHATBOT ERROR:", err);
-
-      setMessagesList((prev) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          text: `Error: ${err.message}`,
-          role: "bot",
-          photo: require("../../assets/images/chatbot.png"),
-        },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleRecordButton = () => {
     console.log("Record button pressed");
@@ -204,7 +239,7 @@ useEffect(() => {
             EgyBot
           </Text>
 
-        
+
           <TouchableOpacity onPress={handleCameraButton}>
             <Ionicons
               name="camera-outline"
