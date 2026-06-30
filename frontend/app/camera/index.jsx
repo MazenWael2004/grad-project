@@ -21,12 +21,15 @@ export default function CameraScreen() {
   const [prediction, setPrediction] = useState(null);
 
   const CUSTOM_MODEL_URL =
-    "https://459c-34-170-90-126.ngrok-free.app/predict";
+  "http://192.168.100.17:8001/api/classify-image/";
 
   const GEMINI_URL =
     "https://12e1-8-229-115-241.ngrok-free.app/gemini-predict";
 
-  const API_KEY = "secret123";
+  // const API_KEY = "secret123";
+
+  const ACCESS_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgyODE0NjgzLCJpYXQiOjE3ODI4MTI4ODMsImp0aSI6ImVmYzk5YzkwOTk3NTQyZWVhZWVmZTYwYTQ2MDRhNmY2IiwidXNlcl9pZCI6IjEyIn0.5aZyVochJm056_h9lD4PACzUwGaFTFH-sNDS2v3lj24";
   
   const flashAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -145,16 +148,22 @@ export default function CameraScreen() {
           ? CUSTOM_MODEL_URL
           : GEMINI_URL;
 
-      const res = await fetch(API_URL, {
+        const res = await fetch(CUSTOM_MODEL_URL, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${API_KEY}`,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
         body: formData,
       });
 
-      const data = await res.json();
+      // const text = await res.text();
 
+      // console.log("Status:", res.status);
+      // console.log("Response:", text);
+
+     const data = await res.json();
+
+      console.log("Status:", res.status);
       console.log("MODEL RESULT:", data);
 
       setPrediction({
