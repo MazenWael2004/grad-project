@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.AI_Models.ImageClassifier import load_model
-from app import state
+import app.state as state
 import uvicorn
 
 from app.api.routes import router
@@ -10,7 +10,7 @@ from app.core.config import HOST, PORT, DEBUG
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    state.model, state.preprocess, state.class_names, state.device = load_model()
+    state.image_classifier = load_model()
     print("Model loaded.")
 
     yield

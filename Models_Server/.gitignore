@@ -1,3 +1,2 @@
-app/AI_Models/faiss_index
-app/AI_Models/mistral_nemo_instruct_2407_4bit_bnb
+app/AI_Models/chatbot_output
 app/AI_Models/clip_classifier_v2.pth

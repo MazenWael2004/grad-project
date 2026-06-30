@@ -3,6 +3,7 @@ Download or copy the required AI models into the `AI_Models/` directory so that 
 ```
 text AI_Models/ 
 ├── clip_classifier_v2/ 
-├── faiss_index/ 
-└── mistral_nemo_instruct_2407_4bit_bnb/
+├── chatbot_output
+    ├── faiss_index/ 
+    └── mistral_nemo_instruct_2407_4bit_bnb/
 ```

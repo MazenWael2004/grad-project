@@ -2,6 +2,16 @@ from PIL import Image
 import torch
 import torch.nn as nn
 import clip
+from dataclasses import dataclass
+from typing import Any
+
+
+@dataclass
+class ImageClassifier:
+    model: Any
+    preprocess: Any
+    class_names: list[str]
+    device: str
 
 
 # Model architecture (must match training)
@@ -68,15 +78,21 @@ def load_model(model_path="app/AI_Models/clip_classifier_v2.pth"):
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
     model.float()
-    return model, preprocess, class_names, device
+    image_classifier = ImageClassifier(
+        model=model,
+        preprocess=preprocess,
+        class_names=class_names,
+        device=device,
+    )
+    return image_classifier
 
 
-def predict_image(model, preprocess, class_names, device, image: Image.Image):
-    image = preprocess(image)
-    image = image.unsqueeze(0).to(device)
+def predict_image(image_classifier: ImageClassifier, image: Image.Image):
+    image = image_classifier.preprocess(image)
+    image = image.unsqueeze(0).to(image_classifier.device)
     with torch.no_grad():
-        logits = model(image)
+        logits = image_classifier.model(image)
         probs = torch.softmax(logits, dim=1)
     confidence, pred = torch.max(probs, dim=1)
-    predicted_class = class_names[pred.item()]
+    predicted_class = image_classifier.class_names[pred.item()]
     return predicted_class, confidence.item(), probs

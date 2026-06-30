@@ -18,23 +18,22 @@ async def classify(
     file: UploadFile = File(...),
     current_user: CurrentUser = Depends(get_current_user),
 ):
+    if state.image_classifier is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Image classifier is not initialized.",
+        )
     try:
         contents = await file.read()
 
         image = Image.open(BytesIO(contents)).convert("RGB")
-        label, confidence, _ = predict_image(
-            state.model,
-            state.preprocess,
-            state.class_names,
-            state.device,
-            image,
-        )
+        label, confidence, _ = predict_image(state.image_classifier, image)
 
         return {
             "label": label,
             "confidence": confidence * 100,
         }
-    
+
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
