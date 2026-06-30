@@ -5,12 +5,20 @@ import httpx
 from app.core.config import DJANGO_URL
 from app.core.security import verify_access_token
 
+from pydantic import BaseModel
+
 security = HTTPBearer()
+
+
+class CurrentUser(BaseModel):
+    user_id: int
+    payload: dict
+    access_token: str
 
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-):
+) -> CurrentUser:
     payload = verify_access_token(credentials.credentials)
 
     if payload is None:
@@ -19,21 +27,21 @@ def get_current_user(
             detail="Invalid or expired token",
         )
 
-    return {
-        "payload": payload,
-        "token": credentials.credentials,
-        "user_id": payload["payload"],
-    }
+    return CurrentUser(
+        user_id=payload["user_id"],
+        payload=payload,
+        access_token=credentials.credentials,
+    )
 
 
 async def is_subscribed(
-    user=Depends(get_current_user),
-):
+    current_user: CurrentUser = Depends(get_current_user),
+) -> CurrentUser:
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"{DJANGO_URL}/api/subscriptions/is-subscribed/",
             headers={
-                "Authorization": f"Bearer {user['token']}",
+                "Authorization": f"Bearer {current_user.access_token}",
             },
         )
 
@@ -63,6 +71,4 @@ async def is_subscribed(
             detail="Subscription required",
         )
 
-    return {
-        "user_id": user["payload"],
-    }
+    return current_user

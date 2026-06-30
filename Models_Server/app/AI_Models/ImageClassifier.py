@@ -42,7 +42,7 @@ class CLIPClassifierV2(nn.Module):
         return self.classifier(features)
 
 
-def load_model(model_path="AI_Models/clip_classifier_v2.pth"):
+def load_model(model_path="app/AI_Models/clip_classifier_v2.pth"):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     # Load checkpoint
     checkpoint = torch.load(
@@ -71,8 +71,8 @@ def load_model(model_path="AI_Models/clip_classifier_v2.pth"):
     return model, preprocess, class_names, device
 
 
-def predict_image(model, preprocess, class_names, device, image_path):
-    image = preprocess(Image.open("AI_Models/test.jpeg").convert("RGB"))
+def predict_image(model, preprocess, class_names, device, image: Image.Image):
+    image = preprocess(image)
     image = image.unsqueeze(0).to(device)
     with torch.no_grad():
         logits = model(image)

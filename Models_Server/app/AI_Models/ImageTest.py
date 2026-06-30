@@ -1,10 +1,10 @@
 import torch
 from ImageClassifier import load_model, predict_image
-
-model, preprocess, class_names, device = load_model("AI_Models/clip_classifier_v2.pth")
+from PIL import Image
+model, preprocess, class_names, device = load_model("app/AI_Models/clip_classifier_v2.pth")
 print(f"using device: {device}")
-
-prediction, confidence, probs = predict_image(model, preprocess, class_names, device, "AI_Models/test_image.jpg")
+image = Image.open("app/AI_Models/test.jpeg").convert("RGB")
+prediction, confidence, probs = predict_image(model, preprocess, class_names, device, image)
 print(f"Prediction: {prediction}")
 print(f"Confidence: {confidence * 100:.2f}%")
 
