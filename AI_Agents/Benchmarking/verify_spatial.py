@@ -40,7 +40,7 @@ URBAN_SPEED_KMH = 30       # Average urban travel speed (km/h)
 INTERCITY_SPEED_KMH = 80   # Average intercity travel speed (km/h)
 MAX_URBAN_DISTANCE_KM = 50 # Max km between consecutive activities before flagging
 MAX_TRAVEL_TIME_HOURS = 2  # Max acceptable travel time between back-to-back activities
-COVERAGE_PENALTY_THRESHOLD = 0.5  # If less than 50% of activities are matched, penalize score
+COVERAGE_PENALTY_THRESHOLD = 1  # If less than 50% of activities are matched, penalize score
 ZIGZAG_RETURN_THRESHOLD_KM = 5    # If route returns within 5km of a previous point, flag zigzag
 
 # -- Load local data as fallback coordinate sources ----------------------------
@@ -59,11 +59,36 @@ _local_hotels = _load_json("hotels.json")
 _local_places = _load_json("egypt_places.json")
 
 
+def _load_db_coords() -> dict:
+    """
+    Try to load coordinates from the Django database (Attraction, Hotel, Restaurant).
+    Returns dict mapping lowercase name -> (latitude, longitude), or empty dict
+    if Django is not configured.
+    """
+    index = {}
+    try:
+        import django
+        if not django.conf.settings.configured:
+            return index
+        from apps.attractions.models import Attraction, Hotel, Restaurant
+        for model in (Attraction, Hotel, Restaurant):
+            for obj in model.objects.all().values('name', 'latitude', 'longitude'):
+                name = obj['name'].lower().strip()
+                lat, lon = obj.get('latitude'), obj.get('longitude')
+                if name and lat is not None and lon is not None:
+                    index[name] = (lat, lon)
+    except Exception:
+        pass  # Django not available, fall back to JSON files
+    return index
+
+
 def build_local_coords_index() -> dict:
     """
-    Build a coordinate lookup from all local data files (restaurants, hotels, places).
+    Build a coordinate lookup from the Django database (primary) and
+    local JSON data files (fallback).
     Returns dict mapping lowercase name -> (latitude, longitude).
     """
+    # Start with JSON file data as base
     index = {}
     for r in _local_restaurants:
         name = r.get("name", "").lower().strip()
@@ -80,6 +105,11 @@ def build_local_coords_index() -> dict:
         lat, lon = p.get("latitude"), p.get("longitude")
         if name and lat is not None and lon is not None:
             index[name] = (lat, lon)
+
+    # Override with database data (more comprehensive & up-to-date)
+    db_coords = _load_db_coords()
+    index.update(db_coords)
+
     return index
 
 _local_coords = build_local_coords_index()
@@ -93,6 +123,48 @@ _STRIP_PREFIXES = [
     "tour of", "tour", "sunset at", "morning at", "evening at",
     "farewell dinner at", "arrive at", "check in at", "check-in at",
 ]
+
+
+def _parse_time(time_str: str):
+    """
+    Parse a time string like '09:00 AM', '3:00 PM', '14:00' into minutes since midnight.
+    Returns int (minutes) or None if unparseable.
+    """
+    time_str = time_str.strip()
+    # Try 12-hour format: "09:00 AM", "3:00 PM"
+    for fmt in ("%I:%M %p", "%I:%M%p", "%I %p"):
+        try:
+            from datetime import datetime as _dt
+            t = _dt.strptime(time_str, fmt)
+            return t.hour * 60 + t.minute
+        except ValueError:
+            continue
+    # Try 24-hour format: "14:00", "9:00"
+    for fmt in ("%H:%M",):
+        try:
+            from datetime import datetime as _dt
+            t = _dt.strptime(time_str, fmt)
+            return t.hour * 60 + t.minute
+        except ValueError:
+            continue
+    return None
+
+
+def _parse_time_range(time_range: str):
+    """
+    Parse a time range string like '09:00 AM - 11:00 AM' or '09:00 AM - 3:00 PM'.
+    Returns (start_minutes, end_minutes) or (None, None) if unparseable.
+    """
+    if not time_range:
+        return None, None
+    # Split on common separators: ' - ', ' – ', ' to ', '-'
+    for sep in (" - ", " – ", " to ", "-"):
+        if sep in time_range:
+            parts = time_range.split(sep, 1)
+            start = _parse_time(parts[0])
+            end = _parse_time(parts[1])
+            return start, end
+    return None, None
 
 
 def build_landmark_index(landmarks: list[dict]) -> dict:
@@ -219,9 +291,14 @@ def analyze_day_spatial(day_plan: dict, landmark_index: dict) -> dict:
     resolved = []
     for act in activities:
         title = act.get("title", "Unknown")
+        time_range = act.get("time", "")
+        start_min, end_min = _parse_time_range(time_range)
         lat, lon, source = match_activity_to_coords(title, landmark_index)
         if lat is not None:
-            resolved.append({"title": title, "lat": lat, "lon": lon, "source": source})
+            resolved.append({
+                "title": title, "lat": lat, "lon": lon, "source": source,
+                "start_min": start_min, "end_min": end_min,
+            })
         else:
             unmatched.append(title)
 
@@ -254,6 +331,23 @@ def analyze_day_spatial(day_plan: dict, landmark_index: dict) -> dict:
                 f"{day_label}: {a['title']} -> {b['title']} would take ~{travel_time_hrs:.1f}h "
                 f"to travel ({distance_km:.1f} km) - exceeds reasonable urban travel time"
             )
+
+        # Flag time-slot feasibility issues
+        a_end = a.get("end_min")
+        b_start = b.get("start_min")
+        if a_end is not None and b_start is not None:
+            gap_minutes = b_start - a_end
+            travel_time_minutes = travel_time_hrs * 60
+            if gap_minutes < 0:
+                issues.append(
+                    f"{day_label}: {a['title']} ends after {b['title']} starts "
+                    f"- overlapping time slots"
+                )
+            elif travel_time_minutes > gap_minutes and gap_minutes >= 0:
+                issues.append(
+                    f"{day_label}: {a['title']} -> {b['title']} needs ~{travel_time_minutes:.0f}min travel "
+                    f"but only {gap_minutes:.0f}min gap between activities"
+                )
 
     # Zigzag detection: check if route doubles back near a previous point
     for i in range(2, len(resolved)):
@@ -362,21 +456,22 @@ def analyze_spatial_coherence(trip_plan: dict) -> dict:
     }
 
 
-# ─── Judge Agent Integration ────────────────────────────────────────────────
+# ─── Constraint Judge Integration ────────────────────────────────────────────
 
-async def run_judge_with_spatial(query: str, plan_json: str) -> dict:
+async def run_constraint_judge(query: str, plan_json: str) -> dict:
     """
-    Run the full judge agent (constraint + spatial evaluation) on a plan.
-    
+    Run the constraint-only judge agent on a plan.
+    Spatial evaluation is handled separately by analyze_spatial_coherence().
+
     Args:
         query: The user's original travel query.
         plan_json: The generated TripPlan as a JSON string.
-    
+
     Returns:
-        Dict with the judge agent's evaluation result.
+        Dict with the judge agent's constraint evaluation result.
     """
     from AI_Agents.Benchmarking.evaluations import evaluate_plan
-    return evaluate_plan(query, plan_json)
+    return await evaluate_plan(query, plan_json)
 
 
 # ─── Test Cases ──────────────────────────────────────────────────────────────
@@ -645,10 +740,10 @@ def main():
         analysis = verify_plan_file(args.file)
         
         if args.query:
-            print("\n>> Running full judge agent (constraint + spatial)...")
+            print("\n>> Running constraint judge agent...")
             with open(args.file, "r", encoding="utf-8") as f:
                 plan_json = f.read()
-            result = asyncio.run(run_judge_with_spatial(args.query, plan_json))
+            result = asyncio.run(run_constraint_judge(args.query, plan_json))
             print(f"  Judge result: {json.dumps(result, indent=2)}")
     else:
         run_test_cases()

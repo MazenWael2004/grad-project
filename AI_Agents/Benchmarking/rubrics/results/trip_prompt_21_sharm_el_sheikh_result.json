@@ -1,0 +1,574 @@
+{
+  "prompt_file": "trip_prompt_21_sharm_el_sheikh.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Alexandria\nDestination: Sharm El-Sheikh\nDates: 2026-06-02 to 2026-06-06\nBudget: Cheap\nParty: Only Me\nInterests: Road Trips, Festivals and Events, Cultural Exploration, Backpacking",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 4906,
+    "latency": {
+      "time_to_first_token": 101.644,
+      "output_tokens_per_sec": 27.36,
+      "time_to_last_token": 101.645
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The JSON structure adheres to the expected keys and data types for a travel plan, including trip details, itinerary, budget breakdown, and landmarks."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": false,
+          "reason": "The user requested a 'Cheap' budget and listed 'Backpacking' as an interest. The plan suggests 'Swissotel Sharm El Sheikh' described as a 'mid-range hotel,' which contradicts a 'cheap' budget and the typical expectations for a 'backpacking' trip."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": false,
+          "reason": "The user specified a 'Cheap' budget. The choice of 'Swissotel Sharm El Sheikh' as a 'mid-range hotel,' even with a listed EGP 1200/night cost, does not align with a strictly 'cheap' budget or a 'Backpacking' interest, which typically implies more economical accommodation options."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": true,
+          "reason": "All activities within each day are listed in chronological order from morning to evening, ensuring a logical flow."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints (destination, duration, budget, number of people, and dates) are met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Sharm El-Sheikh Cultural Exploration",
+    "trip_summary": "A 5-day cultural and natural exploration trip to Sharm El-Sheikh, Egypt, designed for a solo traveler on a budget, from June 2 to June 6, 2026.",
+    "trip_dates": "June 2 - June 6, 2026",
+    "travelers_type": "Solo Traveler",
+    "luxury_level": "Budget",
+    "itinerary": [
+      {
+        "day": "Day 1: Arrival & Cultural Beginnings",
+        "activities": [
+          {
+            "time": "10:00 AM - 12:00 PM",
+            "title": "Hotel Check-in: Swissotel Sharm El Sheikh",
+            "description": "Arrive in Sharm El-Sheikh and check into your mid-range hotel, the Swissotel. Settle in and prepare for your adventure.",
+            "cost": "EGP 1200",
+            "rating": 4.9
+          },
+          {
+            "time": "12:00 PM - 2:00 PM",
+            "title": "Safari Sharm El Sheikh",
+            "description": "Begin your cultural journey with Safari Sharm El Sheikh, a popular tourist destination. Experience local insights and activities for two hours.",
+            "cost": "EGP 200",
+            "rating": 4.2
+          },
+          {
+            "time": "2:00 PM - 3:00 PM",
+            "title": "Lunch at Dananeer Restaurant Sea Food & Steak House",
+            "description": "Enjoy a delightful lunch featuring local or international cuisine at Dananeer Restaurant, known for its Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 4.6
+          },
+          {
+            "time": "3:00 PM - 5:00 PM",
+            "title": "Beautiful place in South Sinai Governorate 8763119",
+            "description": "Explore this beautiful cultural attraction, a highly-rated spot for two hours of discovery.",
+            "cost": "EGP 200",
+            "rating": 4.7
+          },
+          {
+            "time": "5:00 PM - 7:00 PM",
+            "title": "El Sherif Safari",
+            "description": "Continue your safari experience with El Sherif Safari, perfect for an early evening cultural immersion.",
+            "cost": "EGP 200",
+            "rating": 4.2
+          },
+          {
+            "time": "7:00 PM - 9:00 PM",
+            "title": "Sinai Sharm",
+            "description": "Discover Sinai Sharm, another cultural highlight of the region, perfect for an evening exploration.",
+            "cost": "EGP 200",
+            "rating": 4.4
+          },
+          {
+            "time": "9:00 PM - 10:30 PM",
+            "title": "Dinner at Mahony Restaurant",
+            "description": "Savor your dinner at Mahony Restaurant, offering a selection of local and international dishes with Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 4.6
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Scenic Views and Local Art",
+        "activities": [
+          {
+            "time": "10:00 AM - 12:00 PM",
+            "title": "Best view in Sharm el shiekh",
+            "description": "Start your day by visiting 'Best view in Sharm el shiekh', a highly popular spot for breathtaking scenery.",
+            "cost": "EGP 200",
+            "rating": 4.7
+          },
+          {
+            "time": "12:00 PM - 2:00 PM",
+            "title": "Paradise Sparrows",
+            "description": "Immerse yourself in another cultural experience at Paradise Sparrows, known for its charm.",
+            "cost": "EGP 200",
+            "rating": 4.5
+          },
+          {
+            "time": "2:00 PM - 3:00 PM",
+            "title": "Lunch at La cucina degli artisti",
+            "description": "Enjoy a delightful lunch at La cucina degli artisti, offering local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.1
+          },
+          {
+            "time": "3:00 PM - 5:00 PM",
+            "title": "Street Art in South Sinai Governorate 8761441",
+            "description": "Explore the vibrant local Street Art scene, a cultural highlight perfect for an afternoon stroll.",
+            "cost": "EGP 200",
+            "rating": 4.4
+          },
+          {
+            "time": "5:00 PM - 7:00 PM",
+            "title": "The Echo Temple",
+            "description": "Visit The Echo Temple, a unique blend of nature and culture, ideal for a late afternoon visit.",
+            "cost": "EGP 200",
+            "rating": 4.4
+          },
+          {
+            "time": "7:00 PM - 8:30 PM",
+            "title": "Dinner at Verde Basilico, Italian Restaurant in Sharm el Sheikh",
+            "description": "Indulge in an Italian dinner experience at Verde Basilico, highly rated for its Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 4.9
+          }
+        ]
+      },
+      {
+        "day": "Day 3: Nature and Hidden Gems",
+        "activities": [
+          {
+            "time": "10:00 AM - 12:00 PM",
+            "title": "Ras Mohamed Nature Reserve",
+            "description": "Spend your morning at the stunning Ras Mohamed Nature Reserve, a popular destination for nature and culture lovers.",
+            "cost": "EGP 200",
+            "rating": 4.8
+          },
+          {
+            "time": "12:00 PM - 2:00 PM",
+            "title": "Turpigfd",
+            "description": "Discover Turpigfd, another interesting cultural spot in the South Sinai Governorate.",
+            "cost": "EGP 200",
+            "rating": 4.0
+          },
+          {
+            "time": "2:00 PM - 3:00 PM",
+            "title": "Lunch at Verde Basilico, Italian Restaurant in Sharm el Sheikh",
+            "description": "Enjoy a delicious Italian lunch at Verde Basilico, known for its excellent cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.9
+          },
+          {
+            "time": "3:00 PM - 5:00 PM",
+            "title": "\u0633\u0641\u064a\u0646\u0629 \u062e\u0631\u0628\u0629",
+            "description": "Explore the unique cultural site of \u0633\u0641\u064a\u0646\u0629 \u062e\u0631\u0628\u0629 (Safinat Kharibah).",
+            "cost": "EGP 200",
+            "rating": 3.7
+          },
+          {
+            "time": "7:00 PM - 8:30 PM",
+            "title": "Dinner at La cucina degli artisti",
+            "description": "Conclude your day with dinner at La cucina degli artisti, featuring local and international delicacies.",
+            "cost": "EGP 250",
+            "rating": 4.1
+          }
+        ]
+      },
+      {
+        "day": "Day 4: Iconic Landmarks & Entertainment",
+        "activities": [
+          {
+            "time": "10:00 AM - 12:00 PM",
+            "title": "Scritta SHARM",
+            "description": "Visit the iconic 'Scritta SHARM', a popular and highly-rated cultural landmark perfect for photos and local appreciation.",
+            "cost": "EGP 200",
+            "rating": 4.9
+          },
+          {
+            "time": "12:00 PM - 2:00 PM",
+            "title": "Hollywood Sharm El Sheik",
+            "description": "Explore Hollywood Sharm El Sheik, a destination blending nature and entertainment.",
+            "cost": "EGP 200",
+            "rating": 3.9
+          },
+          {
+            "time": "2:00 PM - 3:00 PM",
+            "title": "Lunch at Sky Bar & Lounge",
+            "description": "Enjoy lunch at Sky Bar & Lounge, offering local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.6
+          },
+          {
+            "time": "3:00 PM - 5:00 PM",
+            "title": "Pedestrian Rd Neama Bay",
+            "description": "Stroll along Pedestrian Rd Neama Bay, a lively cultural area to experience local life.",
+            "cost": "EGP 200",
+            "rating": 4.5
+          },
+          {
+            "time": "5:00 PM - 7:00 PM",
+            "title": "SOHO Square Sharm El Sheikh",
+            "description": "Visit the famous SOHO Square Sharm El Sheikh, a popular hub for culture and entertainment.",
+            "cost": "EGP 200",
+            "rating": 4.5
+          },
+          {
+            "time": "7:00 PM - 8:30 PM",
+            "title": "Dinner at Dananeer Restaurant Sea Food & Steak House",
+            "description": "Have dinner at Dananeer Restaurant, known for its excellent seafood and steak options.",
+            "cost": "EGP 250",
+            "rating": 4.6
+          }
+        ]
+      },
+      {
+        "day": "Day 5: Soho Square Delights & Departure",
+        "activities": [
+          {
+            "time": "10:00 AM - 12:00 PM",
+            "title": "Soho Square Dancing Fountain",
+            "description": "Witness the captivating Soho Square Dancing Fountain, a popular cultural attraction.",
+            "cost": "EGP 200",
+            "rating": 4.6
+          },
+          {
+            "time": "12:00 PM - 2:00 PM",
+            "title": "\u0627\u0644\u0641\u0646\u0627\u0631",
+            "description": "Explore \u0627\u0644\u0641\u0646\u0627\u0631 (Al Fanar), a highly-rated cultural site in South Sinai.",
+            "cost": "EGP 200",
+            "rating": 4.9
+          },
+          {
+            "time": "2:00 PM - 3:00 PM",
+            "title": "Lunch at Fleur De Leis Cajun Steakhouse",
+            "description": "Enjoy a unique Cajun steakhouse experience for lunch at Fleur De Leis.",
+            "cost": "EGP 250",
+            "rating": 4.8
+          },
+          {
+            "time": "3:00 PM - 5:00 PM",
+            "title": "Hollywood sharm",
+            "description": "Visit Hollywood sharm, another cultural highlight in the region.",
+            "cost": "EGP 200",
+            "rating": 4.2
+          },
+          {
+            "time": "5:00 PM - 7:00 PM",
+            "title": "Peace Square",
+            "description": "Reflect and enjoy the blend of nature and culture at Peace Square.",
+            "cost": "EGP 200",
+            "rating": 4.5
+          },
+          {
+            "time": "7:00 PM - 8:30 PM",
+            "title": "Dinner at Basilico",
+            "description": "Enjoy your final dinner in Sharm El-Sheikh at Basilico, offering local and international flavors.",
+            "cost": "EGP 250",
+            "rating": 4.7
+          },
+          {
+            "time": "Evening",
+            "title": "Hotel Check-out & Departure",
+            "description": "After a day of exploration and dinner, check out from Swissotel Sharm El Sheikh and depart from Sharm El-Sheikh.",
+            "cost": "EGP 0"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Flights/Transport: EGP 0 (Self-arranged)",
+      "Accommodation: EGP 4800",
+      "Food: EGP 2500",
+      "Activities: EGP 3800",
+      "Total Estimated Budget: EGP 11100"
+    ],
+    "landmarks": [
+      {
+        "id": "swissotel_sharm_el_sheikh",
+        "title": "Swissotel Sharm El Sheikh",
+        "description": "Your hotel in Sharm El-Sheikh.",
+        "coordinate": {
+          "latitude": 27.9203694,
+          "longitude": 34.3368166
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "beautiful_place_8763119",
+        "title": "Beautiful place in South Sinai Governorate 8763119",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 27.9116006,
+          "longitude": 34.3247409
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "el_sherif_safari_8760328",
+        "title": "El Sherif Safari in South Sinai Governorate 8760328",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 27.9427427,
+          "longitude": 34.3125846
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "safari_sharm_el_sheikh_8761352",
+        "title": "Safari Sharm El Sheikh in South Sinai Governorate 8761352",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 27.9223358,
+          "longitude": 34.3232384
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sinai_sharm_46619",
+        "title": "Sinai Sharm in South Sinai Governorate 46619",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 27.9109657,
+          "longitude": 34.3176433
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "dananeer_restaurant_8763114",
+        "title": "Dananeer Restaurant Sea Food & Steak House in South Sinai Governorate 8763114",
+        "description": "Local / International Cuisine",
+        "coordinate": {
+          "latitude": 27.9108788,
+          "longitude": 34.325712
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "mahony_restaurant_46619",
+        "title": "Mahony Restaurant in South Sinai Governorate 46619",
+        "description": "Local / International Cuisine",
+        "coordinate": {
+          "latitude": 27.9113979,
+          "longitude": 34.3212432
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "best_view_sharm_el_sheikh_8762011",
+        "title": "Best view in Sharm el shiekh in South Sinai Governorate 8762011",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 27.8614549,
+          "longitude": 34.2985752
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "paradise_sparrows_8762650",
+        "title": "Paradise Sparrows in South Sinai Governorate 8762650",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 27.8771862,
+          "longitude": 34.3181616
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "street_art_8761441",
+        "title": "Street Art in South Sinai Governorate 8761441",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 27.9188952,
+          "longitude": 34.3375493
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "the_echo_temple_8751001",
+        "title": "The Echo Temple in South Sinai Governorate 8751001",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 27.9610662,
+          "longitude": 34.2834194
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "la_cucina_degli_artisti_8761135",
+        "title": "La cucina degli artisti in South Sinai Governorate 8761135",
+        "description": "Local / International Cuisine",
+        "coordinate": {
+          "latitude": 27.8661403,
+          "longitude": 34.2980445
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "verde_basilico_restaurant_8761130",
+        "title": "Verde Basilico, Italian Restaurant in Sharm el Sheikh in South Sinai Governorate 8761130",
+        "description": "Local / International Cuisine",
+        "coordinate": {
+          "latitude": 27.8651394,
+          "longitude": 34.2935148
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "ras_mohamed_nature_reserve_8750001",
+        "title": "Ras Mohamed Nature Reserve in South Sinai Governorate 8750001",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.8 stars.",
+        "coordinate": {
+          "latitude": 27.7937578,
+          "longitude": 34.17803970000001
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "turpigfd_8761450",
+        "title": "Turpigfd in South Sinai Governorate 8761450",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 27.9333725,
+          "longitude": 34.3421397
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "safinat_kharibah_8765101",
+        "title": "\u0633\u0641\u064a\u0646\u0629 \u062e\u0631\u0628\u0629 in South Sinai Governorate 8765101",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 3.7 stars.",
+        "coordinate": {
+          "latitude": 27.951023,
+          "longitude": 34.3841993
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "scritta_sharm_8763021",
+        "title": "Scritta SHARM in South Sinai Governorate 8763021",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.9 stars.",
+        "coordinate": {
+          "latitude": 27.908189,
+          "longitude": 34.3245308
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "hollywood_sharm_el_sheik_46627",
+        "title": "Hollywood Sharm El Sheik in \u062b\u0627\u0646 \u0634\u0631\u0645 \u0627\u0644\u0634\u064a\u062e\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u062c\u0646\u0648\u0628 \u0633\u064a\u0646\u0627\u0621 46627",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 3.9 stars.",
+        "coordinate": {
+          "latitude": 27.9263898,
+          "longitude": 34.344056
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "pedestrian_rd_naama_bay_8763111",
+        "title": "Pedestrian Rd Neama Bay in \u0627\u0644\u0642\u0627\u0647\u0631\u0629 8763111",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 27.9123271,
+          "longitude": 34.3224149
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "soho_square_sharm_el_sheikh_46628",
+        "title": "SOHO Square Sharm El Sheikh in \u0623\u0648\u0644 \u0634\u0631\u0645 \u0627\u0644\u0634\u064a\u062e\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u062c\u0646\u0648\u0628 \u0633\u064a\u0646\u0627\u0621 46628",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 27.9624931,
+          "longitude": 34.3937437
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sky_bar_lounge_46911",
+        "title": "Sky Bar & Lounge in South Sinai Governorate 46911",
+        "description": "Local / International Cuisine",
+        "coordinate": {
+          "latitude": 27.9084485,
+          "longitude": 34.3264214
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "soho_square_dancing_fountain_8765012",
+        "title": "Soho Square Dancing Fountain in South Sinai Governorate 8765012",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 27.9628026,
+          "longitude": 34.3939765
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "al_fanar_8761452",
+        "title": "\u0627\u0644\u0641\u0646\u0627\u0631 in South Sinai Governorate 8761452",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.9 stars.",
+        "coordinate": {
+          "latitude": 27.9654198,
+          "longitude": 34.3617769
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "hollywood_sharm_8761452",
+        "title": "Hollywood sharm in South Sinai Governorate 8761452",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 27.9654198,
+          "longitude": 34.3617769
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "peace_square_8761452",
+        "title": "Peace Square in South Sinai Governorate 8761452",
+        "description": "A popular tourist destination in Sharm El-Sheikh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 27.963774,
+          "longitude": 34.361324
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "fleur_de_leis_cajun_steakhouse",
+        "title": "Fleur De Leis Cajun Steakhouse in South Sinai Governorate",
+        "description": "Local / International Cuisine",
+        "coordinate": {
+          "latitude": 27.9437229,
+          "longitude": 34.3844604
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "basilico_restaurant",
+        "title": "Basilico in South Sinai Governorate",
+        "description": "Local / International Cuisine",
+        "coordinate": {
+          "latitude": 27.9428685,
+          "longitude": 34.3851304
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

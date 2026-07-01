@@ -1,0 +1,205 @@
+{
+  "prompt_file": "trip_prompt_11_siwa.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Dubai\nDestination: Siwa\nDates: 2026-06-02 to 2026-06-03\nBudget: Balanced\nParty: Couple\nInterests: Backpacking, Food Tourism",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 1366,
+    "latency": {
+      "time_to_first_token": 43.94,
+      "output_tokens_per_sec": 18.82,
+      "time_to_last_token": 43.942
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The JSON structure is well-formed and consistent with a typical travel plan schema, including trip details, itinerary, budget, and landmarks."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The Siwa Paradise Hotel is located in Siwa, and the suggested cost (EGP 1200 for 1 night) aligns with a 'Balanced' budget for a couple."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": true,
+          "reason": "The estimated total cost (EGP 2600) for accommodation, activities, and food for two days for a couple seems appropriate for a 'Balanced' budget."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": true,
+          "reason": "Activities within each day are presented in chronological order, moving from midday to evening, even if some timings (e.g., lunch on Day 2) could be optimized or gaps exist."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints (destination, duration, budget level, number of people, and dates) are met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Siwa Oasis Adventure",
+    "trip_summary": "An adventurous two-day trip for a couple from Cairo to the enchanting Siwa Oasis, exploring ancient sites and indulging in local cuisine.",
+    "trip_dates": "Jun 2 - Jun 3, 2026",
+    "travelers_type": "Couple",
+    "luxury_level": "Balanced",
+    "itinerary": [
+      {
+        "day": "Day 1: Tuesday, June 2, 2026",
+        "activities": [
+          {
+            "time": "12:00 PM - 1:00 PM",
+            "title": "Hotel Check-in: Siwa Paradise Hotel",
+            "description": "Arrive in Siwa and check into the Siwa Paradise Hotel, your comfortable base for exploring the oasis. Settle in and prepare for your afternoon adventures.",
+            "cost": "EGP 1200 (for 1 night)",
+            "rating": 3.9,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=29.203014,25.522818"
+          },
+          {
+            "time": "1:00 PM - 2:00 PM",
+            "title": "Lunch at Tekeyet Elamir Restaurant & Caf\u00e9",
+            "description": "Enjoy a delicious lunch featuring local and international specialties at Tekeyet Elamir Restaurant & Caf\u00e9, known for its Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=29.2044983,25.5197243"
+          },
+          {
+            "time": "2:30 PM - 4:30 PM",
+            "title": "Explore Gebel al-Mawta",
+            "description": "Spend the afternoon discovering Gebel al-Mawta, a popular tourist destination in Siwa with a rating of 4.6 stars. This site offers a glimpse into the region's ancient history and natural beauty.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=29.2113508,25.5251243"
+          },
+          {
+            "time": "7:00 PM - 8:30 PM",
+            "title": "Dinner at New Star Siwa",
+            "description": "Conclude your day with a delightful dinner at New Star Siwa, offering a range of local and international dishes with their renowned Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 3.9,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=29.2028825,25.5222397"
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Wednesday, June 3, 2026",
+        "activities": [
+          {
+            "time": "12:00 PM - 2:00 PM",
+            "title": "Immerse in Siwa Oasis Culture",
+            "description": "Dedicate your afternoon to exploring the heart of the Siwa Oasis, a popular tourist destination with a rating of 4.0 stars. Experience the unique culture and serene atmosphere of this ancient settlement.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=29.2031708,25.5195451"
+          },
+          {
+            "time": "2:00 PM - 3:00 PM",
+            "title": "Lunch at \u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648 \u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a",
+            "description": "Savor authentic local and international cuisine for lunch at \u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648 \u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a, known for its delectable Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=29.2031708,25.5195451"
+          },
+          {
+            "time": "7:00 PM - 8:30 PM",
+            "title": "Dinner at Siwa Gate",
+            "description": "Enjoy your final dinner in Siwa at Siwa Gate, offering a delightful selection of local and international dishes, perfect for concluding your trip.",
+            "cost": "EGP 250",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=29.2027133,25.5197402"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 1200",
+      "Activities: EGP 400",
+      "Food: EGP 1000",
+      "Estimated Total (excluding flights/transport): EGP 2600"
+    ],
+    "landmarks": [
+      {
+        "id": "siwa_paradise_hotel",
+        "title": "Siwa Paradise Hotel",
+        "description": "Your hotel accommodation in Siwa.",
+        "coordinate": {
+          "latitude": 29.203014,
+          "longitude": 25.522818
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "gebel_al_mawta",
+        "title": "Gebel al-Mawta",
+        "description": "A popular tourist destination in Siwa with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 29.2113508,
+          "longitude": 25.5251243
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "tekeyet_elamir_restaurant_cafe",
+        "title": "Tekeyet Elamir Restaurant & Caf\u00e9",
+        "description": "A restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 29.2044983,
+          "longitude": 25.5197243
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "new_star_siwa",
+        "title": "New Star Siwa",
+        "description": "A restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 29.2028825,
+          "longitude": 25.5222397
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "siwa_oasis",
+        "title": "Siwa Oasis",
+        "description": "A popular tourist destination in Siwa with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 29.2031708,
+          "longitude": 25.5195451
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mashawina_restaurant",
+        "title": "\u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648 \u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a",
+        "description": "A restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 29.2031708,
+          "longitude": 25.5195451
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "siwa_gate",
+        "title": "Siwa Gate",
+        "description": "A restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 29.2027133,
+          "longitude": 25.5197402
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

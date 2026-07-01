@@ -1,0 +1,594 @@
+{
+  "prompt_file": "trip_prompt_09_aswan_governorate.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Paris\nDestination: Aswan Governorate\nDates: 2026-12-07 to 2026-12-10\nBudget: Cheap\nParty: Family\nInterests: Camel Riding, Photographing, Cultural Tourism",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 5013,
+    "latency": {
+      "time_to_first_token": 90.089,
+      "output_tokens_per_sec": 33.22,
+      "time_to_last_token": 90.089
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan JSON structure is consistent, with all fields and data types appearing as expected for a travel itinerary, including arrays for itinerary days, activities, and budget breakdown. The 'cost' field is consistently a string (e.g., 'EGP 1200'), which is an acceptable representation for currency within a string type."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": false,
+          "reason": "The plan suggests staying at the 'Old Cataract, Aswan', which is a well-known luxury hotel. This choice directly contradicts the user's 'Budget: Cheap' preference. While the stated cost (EGP 1200) is low, it is highly unrealistic for this specific hotel, making the suggestion irrelevant to a budget-conscious traveler."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": false,
+          "reason": "The primary issue is the suggested accommodation at the Old Cataract hotel. Even with the unrealistically low price of EGP 1200 per night, suggesting a luxury hotel for a 'Cheap' budget fundamentally disregards the budget constraint. The true cost of this hotel would far exceed a cheap budget."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": true,
+          "reason": "All daily itineraries show activities listed with sequential time slots, progressing logically from morning to evening across all four days."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints (destination, duration, budget, number of people, and dates) are met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Aswan Family Cultural & Photography Adventure",
+    "trip_summary": "Embark on a captivating 4-day family journey from Cairo to the heart of Aswan, where ancient history, vibrant culture, and stunning landscapes await. This budget-friendly adventure is perfect for families keen on cultural tourism and photography, offering an immersive experience into Aswan's unique heritage. Explore museums, ancient sites, charming gardens, and enjoy local cuisine, all while capturing unforgettable memories.",
+    "trip_dates": "Dec 07 - Dec 10, 2026",
+    "travelers_type": "Family",
+    "luxury_level": "Budget",
+    "itinerary": [
+      {
+        "day": "Day 1: December 7, 2026 - Aswan's Ancient Marvels",
+        "activities": [
+          {
+            "time": "08:00 AM - 09:00 AM",
+            "title": "Hotel Check-in: Old Cataract, Aswan",
+            "description": "Arrive in Aswan and check into the historic Old Cataract hotel, your comfortable base for exploring the city. Settle in and prepare for a day of discovery.",
+            "cost": "EGP 1200",
+            "rating": 4.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Morning Exploration at Animalia",
+            "description": "Begin your cultural journey at Animalia, a fascinating museum offering insights into local wildlife and traditions. It's a great spot for family photos and learning.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Uncovering the Unfinished Obelisk",
+            "description": "Visit the site of the Unfinished Obelisk, a monumental carving project that offers a glimpse into ancient Egyptian stonemasonry techniques and the sheer scale of their ambition. Popular for photography.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Kana Kato Restaurant & Cafe",
+            "description": "Enjoy a delightful lunch with a mix of local and international cuisine at Kana Kato Restaurant & Cafe, known for its Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Strolling through Dr. Magdy Yacoub Sq.",
+            "description": "Explore Dr. Magdy Yacoub Sq., a lively area offering a feel for modern Aswan and a chance for some afternoon people-watching.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "04:30 PM - 06:30 PM",
+            "title": "Discovering Church Greek parking",
+            "description": "Visit the Church Greek parking area, a cultural landmark offering historical context and architectural interest in Aswan.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "06:30 PM - 08:30 PM",
+            "title": "Sunset at Monastery of St. Simeon",
+            "description": "Conclude your day with a visit to the historic Monastery of St. Simeon. Its desert setting provides stunning photographic opportunities, especially during sunset.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "08:30 PM - 09:30 PM",
+            "title": "Dinner at Nubian Dreams Restaurant & Cafe",
+            "description": "Savor dinner at Nubian Dreams Restaurant & Cafe, offering delicious local and international dishes in a charming setting.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 2: December 8, 2026 - Islands, Gardens & Local Charms",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Exploring Aswan Museum",
+            "description": "Delve deeper into Aswan's history at the Aswan Museum, showcasing artifacts from the Nubian region. An excellent start to a culturally rich day.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Walking Tour with Fatma",
+            "description": "Experience Aswan through the eyes of a local with a guided walking tour, offering unique insights and hidden gems perfect for photography.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Saraya",
+            "description": "Enjoy a delicious lunch at Saraya, offering a taste of local and international cuisine in a pleasant atmosphere.",
+            "cost": "EGP 250",
+            "rating": 4.2,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Tranquility at Aswan Botanical Garden",
+            "description": "Take a scenic boat ride to the Aswan Botanical Garden, a serene island oasis perfect for a relaxing family stroll and capturing beautiful flora.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "04:30 PM - 06:30 PM",
+            "title": "Bird Watching at M\u00f6venpick Resort Aswan",
+            "description": "Visit the Birds Watching House at M\u00f6venpick Resort Aswan, an excellent spot for nature lovers and a peaceful experience.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "06:30 PM - 08:30 PM",
+            "title": "Shopping at Sandallia Jewlery",
+            "description": "Discover unique local crafts and jewelry at Sandallia Jewlery, a wonderful opportunity to find souvenirs and experience local artistry.",
+            "cost": "EGP 200",
+            "rating": 5.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "08:30 PM - 09:30 PM",
+            "title": "Dinner at Nuba Waidi Resturant&Cafe",
+            "description": "Conclude your day with a delightful dinner at Nuba Waidi Resturant&cafe, praised for its local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 5.0,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 3: December 9, 2026 - Nubian Heritage & Scenic Views",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Ascending to the Dome of Abu Al-Hawa",
+            "description": "Start your day on the West Bank with a visit to the Dome of Abu Al-Hawa, offering panoramic views of Aswan and the Nile, ideal for photography.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Experiencing Nubian Eco Village",
+            "description": "Immerse yourselves in the authentic Nubian culture at the Nubian Eco Village, a chance to see traditional life and enjoy a serene environment.",
+            "cost": "EGP 200",
+            "rating": 4.2,
+            "reviews_count": 0
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Nubian Family Restaurant & Caffe at Rooftop",
+            "description": "Cross back to the East Bank for a charming lunch at Nubian Family Restaurant & Caffe, boasting rooftop views and delicious cafe fare.",
+            "cost": "EGP 250",
+            "rating": 5.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Discovering \u0643\u0644\u0627\u0628\u0634\u0647 \u0627\u0644\u062c\u062f\u064a\u062f\u0647",
+            "description": "Explore the area of \u0643\u0644\u0627\u0628\u0634\u0647 \u0627\u0644\u062c\u062f\u064a\u062f\u0647, a cultural site offering insights into local history and architecture.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Historic Fatimid Cemetery",
+            "description": "Visit the Fatimid Cemetery, an ancient burial ground providing a quiet space for reflection and a peek into Aswan's past.",
+            "cost": "EGP 200",
+            "rating": 3.8,
+            "reviews_count": 0
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "Viewing Replica of Nabta Playa",
+            "description": "Discover the Replica of Nabta Playa, an intriguing reconstruction that reflects ancient astronomical and architectural knowledge.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "08:00 PM - 09:00 PM",
+            "title": "Dinner at Panorama Restaurant & Bar",
+            "description": "Enjoy an evening meal at Panorama Restaurant & Bar, offering stunning views alongside its local and international menu.",
+            "cost": "EGP 250",
+            "rating": 4.3,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 4: December 10, 2026 - Grand Structures & Departure",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Insight into Nubian Culture at Nubian Museum",
+            "description": "Begin your final day at the acclaimed Nubian Museum, offering a comprehensive look at Nubian civilization, history, and art.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Ancient Wonders at Temple of Khnum",
+            "description": "Visit the Temple of Khnum, an ancient Egyptian temple dedicated to the ram-headed god Khnum, offering impressive architecture and history.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Saraya",
+            "description": "Enjoy a final lunch in Aswan at Saraya, revisiting a local favorite for its local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.2,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Nile Felucca & Dahabiya Tours with EgyptDiscovering",
+            "description": "Experience the timeless beauty of the Nile with a traditional Felucca or Dahabiya tour. This offers fantastic photography opportunities and a chance to enjoy the river, possibly including a camel riding experience on the banks.",
+            "cost": "EGP 200",
+            "rating": 5.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Cemetery Fatimid 2 Exploration",
+            "description": "Explore Cemetery Fatimid 2, another historical burial site that adds to Aswan's rich tapestry of cultural landmarks.",
+            "cost": "EGP 200",
+            "rating": 1.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "The Engineering Marvel of Assu\u00e3o-The High Dam",
+            "description": "Witness the grandeur of Assu\u00e3o-The High Dam, a modern engineering feat that significantly impacted Egypt's agriculture and economy. A significant site for understanding contemporary Egypt.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "08:00 PM - 09:00 PM",
+            "title": "Farewell Dinner at Oriental Kebabgy",
+            "description": "Enjoy your farewell dinner at Oriental Kebabgy, known for its delicious local and international flavors.",
+            "cost": "EGP 250",
+            "rating": 4.3,
+            "reviews_count": 0
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 3600 (3 nights at Old Cataract, Aswan)",
+      "Activities: EGP 4000 (20 attractions x EGP 200 average cost)",
+      "Food: EGP 2000 (8 meals x EGP 250 average cost)",
+      "Total Estimated On-ground Cost: EGP 9600"
+    ],
+    "landmarks": [
+      {
+        "id": "old_cataract_aswan",
+        "title": "Old Cataract, Aswan",
+        "description": "Historic luxury hotel in Aswan.",
+        "coordinate": {
+          "latitude": 24.082221,
+          "longitude": 32.8872717
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "animalia",
+        "title": "Animalia",
+        "description": "A popular tourist destination in Aswan with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 24.0894606,
+          "longitude": 32.8882436
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "monastery_of_st_simeon",
+        "title": "Monastery of St. Simeon",
+        "description": "A popular tourist destination in Aswan with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 24.0946041,
+          "longitude": 32.8757072
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "church_greek_parking",
+        "title": "Church Greek parking",
+        "description": "A popular tourist destination in Aswan with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 24.0871243,
+          "longitude": 32.893509
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "dr_magdy_yacoub_sq",
+        "title": "Dr. Magdy Yacoub Sq.",
+        "description": "A popular tourist destination in Aswan with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 24.0853848,
+          "longitude": 32.8912965
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "unfinished_obelisk",
+        "title": "Unfinished Obelisk",
+        "description": "A popular tourist destination in Aswan with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 24.0768973,
+          "longitude": 32.895437
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "kana_kato_restaurant_cafe",
+        "title": "Kana Kato Restaurant & cafe",
+        "description": "Local / International cuisine, Chef's Specials.",
+        "coordinate": {
+          "latitude": 24.0881142,
+          "longitude": 32.8889655
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "nubian_dreams_restaurant_cafe",
+        "title": "Nubian Dreams Restaurant & Cafe",
+        "description": "Local / International cuisine, Chef's Specials.",
+        "coordinate": {
+          "latitude": 24.089391,
+          "longitude": 32.8906208
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "aswan_museum",
+        "title": "Aswan Museum",
+        "description": "A popular tourist destination in Aswan with a rating of 4 stars.",
+        "coordinate": {
+          "latitude": 24.0850374,
+          "longitude": 32.8870269
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "birds_watching_house_movenpick_resort_aswan",
+        "title": "Birds watching House - M\u00f6venpick Resort Aswan",
+        "description": "A popular tourist destination in Aswan with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 24.093999,
+          "longitude": 32.8914678
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sandallia_jewlery",
+        "title": "Sandallia Jewlery",
+        "description": "A popular tourist destination in Aswan with a rating of 5 stars.",
+        "coordinate": {
+          "latitude": 24.0903215,
+          "longitude": 32.8955348
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "aswan_botanical_garden",
+        "title": "Aswan Botanical Garden",
+        "description": "A popular tourist destination in Aswan with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 24.0937382,
+          "longitude": 32.886956
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "walking_tour_with_fatma",
+        "title": "Walking tour with Fatma",
+        "description": "A popular tourist destination in Aswan with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 24.0892659,
+          "longitude": 32.8882388
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "saraya",
+        "title": "Saraya",
+        "description": "Local / International cuisine, Chef's Specials.",
+        "coordinate": {
+          "latitude": 24.0823314,
+          "longitude": 32.8876204
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "nuba_waidi_resturant_cafe",
+        "title": "Nuba Waidi Resturant&cafe",
+        "description": "Local / International cuisine, Chef's Specials.",
+        "coordinate": {
+          "latitude": 24.0879963,
+          "longitude": 32.8853269
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "dome_of_abu_al_hawa",
+        "title": "Dome of Abu Al-Hawa",
+        "description": "A popular tourist destination in Aswan with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 24.1018607,
+          "longitude": 32.8891289
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "fatimid_cemetery",
+        "title": "Fatimid Cemetery",
+        "description": "A popular tourist destination in Aswan with a rating of 3.8 stars.",
+        "coordinate": {
+          "latitude": 24.0778044,
+          "longitude": 32.8916639
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "nubian_eco_village",
+        "title": "Nubian Eco Village",
+        "description": "A popular tourist destination in Aswan with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 24.108851,
+          "longitude": 32.884882
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "replica_of_nabta_playa",
+        "title": "Replica of Nabta Playa",
+        "description": "A popular tourist destination in Aswan with a rating of 4 stars.",
+        "coordinate": {
+          "latitude": 24.0803147,
+          "longitude": 32.8887018
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "new_kalabsha",
+        "title": "\u0643\u0644\u0627\u0628\u0634\u0647 \u0627\u0644\u062c\u062f\u064a\u062f\u0647",
+        "description": "A popular tourist destination in Aswan with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 24.088938,
+          "longitude": 32.8998293
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "nubian_family_restaurant_caffe_at_rooftop",
+        "title": "Nubian Family Restaurant & caffe at rooftop",
+        "description": "Cafe / Patisserie, Chef's Specials.",
+        "coordinate": {
+          "latitude": 24.1077161,
+          "longitude": 32.8913402
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "panorama_restaurant_bar",
+        "title": "Panorama Restaurant & Bar",
+        "description": "Local / International cuisine, Chef's Specials.",
+        "coordinate": {
+          "latitude": 24.0932909,
+          "longitude": 32.8915469
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "nubian_museum",
+        "title": "Nubian Museum",
+        "description": "A popular tourist destination in Aswan with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 24.0794249,
+          "longitude": 32.8891749
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "egyptdiscovering_nile_felucca_dahabiya_tours",
+        "title": "EgyptDiscovering \u2013 Nile Felucca & Dahabiya Tours",
+        "description": "A popular tourist destination in Aswan with a rating of 5 stars.",
+        "coordinate": {
+          "latitude": 24.0899257,
+          "longitude": 32.8945799
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "assuao_the_high_dam",
+        "title": "Assu\u00e3o-The High Dam",
+        "description": "A popular tourist destination in Aswan with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 23.970883,
+          "longitude": 32.8772699
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "temple_of_khnum",
+        "title": "Temple of Khnum",
+        "description": "A popular tourist destination in Aswan with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 24.0846185,
+          "longitude": 32.88600280000001
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cemetery_fatimid_2",
+        "title": "Cemetery Fatimid 2",
+        "description": "A popular tourist destination in Aswan with a rating of 1 stars.",
+        "coordinate": {
+          "latitude": 24.0928008,
+          "longitude": 32.9033356
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "oriental_kebabgy",
+        "title": "Oriental Kebabgy",
+        "description": "Local / International cuisine, Chef's Specials.",
+        "coordinate": {
+          "latitude": 24.0816457,
+          "longitude": 32.8865261
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

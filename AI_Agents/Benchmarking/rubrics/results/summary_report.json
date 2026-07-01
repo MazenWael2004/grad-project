@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-07-01 15:39:45",
+  "total_runs": 35,
+  "valid_json_count": 35,
+  "schema_pass_rate": 100.0,
+  "judge_pass_count": 34,
+  "judge_pass_rate": 97.14,
+  "averages": {
+    "latency": 90.83,
+    "tokens": 4500.6,
+    "toolcalls": 0.0,
+    "turns": 1.0
+  },
+  "latency_stats": {
+    "min": 32.13,
+    "max": 151.4,
+    "median": 87.29
+  },
+  "assertions": {
+    "Travel Plan correctly strictly follows the schema.": 100.0,
+    "Accommodation suggestions are relevant to the city and user preferences.": 80.0,
+    "Budget constraints are respected throughout the itinerary.": 48.57142857142857,
+    "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).": 80.0
+  },
+  "failed_constraints": {
+    "Origin": 1
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "prompt_file": "trip_prompt_19_siwa.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Alexandria\nDestination: Siwa\nDates: 2026-06-11 to 2026-06-12\nBudget: Cheap\nParty: Only Me\nInterests: Cultural Exploration, Nile Cruise, Cultural Tourism, Photographing",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 1417,
+    "latency": {
+      "time_to_first_token": 32.13,
+      "output_tokens_per_sec": 27.11,
+      "time_to_last_token": 32.13
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan adheres to the expected JSON schema structure, including all required fields and correct data types."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The suggested accommodation (Siwa Paradise Hotel) is located in the destination city (Siwa) and aligns with the 'cheap' budget preference for a solo traveler, as indicated by the 'luxury_level' and 'trip_summary'."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": true,
+          "reason": "The plan is explicitly labeled as 'Cheap' and 'on a budget'. The estimated total cost (EGP 2600 excluding transport for 2 days) appears reasonable for a budget solo trip to Siwa."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": true,
+          "reason": "Activities for each day are structured chronologically, moving from morning check-in/activities, to lunch, afternoon explorations, and evening dinners, ensuring a logical flow."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints (destination, duration, budget, number of people, and dates) are met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Siwa Cultural Exploration",
+    "trip_summary": "An enriching cultural exploration trip from Cairo to the historical Siwa Oasis, focusing on unique archaeological sites and local cuisine, perfect for a solo traveler on a budget.",
+    "trip_dates": "June 11 - June 12, 2026",
+    "travelers_type": "Only Me",
+    "luxury_level": "Cheap",
+    "itinerary": [
+      {
+        "day": "Day 1: Arrival and Ancient Tombs",
+        "activities": [
+          {
+            "time": "10:00 AM - 11:00 AM",
+            "title": "Hotel Check-in: Siwa Paradise Hotel",
+            "description": "Arrive in Siwa and check into the Siwa Paradise Hotel, your comfortable base for this adventure. Take some time to settle in before heading out to explore.",
+            "cost": "EGP 1200",
+            "rating": 3.9,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.203014,25.522818"
+          },
+          {
+            "time": "12:00 PM - 01:00 PM",
+            "title": "Lunch at Tekeyet Elamir Restaurant & Caf\u00e9",
+            "description": "Enjoy a delicious lunch featuring local and international cuisine at Tekeyet Elamir Restaurant & Caf\u00e9, known for its Chef's Specials and high rating.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.2044983,25.5197243"
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Explore Gebel al-Mawta",
+            "description": "Spend your afternoon exploring Gebel al-Mawta, a popular tourist destination in Siwa known for its ancient tombs carved into the mountain. This site offers a glimpse into Siwa's rich history and is great for cultural tourism and photography.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.2113508,25.5251243"
+          },
+          {
+            "time": "07:00 PM - 08:00 PM",
+            "title": "Dinner at New Star Siwa",
+            "description": "Conclude your first day with dinner at New Star Siwa, offering a variety of local and international dishes. It's a convenient spot to enjoy a meal before heading back to your hotel.",
+            "cost": "EGP 250",
+            "rating": 3.9,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.2028825,25.5222397"
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Oasis Serenity and Local Flavors",
+        "activities": [
+          {
+            "time": "09:30 AM - 11:30 AM",
+            "title": "Discover Siwa Oasis",
+            "description": "Begin your day by immersing yourself in the tranquil beauty of the Siwa Oasis. This cultural gem offers stunning natural landscapes and a deep sense of peace, perfect for cultural exploration and capturing beautiful photographs.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.2031708,25.5195451"
+          },
+          {
+            "time": "12:00 PM - 01:00 PM",
+            "title": "Lunch at \u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648 \u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a",
+            "description": "Savor a delightful lunch at \u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648 \u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a, known for its grilled specialties and Arabic cuisine. A great place to experience local flavors.",
+            "cost": "EGP 250",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.2031708,25.5195451"
+          },
+          {
+            "time": "07:00 PM - 08:00 PM",
+            "title": "Farewell Dinner at Siwa Gate",
+            "description": "Enjoy your final dinner in Siwa at Siwa Gate, offering a selection of local and international dishes. Reflect on your cultural journey through the oasis.",
+            "cost": "EGP 250",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.2027133,25.5197402"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 1200",
+      "Activities & Attractions: EGP 400",
+      "Food & Dining: EGP 1000",
+      "Estimated Flights/Transportation: Not included",
+      "Total Estimated Trip Cost (Excluding Transport): EGP 2600"
+    ],
+    "landmarks": [
+      {
+        "id": "siwa_paradise_hotel",
+        "title": "Siwa Paradise Hotel",
+        "description": "Your accommodation in Siwa.",
+        "coordinate": {
+          "latitude": 29.203014,
+          "longitude": 25.522818
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "gebel_al_mawta",
+        "title": "Gebel al-Mawta",
+        "description": "A popular tourist destination in Siwa with ancient tombs.",
+        "coordinate": {
+          "latitude": 29.2113508,
+          "longitude": 25.5251243
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "tekeyet_elamir_restaurant_and_cafe",
+        "title": "Tekeyet Elamir Restaurant & Caf\u00e9",
+        "description": "Restaurant known for local and international cuisine.",
+        "coordinate": {
+          "latitude": 29.2044983,
+          "longitude": 25.5197243
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "new_star_siwa",
+        "title": "New Star Siwa",
+        "description": "Restaurant offering local and international dishes.",
+        "coordinate": {
+          "latitude": 29.2028825,
+          "longitude": 25.5222397
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "siwa_oasis",
+        "title": "Siwa Oasis",
+        "description": "A popular tourist destination for cultural exploration.",
+        "coordinate": {
+          "latitude": 29.2031708,
+          "longitude": 25.5195451
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "matam_mashawina_lil_mashawiyat_wal_akl_alarabi",
+        "title": "\u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648 \u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a",
+        "description": "Restaurant specializing in grilled and Arabic cuisine.",
+        "coordinate": {
+          "latitude": 29.2031708,
+          "longitude": 25.5195451
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "siwa_gate",
+        "title": "Siwa Gate",
+        "description": "Restaurant for local and international cuisine.",
+        "coordinate": {
+          "latitude": 29.2027133,
+          "longitude": 25.5197402
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

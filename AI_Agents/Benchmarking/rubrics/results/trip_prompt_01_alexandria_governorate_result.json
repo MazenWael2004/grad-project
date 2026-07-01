@@ -1,0 +1,527 @@
+{
+  "prompt_file": "trip_prompt_01_alexandria_governorate.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Cairo\nDestination: Alexandria Governorate\nDates: 2026-06-18 to 2026-06-19\nBudget: Luxury\nParty: Family\nInterests: Cultural Tourism, Eco Tourism",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 5052,
+    "latency": {
+      "time_to_first_token": 117.789,
+      "output_tokens_per_sec": 25.63,
+      "time_to_last_token": 117.791
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan JSON structure adheres to the specified schema, including top-level keys, nested lists for itinerary and landmarks, and required fields for each item."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The Cecil Hotel (Steigenberger) is located in Alexandria and described as 'luxurious' and 'elegant', aligning with the user's 'Luxury' preference and the destination city."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": true,
+          "reason": "The user requested a 'Luxury' budget, and the plan includes a luxurious hotel, several upscale restaurants, and details a budget breakdown consistent with a high-end trip, without imposing monetary limits."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": false,
+          "reason": "The daily activities are not logically ordered chronologically within a single day. Day 1's activities span from 8:00 AM on Day 1 to 11:30 AM on Day 2, including activities scheduled at 1:00 AM, 3:00 AM, 6:00 AM, 8:00 AM, and 10:00 AM on what would technically be the morning of Day 2."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints (destination, duration, budget level, number of people, and dates) are met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Alexandria Family Luxury Getaway",
+    "trip_summary": "Embark on a luxurious 2-day family adventure to Alexandria, Egypt, from June 18 to June 19, 2026. This itinerary focuses on cultural and eco-tourism experiences, staying at the elegant Cecil Hotel. Please note: This itinerary has been generated strictly adhering to the requirement to include *all* provided attractions and restaurants for each day, with their specified visit durations. This results in an extremely packed schedule that extends beyond typical daily hours, and significant travel time between locations has not been factored in. This plan may be unrealistic for actual implementation and should be adapted to suit your family's pace and preferences.",
+    "trip_dates": "June 18 - June 19, 2026",
+    "travelers_type": "Family",
+    "luxury_level": "Luxury",
+    "itinerary": [
+      {
+        "day": "Day 1: Thursday, June 18, 2026",
+        "activities": [
+          {
+            "time": "08:00 AM - 09:00 AM",
+            "title": "Hotel Check-in at Cecil Hotel (Steigenberger)",
+            "description": "Begin your Alexandria adventure with a smooth check-in process at the luxurious Cecil Hotel, conveniently located with beautiful views. Settle in and prepare for a day of exploration.",
+            "cost": "EGP 220"
+          },
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Citadel of Qaitbay in Alexandria",
+            "description": "Step back in time at this iconic 15th-century defensive fortress, offering stunning views of the Mediterranean Sea and rich history. A perfect start to your cultural journey.",
+            "cost": "EGP 300"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Mahmoud Said Museum in Alexandria Governorate 5451102",
+            "description": "Immerse yourselves in art and culture at the Mahmoud Said Museum, a highly-rated destination showcasing Egyptian artistic heritage.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Greek Club Restaurant",
+            "description": "Savor authentic Greek and fresh seafood dishes at the renowned Greek Club Restaurant, known for its Fried Calamari & Mezze and charming ambiance.",
+            "cost": "EGP 300"
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Alexandria Bibliotheca in \u0627\u0644\u0623\u0632\u0627\u0631\u064a\u0637\u0629 \u0648\u0627\u0644\u0634\u0627\u0637\u0628\u064a\u060c \u0628\u0627\u0628 \u0634\u0631\u0642\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0625\u0633\u0643\u0646\u062f\u0631\u064a\u0629 21526",
+            "description": "Explore the wonders of the Bibliotheca, a modern homage to the ancient Library of Alexandria. This cultural hub offers a wealth of knowledge and stunning architecture.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "04:00 PM - 07:00 PM",
+            "title": "Bibliotheca Alexandrina in Alexandria",
+            "description": "Delve deeper into this magnificent library and cultural center. Discover its vast collections and impressive design, a beacon of knowledge on the Mediterranean shore.",
+            "cost": "EGP 300"
+          },
+          {
+            "time": "07:00 PM - 09:00 PM",
+            "title": "Alexandria Ancient Roman Theater in Alexandria Governorate 21517",
+            "description": "Uncover the historical remnants of Alexandria's Roman past at this well-preserved theater, offering a glimpse into ancient entertainment and architecture.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "09:00 PM - 11:00 PM",
+            "title": "\u062a\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0634\u0631\u0639\u0647 \u0627\u0644\u0628\u064a\u0636\u0627\u0621 in \u0627\u0644\u0623\u0632\u0627\u0631\u064a\u0637\u0629 \u0648\u0627\u0644\u0634\u0627\u0637\u0628\u064a\u060c \u0628\u0627\u0628 \u0634\u0631\u0642\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0625\u0633\u0643\u0646\u062f\u0631\u064a\u0629 5424020",
+            "description": "Visit the Statue of White Sails, a local cultural landmark in the heart of Alexandria, offering a unique photo opportunity and insight into local artistry.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "11:00 PM - 01:00 AM",
+            "title": "Alsoyouf in Alexandria Governorate 5422015",
+            "description": "Experience another facet of Alexandria's vibrant culture at Alsoyouf, a popular local destination.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "01:00 AM - 03:00 AM",
+            "title": "Garden World War Victims in Alexandria Governorate 5422023",
+            "description": "Pay respects and find tranquility in the serene Garden World War Victims, a peaceful and reflective spot.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "03:00 AM - 06:00 AM",
+            "title": "Montaza Palace Gardens in Alexandria",
+            "description": "Wander through the extensive and beautiful gardens surrounding Montaza Palace. These tranquil grounds are perfect for relaxation and enjoying nature, even in the late hours as they remain open until midnight.",
+            "cost": "EGP 50"
+          },
+          {
+            "time": "06:00 AM - 08:00 AM",
+            "title": "Serapeum of Alexandria in Alexandria Governorate 5341142",
+            "description": "Explore the ancient Serapeum, a historical site dedicated to the god Serapis, offering fascinating insights into Alexandria's past religious practices.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "08:00 AM - 10:00 AM",
+            "title": "Catacombs of Kom el Shoqafa in Alexandria Governorate 5341042",
+            "description": "Descend into the Catacombs of Kom el Shoqafa, an impressive series of Alexandrian tombs blending Roman, Greek, and ancient Egyptian architectural styles.",
+            "cost": "EGP 150"
+          },
+          {
+            "time": "10:00 AM - 11:30 AM",
+            "title": "Dinner at Fish Market",
+            "description": "Conclude your day with a delightful late-night dinner at the Fish Market restaurant, renowned for its fresh Seafood, especially the Grilled Sea Bass.",
+            "cost": "EGP 350"
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Friday, June 19, 2026",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Royal Jewelry Museum Alexandria in Alexandria Governorate 5451010",
+            "description": "Marvel at the exquisite collection of royal jewels and artifacts housed in this magnificent museum, offering a glimpse into Egypt's opulent past.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Alexandria National Museum in \u0628\u0627\u0628 \u0634\u0631\u0642\u064a \u0648\u0648\u0627\u0628\u0648\u0631 \u0627\u0644\u0645\u064a\u0627\u0647\u060c \u0628\u0627\u0628 \u0634\u0631\u0642\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0625\u0633\u0643\u0646\u062f\u0631\u064a\u0629 5423004",
+            "description": "Discover Alexandria's rich history and diverse cultural heritage through the vast exhibits at the Alexandria National Museum.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "01:00 PM - 03:00 PM",
+            "title": "Cavafy Museum in Alexandria Governorate 5372021",
+            "description": "Step into the former residence of the renowned Greek poet Constantine P. Cavafy, preserved as a museum to honor his life and works.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "03:00 PM - 04:00 PM",
+            "title": "Lunch at Gleem Bay, Alexandria in Alexandria Governorate 5452033",
+            "description": "Enjoy a relaxing meal or a delicious treat at Gleem Bay, a popular cafe and patisserie known for its Chef's Specials and pleasant atmosphere.",
+            "cost": "EGP 250"
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Qaitbay Citadel in Alexandria Governorate 5321431",
+            "description": "Revisit or discover another perspective of the historic Qaitbay Citadel, a significant landmark and a testament to Alexandria's strategic importance.",
+            "cost": "EGP 300"
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "Roman Villa of the Birds in \u0627\u0644\u0645\u0633\u0644\u0629 \u0634\u0631\u0642\u060c \u0627\u0644\u0639\u0637\u0627\u0631\u064a\u0646\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0625\u0633\u0643\u0646\u062f\u0631\u064a\u0629 5371040",
+            "description": "Explore the stunning mosaics and remains of the Roman Villa of the Birds, offering a window into ancient Roman domestic life.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "08:00 PM - 10:00 PM",
+            "title": "Antoniades Palace in Alexandria Governorate 5432034",
+            "description": "Visit the historic Antoniades Palace, once a royal residence, known for its beautiful architecture and surrounding gardens.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "10:00 PM - 12:00 AM",
+            "title": "Montaza Palace in Alexandria Governorate 5527001",
+            "description": "Experience the grandeur of Montaza Palace, a former royal palace with impressive grounds and a rich history, now a public museum.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "12:00 AM - 02:00 AM",
+            "title": "Cornish Sporting in Alexandria Governorate 5424083",
+            "description": "Enjoy the vibrant atmosphere of Cornish Sporting, a popular cultural spot along Alexandria's scenic coastline.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "02:00 AM - 04:00 AM",
+            "title": "Alroshd Tourism in Alexandria Governorate 5411432",
+            "description": "Discover Alroshd Tourism, a highly-rated local destination offering unique cultural experiences.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "04:00 AM - 06:00 AM",
+            "title": "Jewel sculpture in Alexandria Governorate 5372066",
+            "description": "Admire the intricate Jewel sculpture, a notable piece of public art that contributes to Alexandria's cultural landscape.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "06:00 AM - 08:00 AM",
+            "title": "temple black head in Alexandria Governorate 5423020",
+            "description": "Visit the unique 'temple black head', a historical and cultural site in Alexandria.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "08:00 AM - 10:00 AM",
+            "title": "\u062c\u0648\u0644\u062f\u0646 \u0628\u064a\u062a\u0634 in Alexandria Governorate 5422015",
+            "description": "Enjoy a visit to Golden Beach (\u062c\u0648\u0644\u062f\u0646 \u0628\u064a\u062a\u0634), a popular spot along the coast, offering scenic views and a taste of local beach culture.",
+            "cost": "EGP 200"
+          },
+          {
+            "time": "10:00 AM - 11:30 AM",
+            "title": "Dinner at Portofino",
+            "description": "Savor a late-night meal or an early morning delight at Portofino, known for its delicious local and international Chef's Specials.",
+            "cost": "EGP 250"
+          },
+          {
+            "time": "11:30 AM - 12:00 PM",
+            "title": "Hotel Check-out from Cecil Hotel",
+            "description": "Conclude your memorable family trip with a smooth check-out from the Cecil Hotel, taking with you lasting memories of Alexandria.",
+            "cost": "EGP 0"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Flights/transport: EGP 500",
+      "Accommodation: EGP 220",
+      "Food: EGP 1150",
+      "Activities: EGP 4500",
+      "Total: EGP 6370"
+    ],
+    "landmarks": [
+      {
+        "id": "cecil_hotel",
+        "title": "Cecil Hotel (Steigenberger)",
+        "description": "Luxury hotel in Alexandria.",
+        "coordinate": {
+          "latitude": 31.2009,
+          "longitude": 29.8998
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "citadel_of_qaitbay",
+        "title": "Citadel of Qaitbay in Alexandria",
+        "description": "A 15th-century defensive fortress located on the Mediterranean sea coast.",
+        "coordinate": {
+          "latitude": 31.2131,
+          "longitude": 29.8856
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mahmoud_said_museum",
+        "title": "Mahmoud Said Museum in Alexandria Governorate 5451102",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.24439,
+          "longitude": 29.9690143
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alexandria_bibliotheca_alazareta",
+        "title": "Alexandria Bibliotheca in \u0627\u0644\u0623\u0632\u0627\u0631\u064a\u0637\u0629 \u0648\u0627\u0644\u0634\u0627\u0637\u0628\u064a\u060c \u0628\u0627\u0628 \u0634\u0631\u0642\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0625\u0633\u0643\u0646\u062f\u0631\u064a\u0629 21526",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 31.2089032,
+          "longitude": 29.9091587
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "bibliotheca_alexandrina_alexandria",
+        "title": "Bibliotheca Alexandrina in Alexandria",
+        "description": "A major library and cultural center on the shore of the Mediterranean Sea in the Egyptian city of Alexandria.",
+        "coordinate": {
+          "latitude": 31.2089,
+          "longitude": 29.9092
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alexandria_ancient_roman_theater",
+        "title": "Alexandria Ancient Roman Theater in Alexandria Governorate 21517",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 31.1945057,
+          "longitude": 29.903902
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alsoyouf",
+        "title": "Alsoyouf in Alexandria Governorate 5422015",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 31.2000924,
+          "longitude": 29.9187387
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "catacombs_of_kom_el_shoqafa",
+        "title": "Catacombs of Kom el Shoqafa in Alexandria Governorate 5341042",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.1787378,
+          "longitude": 29.8930706
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "garden_world_war_victims",
+        "title": "Garden World War Victims in Alexandria Governorate 5422023",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 31.2040066,
+          "longitude": 29.9223677
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "montaza_palace_gardens",
+        "title": "Montaza Palace Gardens in Alexandria",
+        "description": "A palace, museum and extensive gardens in the Montaza district of Alexandria, Egypt.",
+        "coordinate": {
+          "latitude": 31.2878,
+          "longitude": 30.0159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "serapeum_of_alexandria",
+        "title": "Serapeum of Alexandria in Alexandria Governorate 5341142",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 31.1823466,
+          "longitude": 29.8962872
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "statue_of_white_sails",
+        "title": "\u062a\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0634\u0631\u0639\u0647 \u0627\u0644\u0628\u064a\u0636\u0627\u0621 in \u0627\u0644\u0623\u0632\u0627\u0631\u064a\u0637\u0629 \u0648\u0627\u0644\u0634\u0627\u0637\u0628\u064a\u060c \u0628\u0627\u0628 \u0634\u0631\u0642\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0625\u0633\u0643\u0646\u062f\u0631\u064a\u0629 5424020",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.1 stars.",
+        "coordinate": {
+          "latitude": 31.2099314,
+          "longitude": 29.9086231
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "greek_club_restaurant",
+        "title": "Greek Club Restaurant in Alexandria",
+        "description": "Cuisine: Greek/Seafood, Specialty: Fried Calamari & Mezze",
+        "coordinate": {
+          "latitude": 31.2128,
+          "longitude": 29.8837
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "fish_market_restaurant",
+        "title": "Fish Market in Alexandria",
+        "description": "Cuisine: Seafood, Specialty: Grilled Sea Bass",
+        "coordinate": {
+          "latitude": 31.2115,
+          "longitude": 29.8902
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "royal_jewelry_museum_alexandria",
+        "title": "Royal Jewelry Museum Alexandria in Alexandria Governorate 5451010",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 31.2405929,
+          "longitude": 29.9632818
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alexandria_national_museum",
+        "title": "Alexandria National Museum in \u0628\u0627\u0628 \u0634\u0631\u0642\u064a \u0648\u0648\u0627\u0628\u0648\u0631 \u0627\u0644\u0645\u064a\u0627\u0647\u060c \u0628\u0627\u0628 \u0634\u0631\u0642\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0625\u0633\u0643\u0646\u062f\u0631\u064a\u0629 5423004",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 31.2007415,
+          "longitude": 29.9131977
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cavafy_museum",
+        "title": "Cavafy Museum in Alexandria Governorate 5372021",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 31.1975855,
+          "longitude": 29.9012432
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "qaitbay_citadel_governorate",
+        "title": "Qaitbay Citadel in Alexandria Governorate 5321431",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.2136987,
+          "longitude": 29.8853921
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alroshd_tourism",
+        "title": "Alroshd Tourism in Alexandria Governorate 5411432",
+        "description": "A popular tourist destination in Alexandria with a rating of 5 stars.",
+        "coordinate": {
+          "latitude": 31.1788926,
+          "longitude": 29.9371714
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cornish_sporting",
+        "title": "Cornish Sporting in Alexandria Governorate 5424083",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 31.2199985,
+          "longitude": 29.9286598
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "roman_villa_of_the_birds",
+        "title": "Roman Villa of the Birds in \u0627\u0644\u0645\u0633\u0644\u0629 \u0634\u0631\u0642\u060c \u0627\u0644\u0639\u0637\u0627\u0631\u064a\u0646\u060c \u0645\u062d\u0627\u0641\u0638\u0629 \u0627\u0644\u0625\u0633\u0643\u0646\u062f\u0631\u064a\u0629 5371040",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 31.1954085,
+          "longitude": 29.9053826
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "antoniades_palace",
+        "title": "Antoniades Palace in Alexandria Governorate 5432034",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 31.2022828,
+          "longitude": 29.9507256
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "jewel_sculpture",
+        "title": "Jewel sculpture in Alexandria Governorate 5372066",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 31.2022911,
+          "longitude": 29.9035882
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "montaza_palace_governorate",
+        "title": "Montaza Palace in Alexandria Governorate 5527001",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.2884642,
+          "longitude": 30.0159916
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "temple_black_head",
+        "title": "temple black head in Alexandria Governorate 5423020",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 31.2032194,
+          "longitude": 29.9188081
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "golden_beach",
+        "title": "\u062c\u0648\u0644\u062f\u0646 \u0628\u064a\u062a\u0634 in Alexandria Governorate 5422015",
+        "description": "A popular tourist destination in Alexandria with a rating of 4 stars.",
+        "coordinate": {
+          "latitude": 31.2000924,
+          "longitude": 29.9187387
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "gleem_bay_alexandria",
+        "title": "Gleem Bay, Alexandria in Alexandria Governorate 5452033",
+        "description": "Cuisine: Cafe / Patisserie, Specialty: Chef's Specials",
+        "coordinate": {
+          "latitude": 31.2428335,
+          "longitude": 29.9586036
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "portofino_restaurant",
+        "title": "Portofino in Alexandria Governorate 5452058",
+        "description": "Cuisine: Local / International, Specialty: Chef's Specials",
+        "coordinate": {
+          "latitude": 31.2523977,
+          "longitude": 29.9724562
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

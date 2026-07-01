@@ -1,0 +1,633 @@
+{
+  "prompt_file": "trip_prompt_17_giza_governorate.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: London\nDestination: Giza Governorate\nDates: 2026-10-13 to 2026-10-16\nBudget: Luxury\nParty: Friends\nInterests: Backpacking, Cultural Tourism",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 4913,
+    "latency": {
+      "time_to_first_token": 99.896,
+      "output_tokens_per_sec": 28.43,
+      "time_to_last_token": 99.898
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan JSON adheres to the expected schema, with all required fields present and correct data types used for each property."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The Barcelo Cairo Pyramids hotel is located in Giza and is suitable for a luxury budget and friends, aligning with the user's preferences."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": true,
+          "reason": "The user requested a 'Luxury' budget, and the plan explicitly identifies itself as 'Luxury', suggesting a hotel and activity costs that are consistent with a luxury travel experience in the region."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": true,
+          "reason": "For each day, the activities are listed in sequential order based on their specified 'time' slots, from morning to evening."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All constraints from the user query are satisfied by the travel plan. The destination, duration, dates, budget level, and traveler type all match the requirements.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Giza's Grandeur: A Luxury Friends' Expedition",
+    "trip_summary": "Embark on a captivating 4-day luxury journey through Giza with friends, exploring ancient wonders like the Pyramids and Sphinx, delving into rich cultural history, and enjoying exquisite local and international cuisine. This immersive trip blends historical exploration with modern comforts and unique experiences.",
+    "trip_dates": "Oct 13 - Oct 16, 2026",
+    "travelers_type": "Friends",
+    "luxury_level": "Luxury",
+    "itinerary": [
+      {
+        "day": "Day 1: Tuesday, October 13, 2026",
+        "activities": [
+          {
+            "time": "09:00 AM - 09:30 AM",
+            "title": "Hotel Check-in: Barcelo Cairo Pyramids",
+            "description": "Arrive in Giza and check into the comfortable Barcelo Cairo Pyramids hotel, your base for exploring the wonders of ancient Egypt. Settle in and prepare for an adventure-filled day.",
+            "cost": "EGP 0",
+            "rating": 4.4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9996657,31.1763313"
+          },
+          {
+            "time": "09:30 AM - 12:30 PM",
+            "title": "Majesty of the Pyramids of Giza",
+            "description": "Begin your journey by standing in awe before the iconic Pyramids of Giza, one of the Seven Wonders of the Ancient World. Explore the grandeur and mystery of these colossal structures.",
+            "cost": "EGP 700",
+            "rating": 0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9792,31.1342"
+          },
+          {
+            "time": "12:30 PM - 02:30 PM",
+            "title": "Giza Necropolis Exploration",
+            "description": "Delve deeper into the ancient burial grounds of the Giza Necropolis, an archaeological site that offers profound insights into ancient Egyptian civilization and monumental architecture.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9772962,31.1324955"
+          },
+          {
+            "time": "02:30 PM - 03:30 PM",
+            "title": "Lunch at Khufu's Restaurant",
+            "description": "Savor a delicious lunch at Khufu's Restaurant, offering local and international cuisine with chef's specials, providing a perfect break amidst your historical exploration.",
+            "cost": "EGP 550",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9783323,31.1242706"
+          },
+          {
+            "time": "03:30 PM - 05:30 PM",
+            "title": "Visit \u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634",
+            "description": "Continue your cultural immersion at \u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634, a popular destination in Giza known for its historical and cultural significance.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0266743,31.2300227"
+          },
+          {
+            "time": "05:30 PM - 07:30 PM",
+            "title": "Experience Pioneer travel Egypt",
+            "description": "Engage with the local culture and history at Pioneer travel Egypt, another significant cultural landmark offering unique insights into the region.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9624953,31.1821089"
+          },
+          {
+            "time": "07:30 PM - 09:30 PM",
+            "title": "Cleopatra Museum Visit",
+            "description": "Conclude your day's attractions with a visit to the Cleopatra Museum, exploring artifacts and exhibits related to the famous queen and ancient Egypt.",
+            "cost": "EGP 200",
+            "rating": 2.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9976768,31.2153739"
+          },
+          {
+            "time": "09:30 PM - 10:30 PM",
+            "title": "Dinner at Rooftop 7000",
+            "description": "Enjoy a delightful dinner at Rooftop 7000, offering local and international cuisine in a vibrant setting, perfect for unwinding after a day of exploration.",
+            "cost": "EGP 250",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.97458899999999,31.1410312"
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Wednesday, October 14, 2026",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Encounter the Great Sphinx of Giza",
+            "description": "Marvel at the enigmatic Great Sphinx of Giza, a mythical creature with the body of a lion and the head of a human, guarding the ancient pyramids.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9752687,31.1375674"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Discover the Valley Temple of Khafre",
+            "description": "Explore the Valley Temple of Khafre, a mortuary temple used for the mummification of King Khafre, offering a glimpse into ancient Egyptian funerary rituals.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9747367,31.1383572"
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Rooftop 7000",
+            "description": "Enjoy another delicious meal at Rooftop 7000, known for its local and international cuisine and pleasant ambiance.",
+            "cost": "EGP 250",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.97458899999999,31.1410312"
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Visit SPHINX FOUNTAIN (ABOTALEB BRG.)",
+            "description": "Discover SPHINX FOUNTAIN (ABOTALEB BRG.), a site with cultural significance near the Sphinx area, adding to your understanding of Giza's landscape.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9789767,31.1445531"
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Explore \u0633\u0631\u0627\u0649 \u0627\u0644\u0625\u0633\u062a\u0642\u0628\u0627\u0644",
+            "description": "Continue your cultural exploration at \u0633\u0631\u0627\u0649 \u0627\u0644\u0625\u0633\u062a\u0642\u0628\u0627\u0644, a popular and highly-rated destination in Giza.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0287043,31.2298051"
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "Visit \u0628\u0631\u062c \u0627\u0644\u0633\u0627\u0639\u0629",
+            "description": "Take time to see \u0628\u0631\u062c \u0627\u0644\u0633\u0627\u0639\u0629, another interesting cultural point in Giza, offering unique architecture and atmosphere.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0286786,31.2296709"
+          },
+          {
+            "time": "08:00 PM - 10:00 PM",
+            "title": "Experience Sphinx Tours",
+            "description": "Embark on Sphinx Tours to deepen your understanding of the area's history and legends, even if it's a less-known gem.",
+            "cost": "EGP 200",
+            "rating": 1,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.97530799999999,31.1417362"
+          },
+          {
+            "time": "10:00 PM - 11:00 PM",
+            "title": "Dinner at The Rooftop",
+            "description": "Cap off your day with dinner at The Rooftop, offering a relaxed setting and a selection of local and international dishes.",
+            "cost": "EGP 250",
+            "rating": 3.8,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9750742,31.1416684"
+          }
+        ]
+      },
+      {
+        "day": "Day 3: Thursday, October 15, 2026",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Ascend Cairo Tower",
+            "description": "Start your day with panoramic views of Cairo and Giza from the iconic Cairo Tower, a modern marvel offering breathtaking vistas of the city.",
+            "cost": "EGP 250",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.046522,31.22429889999999"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Journey to Pharaonic Village",
+            "description": "Step back in time at the Pharaonic Village, an interactive open-air museum that brings ancient Egypt to life through live reenactments and exhibits.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9973428,31.2147895"
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Dahabiya Cairo",
+            "description": "Enjoy a delightful lunch at Dahabiya Cairo, known for its high-rated local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0446422,31.2193938"
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Capture the Panoramic view",
+            "description": "Visit the Panoramic view point, offering stunning vistas of the Giza Plateau, perfect for memorable photos and appreciating the vastness of the ancient site.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9695817,31.12565279999999"
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Discover Cairo, Egito.",
+            "description": "Explore the area known as Cairo, Egito., soaking in the local atmosphere and finding hidden cultural gems.",
+            "cost": "EGP 200",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0130557,31.2088526"
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "See \u062a\u0645\u062b\u0627\u0644 \u0643\u0644\u064a\u0648\u0628\u0627\u062a\u0631\u0627",
+            "description": "Visit the statue of Cleopatra, a cultural landmark that pays homage to one of Egypt's most famous historical figures.",
+            "cost": "EGP 200",
+            "rating": 3.8,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0285069,31.2081171"
+          },
+          {
+            "time": "08:00 PM - 09:00 PM",
+            "title": "Dinner at Aspero Restaurant & Lounge",
+            "description": "Indulge in dinner at Aspero Restaurant & Lounge, a highly-rated spot offering cafe and patisserie specialties.",
+            "cost": "EGP 250",
+            "rating": 4.4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0262856,31.21818"
+          }
+        ]
+      },
+      {
+        "day": "Day 4: Friday, October 16, 2026",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Explore the Pyramid of Khafre",
+            "description": "Visit the Pyramid of Khafre, the second tallest of the ancient Egyptian Pyramids of Giza, offering more insights into the pharaonic era.",
+            "cost": "EGP 700",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9759954,31.1309285"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Ahmed Shawky Museum Visit",
+            "description": "Immerse yourself in literature and history at the Ahmed Shawky Museum, dedicated to the renowned Egyptian poet.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0213434,31.2174793"
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Khufu's Restaurant",
+            "description": "Enjoy a final lunch at Khufu's Restaurant, revisiting its acclaimed local and international cuisine.",
+            "cost": "EGP 550",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9783323,31.1242706"
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Discover \u0645\u0646\u0637\u0642\u0629 \u0627\u0647\u0631\u0627\u0645\u0627\u062a \u0627\u0644\u062c\u064a\u0632\u0629",
+            "description": "Explore the wider area of \u0645\u0646\u0637\u0642\u0629 \u0627\u0647\u0631\u0627\u0645\u0627\u062a \u0627\u0644\u062c\u064a\u0632\u0629, soaking in the historical atmosphere and discovering more facets of this grand site.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9798375,31.1499942"
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Enjoy a Boat tour",
+            "description": "Embark on a relaxing boat tour, offering unique perspectives of the Giza landscape and waterways.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9971471,31.2168782"
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "Visit \u0645\u064a\u0646\u0627\u0621 \u0627\u0644\u0642\u0631\u064a\u0629",
+            "description": "Conclude your sightseeing with a visit to \u0645\u064a\u0646\u0627\u0621 \u0627\u0644\u0642\u0631\u064a\u0629, a charming cultural spot in Giza.",
+            "cost": "EGP 200",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9959467,31.2160239"
+          },
+          {
+            "time": "08:00 PM - 09:00 PM",
+            "title": "Dinner at 9 Pyramids Lounge",
+            "description": "Savor your farewell dinner at 9 Pyramids Lounge, offering a unique dining experience, perhaps with a view of the illuminated pyramids.",
+            "cost": "EGP 550",
+            "rating": 4.2,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=29.9677783,31.1319209"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 3600 (3 nights at Barcelo Cairo Pyramids)",
+      "Food: EGP 2900 (estimated for 4 lunches and 4 dinners)",
+      "Activities: EGP 5250 (entrance fees and tours)",
+      "Flights/Transport: Not included",
+      "Total Estimated Trip Cost: EGP 11750"
+    ],
+    "landmarks": [
+      {
+        "id": "barcelo_cairo_pyramids",
+        "title": "Barcelo Cairo Pyramids",
+        "description": "Your luxury hotel in Giza.",
+        "coordinate": {
+          "latitude": 29.9996657,
+          "longitude": 31.1763313
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "giza_necropolis",
+        "title": "Giza Necropolis",
+        "description": "Ancient burial ground including pyramids and tombs.",
+        "coordinate": {
+          "latitude": 29.9772962,
+          "longitude": 31.1324955
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "pyramids_of_giza",
+        "title": "Pyramids of Giza",
+        "description": "Iconic ancient Egyptian pyramids and the Great Sphinx.",
+        "coordinate": {
+          "latitude": 29.9792,
+          "longitude": 31.1342
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "saray_al_arsh",
+        "title": "\u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 30.0266743,
+          "longitude": 31.2300227
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "pioneer_travel_egypt",
+        "title": "Pioneer travel Egypt",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.9624953,
+          "longitude": 31.1821089
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cleopatra_museum",
+        "title": "Cleopatra Museum",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.9976768,
+          "longitude": 31.2153739
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "khufus_restaurant",
+        "title": "Khufu's Restaurant",
+        "description": "Local / International cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 29.9783323,
+          "longitude": 31.1242706
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "rooftop_7000",
+        "title": "Rooftop 7000",
+        "description": "Local / International cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 29.97458899999999,
+          "longitude": 31.1410312
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "great_sphinx_of_giza",
+        "title": "Great Sphinx of Giza",
+        "description": "Iconic limestone statue of a mythical creature.",
+        "coordinate": {
+          "latitude": 29.9752687,
+          "longitude": 31.1375674
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sphinx_fountain",
+        "title": "SPHINX FOUNTAIN (ABOTALEB BRG.)",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.9789767,
+          "longitude": 31.1445531
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "valley_temple_of_khafre",
+        "title": "Valley Temple of Khafre",
+        "description": "Ancient temple used for mummification rituals.",
+        "coordinate": {
+          "latitude": 29.9747367,
+          "longitude": 31.1383572
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "saray_al_istiqbal",
+        "title": "\u0633\u0631\u0627\u0649 \u0627\u0644\u0625\u0633\u062a\u0642\u0628\u0627\u0644",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 30.0287043,
+          "longitude": 31.2298051
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "burj_al_sa_a",
+        "title": "\u0628\u0631\u062c \u0627\u0644\u0633\u0627\u0639\u0629",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 30.0286786,
+          "longitude": 31.2296709
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sphinx_tours",
+        "title": "Sphinx Tours",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.97530799999999,
+          "longitude": 31.1417362
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "the_rooftop",
+        "title": "The Rooftop",
+        "description": "Local / International cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 29.9750742,
+          "longitude": 31.1416684
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "cairo_tower",
+        "title": "Cairo Tower",
+        "description": "Modern tower offering panoramic views of Cairo.",
+        "coordinate": {
+          "latitude": 30.046522,
+          "longitude": 31.22429889999999
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "panoramic_view",
+        "title": "Panoramic view",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.9695817,
+          "longitude": 31.12565279999999
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cairo_egito",
+        "title": "Cairo, Egito.",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 30.0130557,
+          "longitude": 31.2088526
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "pharaonic_village",
+        "title": "Pharaonic Village",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.9973428,
+          "longitude": 31.2147895
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "temsal_cleopatra",
+        "title": "\u062a\u0645\u062b\u0627\u0644 \u0643\u0644\u064a\u0648\u0628\u0627\u062a\u0631\u0627",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 30.0285069,
+          "longitude": 31.2081171
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "dahabiya_cairo",
+        "title": "Dahabiya Cairo",
+        "description": "Local / International cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 30.0446422,
+          "longitude": 31.2193938
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "aspero_restaurant_lounge",
+        "title": "Aspero Restaurant & Lounge",
+        "description": "Cafe / Patisserie with Chef's Specials.",
+        "coordinate": {
+          "latitude": 30.0262856,
+          "longitude": 31.21818
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "pyramid_of_khafre",
+        "title": "Pyramid of Khafre",
+        "description": "The second tallest pyramid at Giza.",
+        "coordinate": {
+          "latitude": 29.9759954,
+          "longitude": 31.1309285
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "ahmed_shawky_museum",
+        "title": "Ahmed Shawky Museum",
+        "description": "Museum dedicated to the renowned Egyptian poet.",
+        "coordinate": {
+          "latitude": 30.0213434,
+          "longitude": 31.2174793
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mantaqat_ahramat_al_giza",
+        "title": "\u0645\u0646\u0637\u0642\u0629 \u0627\u0647\u0631\u0627\u0645\u0627\u062a \u0627\u0644\u062c\u064a\u0632\u0629",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.9798375,
+          "longitude": 31.1499942
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "boat_tour",
+        "title": "Boat tour",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.9971471,
+          "longitude": 31.2168782
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mina_al_qariya",
+        "title": "\u0645\u064a\u0646\u0627\u0621 \u0627\u0644\u0642\u0631\u064a\u0629",
+        "description": "A popular cultural destination in Giza.",
+        "coordinate": {
+          "latitude": 29.9959467,
+          "longitude": 31.2160239
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "9_pyramids_lounge",
+        "title": "9 Pyramids Lounge",
+        "description": "Local / International cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 29.9677783,
+          "longitude": 31.1319209
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

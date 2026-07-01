@@ -1,0 +1,558 @@
+{
+  "prompt_file": "trip_prompt_27_luxor_governorate.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Cairo\nDestination: Luxor Governorate\nDates: 2026-06-20 to 2026-06-21\nBudget: Luxury\nParty: Only Me\nInterests: Cultural Tourism, Road Trips, Photographing, Cultural Exploration",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 4584,
+    "latency": {
+      "time_to_first_token": 133.369,
+      "output_tokens_per_sec": 18.83,
+      "time_to_last_token": 133.374
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan adheres to the provided JSON schema, with all fields correctly typed and structured."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The suggested 'Sofitel Winter Palace Luxor' is a well-known luxury hotel in Luxor, fitting the 'Luxury' budget preference."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": false,
+          "reason": "The plan states a 'Luxury' budget, but the estimated accommodation cost (EGP 350) and total estimated cost (EGP 7670) for 2 days are unrealistically low for a luxury trip to Luxor, especially for a single traveler and including flights (even if 'to be determined'). A single night at a luxury hotel like Sofitel Winter Palace would far exceed EGP 350."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": false,
+          "reason": "Many activities are scheduled in the middle of the night (e.g., Luxor Temple until 1:15 AM, 'Bird guides' from 1:30 AM to 3:30 AM, 'Mortuary Temple of Hatshepsut' from 11:00 PM to 01:00 AM on Day 2). This is not chronologically logical or realistic for tourist activities."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints (Destination, Duration, Budget level, Number of People, and Dates) are met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Luxor: Ancient Wonders & Cultural Immersion",
+    "trip_summary": "An intensive two-day luxury solo journey through the historical marvels of Luxor Governorate, focusing on cultural exploration, photography, and ancient Egyptian history from Cairo, Egypt.",
+    "trip_dates": "Jun 20 - Jun 21, 2026",
+    "travelers_type": "Only Me",
+    "luxury_level": "Luxury",
+    "itinerary": [
+      {
+        "day": "Day 1: West Bank Tombs & East Bank Temples",
+        "activities": [
+          {
+            "time": "07:00 AM - 10:00 AM",
+            "title": "Valley of the Kings",
+            "description": "Embark on an early morning exploration of the Valley of the Kings, where rock-cut tombs were excavated for pharaohs for nearly 500 years. This site is a must-see for history and culture enthusiasts. (Visit Duration: 3.0 hours)",
+            "cost": "EGP 600",
+            "rating": 5.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7401,32.6018"
+          },
+          {
+            "time": "10:15 AM - 12:15 PM",
+            "title": "Tombs of the Nobles",
+            "description": "Discover the beautifully decorated Tombs of the Nobles, offering a glimpse into the daily lives of ancient Egyptian dignitaries. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7307509,32.6093397"
+          },
+          {
+            "time": "12:30 PM - 02:30 PM",
+            "title": "Colossi of Memnon",
+            "description": "Stand before the colossal statues of Amenhotep III, known as the Colossi of Memnon. These massive stone statues are an impressive photographic subject. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7203984,32.6104276"
+          },
+          {
+            "time": "02:45 PM - 03:45 PM",
+            "title": "Lunch at Al Sahaby Lane Restaurant",
+            "description": "Enjoy a delightful lunch with Chef's Specials at Al Sahaby Lane Restaurant, offering local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7016124,32.6421777"
+          },
+          {
+            "time": "04:00 PM - 06:30 PM",
+            "title": "Karnak Temple",
+            "description": "Explore the vast Karnak Temple Complex, a sprawling array of decayed temples, pylons, and chapels, showcasing millennia of ancient Egyptian architecture and history. (Visit Duration: 2.5 hours)",
+            "cost": "EGP 450",
+            "rating": 5.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7188,32.6586"
+          },
+          {
+            "time": "06:45 PM - 08:45 PM",
+            "title": "Mummification Museum",
+            "description": "Delve into the fascinating process of mummification at this unique museum in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7023166,32.6398497"
+          },
+          {
+            "time": "09:00 PM - 11:00 PM",
+            "title": "Luxor Temple Ticket Office",
+            "description": "Pass by the Luxor Temple Ticket Office, an initial stop before entering the grand Luxor Temple. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 400",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.700508,32.6407155"
+          },
+          {
+            "time": "11:15 PM - 01:15 AM",
+            "title": "Luxor Temple",
+            "description": "Experience the Luxor Temple, a magnificent ancient Egyptian temple complex located on the east bank of the Nile River. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 400",
+            "rating": 4.8,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.699502,32.6390509"
+          },
+          {
+            "time": "01:30 AM - 03:30 AM",
+            "title": "Bird guides",
+            "description": "A popular tourist destination in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.6872431,32.6396357"
+          },
+          {
+            "time": "03:45 AM - 05:45 AM",
+            "title": "Luxor Sign",
+            "description": "A popular tourist destination in Luxor, perfect for a quick photo opportunity. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.2,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.698,32.6387222"
+          },
+          {
+            "time": "06:00 AM - 08:00 AM",
+            "title": "Maadi Square",
+            "description": "A popular tourist destination in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7073327,32.6460651"
+          },
+          {
+            "time": "08:15 AM - 10:15 AM",
+            "title": "Queen\u2019s Island",
+            "description": "A popular tourist destination in Luxor, offering serene views. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.1,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.6655365,32.6192598"
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Royal Mortuary Temples & Local Culture",
+        "activities": [
+          {
+            "time": "10:30 AM - 12:30 PM",
+            "title": "Karnak",
+            "description": "Revisit a different aspect of the Karnak complex, focusing on specific exhibits or overlooked areas. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 450",
+            "rating": 4.8,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7188346,32.6572703"
+          },
+          {
+            "time": "12:45 PM - 02:45 PM",
+            "title": "Luxor Museum",
+            "description": "Immerse yourself in the rich history of ancient Egypt at the Luxor Museum, home to a collection of artifacts from the area. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7076132,32.6445491"
+          },
+          {
+            "time": "03:00 PM - 05:00 PM",
+            "title": "Temple of Hatshepsut",
+            "description": "Visit the Mortuary Temple of Hatshepsut, a stunning example of New Kingdom architecture built for the female pharaoh Hatshepsut. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 360",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7382,32.6074"
+          },
+          {
+            "time": "05:15 PM - 06:15 PM",
+            "title": "Lunch at Kaya Restoz",
+            "description": "Enjoy a relaxing lunch with Chef's Specials at Kaya Restoz, a charming cafe and patisserie.",
+            "cost": "EGP 250",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7074942,32.6438192"
+          },
+          {
+            "time": "06:30 PM - 08:30 PM",
+            "title": "First Pylon Luxor Temple",
+            "description": "Explore the impressive First Pylon of Luxor Temple, an integral part of the grand temple complex. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 400",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7003035,32.6396669"
+          },
+          {
+            "time": "08:45 PM - 10:45 PM",
+            "title": "Gateway of Ptolemy III Euergetes",
+            "description": "Discover the Gateway of Ptolemy III Euergetes, an ancient structure within the Karnak complex. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 5.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.71609,32.6554857"
+          },
+          {
+            "time": "11:00 PM - 01:00 AM",
+            "title": "Mortuary Temple of Hatshepsut",
+            "description": "A popular tourist destination in Luxor, offering another perspective on the Queen's grand temple. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 360",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7382773,32.6064906"
+          },
+          {
+            "time": "01:15 AM - 03:15 AM",
+            "title": "Banana Island Sara",
+            "description": "A popular tourist destination in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 3.9,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.6850102,32.6210945"
+          },
+          {
+            "time": "03:30 AM - 05:30 AM",
+            "title": "JIMMY GUIDEZILLA-PRIVATE EGYPT TOURS BY AHMED KHATTAB",
+            "description": "A popular tourist destination in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.6872431,32.6396357"
+          },
+          {
+            "time": "05:45 AM - 07:45 AM",
+            "title": "Luxor Tours & Excursions",
+            "description": "A popular tourist destination in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.6872236,32.6362231"
+          },
+          {
+            "time": "08:00 AM - 10:00 AM",
+            "title": "Mado Tourguide Luxor",
+            "description": "A popular tourist destination in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.7026671,32.6326869"
+          },
+          {
+            "time": "10:15 AM - 12:15 PM",
+            "title": "Necropoli (cimitero) tomba di Neferrenpet",
+            "description": "A popular tourist destination in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.6872431,32.6396357"
+          },
+          {
+            "time": "12:30 PM - 02:30 PM",
+            "title": "\u0627\u0644\u0627\u0642\u0635\u0631 \u0648\u0627\u0633\u0648\u0627\u0646",
+            "description": "A popular tourist destination in Luxor. (Visit Duration: 2.0 hours)",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=25.6872431,32.6396357"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 350",
+      "Food: EGP 1000",
+      "Activities: EGP 6320",
+      "Flights/Transport: To be determined",
+      "Total Estimated Cost: EGP 7670"
+    ],
+    "landmarks": [
+      {
+        "id": "sofitel_winter_palace_luxor",
+        "title": "Sofitel Winter Palace Luxor",
+        "description": "Your luxury accommodation in Luxor.",
+        "coordinate": {
+          "latitude": 25.6987,
+          "longitude": 32.6386
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "karnak_temple",
+        "title": "Karnak Temple",
+        "description": "The Karnak Temple Complex comprises a vast mix of decayed temples, pylons, chapels, and other buildings near Luxor.",
+        "coordinate": {
+          "latitude": 25.7188,
+          "longitude": 32.6586
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "valley_of_the_kings",
+        "title": "Valley of the Kings",
+        "description": "A valley in Egypt where, for a period of nearly 500 years from the 16th to 11th century BC, rock-cut tombs were excavated for the pharaohs.",
+        "coordinate": {
+          "latitude": 25.7401,
+          "longitude": 32.6018
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mummification_museum",
+        "title": "Mummification Museum",
+        "description": "A popular tourist destination in Luxor with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 25.7023166,
+          "longitude": 32.6398497
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "colossi_of_memnon",
+        "title": "Colossi of Memnon",
+        "description": "A popular tourist destination in Luxor with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 25.7203984,
+          "longitude": 32.6104276
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_temple",
+        "title": "Luxor Temple",
+        "description": "A popular tourist destination in Luxor with a rating of 4.8 stars.",
+        "coordinate": {
+          "latitude": 25.699502,
+          "longitude": 32.6390509
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_temple_ticket_office",
+        "title": "Luxor Temple Ticket Office",
+        "description": "A popular tourist destination in Luxor with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 25.700508,
+          "longitude": 32.6407155
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "bird_guides",
+        "title": "Bird guides",
+        "description": "A popular tourist destination in Luxor with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 25.6872431,
+          "longitude": 32.6396357
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_sign",
+        "title": "Luxor Sign",
+        "description": "A popular tourist destination in Luxor with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 25.698,
+          "longitude": 32.6387222
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "maadi_square",
+        "title": "Maadi Square",
+        "description": "A popular tourist destination in Luxor with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 25.7073327,
+          "longitude": 32.6460651
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "queen_s_island",
+        "title": "Queen\u2019s Island",
+        "description": "A popular tourist destination in Luxor with a rating of 4.1 stars.",
+        "coordinate": {
+          "latitude": 25.6655365,
+          "longitude": 32.6192598
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "tombs_of_the_nobles",
+        "title": "Tombs of the Nobles",
+        "description": "A popular tourist destination in Luxor with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 25.7307509,
+          "longitude": 32.6093397
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "kaya_restoz",
+        "title": "Kaya Restoz",
+        "description": "Restaurant for lunch or dinner.",
+        "coordinate": {
+          "latitude": 25.7074942,
+          "longitude": 32.6438192
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "al_sahaby_lane_restaurant",
+        "title": "Al Sahaby Lane Restaurant",
+        "description": "Restaurant for lunch or dinner.",
+        "coordinate": {
+          "latitude": 25.7016124,
+          "longitude": 32.6421777
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "karnak_day2",
+        "title": "Karnak",
+        "description": "A popular tourist destination in Luxor with a rating of 4.8 stars.",
+        "coordinate": {
+          "latitude": 25.7188346,
+          "longitude": 32.6572703
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_museum",
+        "title": "Luxor Museum",
+        "description": "A popular tourist destination in Luxor with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 25.7076132,
+          "longitude": 32.6445491
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "temple_of_hatshepsut",
+        "title": "Temple of Hatshepsut",
+        "description": "The Mortuary Temple of Hatshepsut is a mortuary temple of Ancient Egypt built for the Eighteenth Dynasty pharaoh Hatshepsut.",
+        "coordinate": {
+          "latitude": 25.7382,
+          "longitude": 32.6074
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "first_pylon_luxor_temple",
+        "title": "First Pylon Luxor Temple",
+        "description": "A popular tourist destination in Luxor with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 25.7003035,
+          "longitude": 32.6396669
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "gateway_of_ptoLemy_iii_euergetes",
+        "title": "Gateway of Ptolemy III Euergetes",
+        "description": "A popular tourist destination in Luxor with a rating of 5 stars.",
+        "coordinate": {
+          "latitude": 25.71609,
+          "longitude": 32.6554857
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mortuary_temple_of_hatshepsut",
+        "title": "Mortuary Temple of Hatshepsut",
+        "description": "A popular tourist destination in Luxor with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 25.7382773,
+          "longitude": 32.6064906
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "banana_island_sara",
+        "title": "Banana Island Sara",
+        "description": "A popular tourist destination in Luxor with a rating of 3.9 stars.",
+        "coordinate": {
+          "latitude": 25.6850102,
+          "longitude": 32.6210945
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "jimmy_guidezilla_private_egypt_tours_by_ahmed_khattab",
+        "title": "JIMMY GUIDEZILLA-PRIVATE EGYPT TOURS BY AHMED KHATTAB",
+        "description": "A popular tourist destination in Luxor with a rating of 4 stars.",
+        "coordinate": {
+          "latitude": 25.6872431,
+          "longitude": 32.6396357
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_tours_excursions",
+        "title": "Luxor Tours & Excursions",
+        "description": "A popular tourist destination in Luxor with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 25.6872236,
+          "longitude": 32.6362231
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mado_tourguide_luxor",
+        "title": "Mado Tourguide Luxor",
+        "description": "A popular tourist destination in Luxor with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 25.7026671,
+          "longitude": 32.6326869
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "necropoli_cimitero_tomba_di_neferrenpet",
+        "title": "Necropoli (cimitero) tomba di Neferrenpet",
+        "description": "A popular tourist destination in Luxor with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 25.6872431,
+          "longitude": 32.6396357
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "al_aqsur_wa_aswan",
+        "title": "\u0627\u0644\u0627\u0642\u0635\u0631 \u0648\u0627\u0633\u0648\u0627\u0646",
+        "description": "A popular tourist destination in Luxor with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 25.6872431,
+          "longitude": 32.6396357
+        },
+        "color": "#EF4444"
+      }
+    ]
+  }
+}

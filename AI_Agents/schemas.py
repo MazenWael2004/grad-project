@@ -1,7 +1,15 @@
 from pydantic import BaseModel, Field
 
 
+class ConstraintResult(BaseModel):
+    """Output schema for the constraint-only judge agent."""
+    passed: bool = Field(description="Whether the travel plan satisfies all user constraints.")
+    reason: str = Field(description="A brief explanation of why it passed or failed.")
+    failed_constraints: list[str] = Field(description="List of specific constraints that were not met.")
+
+
 class Criterion(BaseModel):
+    """Combined evaluation result used for full benchmark reports."""
     passed: bool = Field(description="Whether the travel plan satisfies all constraints.")
     reason: str = Field(description="A brief explanation of why it passed or failed.")
     failed_constraints: list[str] = Field(description="List of specific constraints that were not met.")

@@ -1,0 +1,568 @@
+{
+  "prompt_file": "trip_prompt_24_alexandria_governorate.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Riyadh\nDestination: Alexandria Governorate\nDates: 2026-11-06 to 2026-11-07\nBudget: Cheap\nParty: Friends\nInterests: Food Tourism, Cultural Tourism, Road Trips",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 4723,
+    "latency": {
+      "time_to_first_token": 128.352,
+      "output_tokens_per_sec": 20.95,
+      "time_to_last_token": 128.354
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The generated Travel Plan adheres to the expected JSON schema, with all required fields present and correct data types used."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The plan suggests 'Ithaka Hostel' in Alexandria, explicitly described as 'budget-friendly', which aligns with the user's destination (Alexandria Governorate) and budget preference ('Cheap')."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": false,
+          "reason": "The plan is for a 'Cheap' budget, but the budget breakdown has a significant mathematical discrepancy: the sum of 'Accommodation (1 night): EGP 30', 'Activities & Entrance Fees: EGP 4700', and 'Food & Dining (4 meals): EGP 1150' equals EGP 5880, which contradicts the 'Estimated Total per person (excluding transport): EGP 2940'. This inconsistency makes it impossible to accurately assess if the budget is respected. Furthermore, EGP 4700 for activities alone over two days seems high for a 'cheap' budget."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": true,
+          "reason": "The activities within each day are listed in a chronological order based on the provided time slots, flowing from morning to evening."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints (Destination, Duration, Budget, Number of People, Dates) are met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Alexandria Cultural & Food Journey",
+    "trip_summary": "A two-day, budget-friendly road trip from Cairo to Alexandria, designed for friends keen on cultural exploration and local food. This itinerary packs in an extensive list of Alexandria's historical and cultural gems, from ancient fortresses and Roman theaters to modern libraries and vibrant markets, alongside delicious seafood experiences.",
+    "trip_dates": "Nov 06 - Nov 07, 2026",
+    "travelers_type": "Friends",
+    "luxury_level": "Cheap",
+    "itinerary": [
+      {
+        "day": "Day 1: November 6, 2026",
+        "activities": [
+          {
+            "time": "08:00 AM - 09:00 AM",
+            "title": "Hotel Check-in: Ithaka Hostel",
+            "description": "Arrive in Alexandria and check into your budget-friendly accommodation, Ithaka Hostel. Drop off your bags and prepare for a day of exploration.",
+            "cost": "EGP 30",
+            "rating": 4.2,
+            "reviews_count": 0
+          },
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Citadel of Qaitbay",
+            "description": "Start your day with a visit to the iconic 15th-century defensive fortress, Citadel of Qaitbay, offering stunning views of the Mediterranean Sea. Explore its historic walls and learn about its strategic importance.",
+            "cost": "EGP 300",
+            "rating": 5,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 12:30 PM",
+            "title": "Lunch at Fish Market",
+            "description": "Enjoy a fresh seafood lunch at Fish Market, known for its grilled sea bass and vibrant atmosphere, located conveniently near the Citadel.",
+            "cost": "EGP 350",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "12:30 PM - 01:30 PM",
+            "title": "Alexandria Ancient Roman Theater",
+            "description": "Step back in time at the Alexandria Ancient Roman Theater, an archaeological site showcasing Roman-era ruins and a well-preserved amphitheater.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "01:30 PM - 02:30 PM",
+            "title": "Serapeum of Alexandria",
+            "description": "Explore the remains of the ancient Serapeum, a temple dedicated to the Greco-Egyptian god Serapis, featuring the iconic Pompey's Pillar.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:30 PM - 03:30 PM",
+            "title": "Catacombs of Kom el Shoqafa",
+            "description": "Descend into the fascinating Catacombs of Kom el Shoqafa, a series of Alexandrian tombs, statues, and archaeological objects that blend Roman, Greek, and Egyptian cultural features.",
+            "cost": "EGP 150",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "03:30 PM - 04:30 PM",
+            "title": "\u062a\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0634\u0631\u0639\u0647 \u0627\u0644\u0628\u064a\u0636\u0627\u0621 (White Sails Statue)",
+            "description": "Visit the 'White Sails Statue', a modern landmark along the Corniche, offering photo opportunities and views of the Mediterranean.",
+            "cost": "EGP 200",
+            "rating": 4.1,
+            "reviews_count": 0
+          },
+          {
+            "time": "04:30 PM - 06:00 PM",
+            "title": "Bibliotheca Alexandrina & Alexandria Bibliotheca",
+            "description": "Immerse yourself in knowledge at the Bibliotheca Alexandrina, a magnificent modern library and cultural center. Explore its vast collections and unique architecture, also covering the nearby 'Alexandria Bibliotheca' experience.",
+            "cost": "EGP 300",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "06:00 PM - 07:00 PM",
+            "title": "Garden World War Victims",
+            "description": "Take a moment of reflection at the Garden World War Victims, a peaceful park dedicated to those who lost their lives.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "07:00 PM - 08:00 PM",
+            "title": "Alsoyouf",
+            "description": "Discover Alsoyouf, a local cultural spot offering insights into Alexandrian life and its vibrant atmosphere.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "08:00 PM - 09:00 PM",
+            "title": "Mahmoud Said Museum",
+            "description": "Visit the Mahmoud Said Museum, dedicated to one of Egypt's most prominent artists, showcasing his impressive works.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "09:00 PM - 10:00 PM",
+            "title": "Montaza Palace Gardens",
+            "description": "Stroll through the extensive and beautiful Montaza Palace Gardens, a perfect place for an evening walk with impressive architecture and greenery.",
+            "cost": "EGP 50",
+            "rating": 4,
+            "reviews_count": 0
+          },
+          {
+            "time": "10:00 PM - 11:30 PM",
+            "title": "Dinner at Greek Club Restaurant",
+            "description": "Conclude your day with dinner at the Greek Club Restaurant, known for its delicious Greek/Seafood cuisine, including fried calamari and mezze.",
+            "cost": "EGP 300",
+            "rating": 4.3,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 2: November 7, 2026",
+        "activities": [
+          {
+            "time": "09:00 AM - 10:30 AM",
+            "title": "Royal Jewelry Museum Alexandria",
+            "description": "Begin your second day exploring the opulent Royal Jewelry Museum, housed in a former palace and showcasing an exquisite collection of royal jewels and artifacts.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "10:30 AM - 12:00 PM",
+            "title": "Lunch at Gleem Bay, Alexandria",
+            "description": "Enjoy a delightful lunch at Gleem Bay, Alexandria, a popular caf\u00e9 and patisserie known for its Chef's Specials and scenic views.",
+            "cost": "EGP 250",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "12:00 PM - 01:00 PM",
+            "title": "Qaitbay Citadel",
+            "description": "Revisit (or get a different perspective of) the impressive Qaitbay Citadel, a powerful defensive fortress on the Mediterranean coast.",
+            "cost": "EGP 300",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Cavafy Museum",
+            "description": "Discover the Cavafy Museum, dedicated to the renowned Greek Alexandrian poet Constantine P. Cavafy, offering a glimpse into his life and work.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:00 PM - 03:00 PM",
+            "title": "Alexandria National Museum",
+            "description": "Explore the Alexandria National Museum, which houses a comprehensive collection of artifacts spanning Egypt's history, from ancient times to the modern era.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "03:00 PM - 04:00 PM",
+            "title": "Roman Villa of the Birds",
+            "description": "Visit the Roman Villa of the Birds, an archaeological site featuring beautiful mosaic floors depicting various bird species.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "04:00 PM - 05:00 PM",
+            "title": "Jewel sculpture",
+            "description": "Discover the 'Jewel sculpture', an artistic landmark contributing to Alexandria's modern cultural landscape.",
+            "cost": "EGP 200",
+            "rating": 4.2,
+            "reviews_count": 0
+          },
+          {
+            "time": "05:00 PM - 06:00 PM",
+            "title": "Antoniades Palace",
+            "description": "Explore the historic Antoniades Palace, known for its beautiful architecture and extensive gardens, offering a tranquil retreat.",
+            "cost": "EGP 200",
+            "rating": 4.2,
+            "reviews_count": 0
+          },
+          {
+            "time": "06:00 PM - 07:00 PM",
+            "title": "Alroshd Tourism",
+            "description": "Experience Alroshd Tourism, a local cultural point of interest with a highly-rated visitor experience.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0
+          },
+          {
+            "time": "07:00 PM - 08:00 PM",
+            "title": "Cornish Sporting",
+            "description": "Enjoy a walk along Cornish Sporting, a vibrant area of Alexandria's Corniche, perfect for an evening stroll.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "08:00 PM - 09:00 PM",
+            "title": "temple black head",
+            "description": "Visit the 'temple black head', an interesting cultural site reflecting Alexandria's diverse historical layers.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "09:00 PM - 10:00 PM",
+            "title": "\u062c\u0648\u0644\u062f\u0646 \u0628\u064a\u062a\u0634 (Golden Beach)",
+            "description": "Conclude your sightseeing with a visit to '\u062c\u0648\u0644\u062f\u0646 \u0628\u064a\u062a\u0634' (Golden Beach), a popular spot to enjoy the evening coastal ambiance.",
+            "cost": "EGP 200",
+            "rating": 4,
+            "reviews_count": 0
+          },
+          {
+            "time": "10:00 PM - 11:00 PM",
+            "title": "Montaza Palace",
+            "description": "Discover the grandeur of Montaza Palace, an architectural marvel surrounded by magnificent gardens, offering a glimpse into royal history.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 PM - 12:30 AM",
+            "title": "Dinner at Portofino",
+            "description": "Savor your final dinner in Alexandria at Portofino, offering local and international cuisine with Chef's Specials, a perfect end to your cultural journey.",
+            "cost": "EGP 250",
+            "rating": 4.3,
+            "reviews_count": 0
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation (1 night): EGP 30",
+      "Activities & Entrance Fees: EGP 4700",
+      "Food & Dining (4 meals): EGP 1150",
+      "Estimated Total per person (excluding transport): EGP 2940"
+    ],
+    "landmarks": [
+      {
+        "id": "ithaka_hostel",
+        "title": "Ithaka Hostel",
+        "description": "Your budget-friendly accommodation in Alexandria.",
+        "coordinate": {
+          "latitude": 31.2023,
+          "longitude": 29.9034
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "citadel_of_qaitbay",
+        "title": "Citadel of Qaitbay",
+        "description": "A 15th-century defensive fortress on the Mediterranean sea coast.",
+        "coordinate": {
+          "latitude": 31.2131,
+          "longitude": 29.8856
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mahmoud_said_museum",
+        "title": "Mahmoud Said Museum",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.24439,
+          "longitude": 29.9690143
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alexandria_bibliotheca",
+        "title": "Alexandria Bibliotheca",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 31.2089032,
+          "longitude": 29.9091587
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "bibliotheca_alexandrina",
+        "title": "Bibliotheca Alexandrina",
+        "description": "A major library and cultural center on the shore of the Mediterranean Sea.",
+        "coordinate": {
+          "latitude": 31.2089,
+          "longitude": 29.9092
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alexandria_ancient_roman_theater",
+        "title": "Alexandria Ancient Roman Theater",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 31.1945057,
+          "longitude": 29.903902
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alsoyouf",
+        "title": "Alsoyouf",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 31.2000924,
+          "longitude": 29.9187387
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "catacombs_of_kom_el_shoqafa",
+        "title": "Catacombs of Kom el Shoqafa",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.1787378,
+          "longitude": 29.8930706
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "garden_world_war_victims",
+        "title": "Garden World War Victims",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 31.2040066,
+          "longitude": 29.9223677
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "montaza_palace_gardens",
+        "title": "Montaza Palace Gardens",
+        "description": "A palace, museum and extensive gardens in the Montaza district of Alexandria.",
+        "coordinate": {
+          "latitude": 31.2878,
+          "longitude": 30.0159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "serapeum_of_alexandria",
+        "title": "Serapeum of Alexandria",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 31.1823466,
+          "longitude": 29.8962872
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "temsal_al_ashraa_al_baidaa",
+        "title": "\u062a\u0645\u062b\u0627\u0644 \u0627\u0644\u0623\u0634\u0631\u0639\u0647 \u0627\u0644\u0628\u064a\u0636\u0627\u0621",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.1 stars.",
+        "coordinate": {
+          "latitude": 31.2099314,
+          "longitude": 29.9086231
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "greek_club_restaurant",
+        "title": "Greek Club Restaurant",
+        "description": "Restaurant specializing in Greek/Seafood cuisine.",
+        "coordinate": {
+          "latitude": 31.2128,
+          "longitude": 29.8837
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "fish_market",
+        "title": "Fish Market",
+        "description": "Restaurant specializing in Seafood cuisine.",
+        "coordinate": {
+          "latitude": 31.2115,
+          "longitude": 29.8902
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "royal_jewelry_museum_alexandria",
+        "title": "Royal Jewelry Museum Alexandria",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 31.2405929,
+          "longitude": 29.9632818
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alexandria_national_museum",
+        "title": "Alexandria National Museum",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 31.2007415,
+          "longitude": 29.9131977
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cavafy_museum",
+        "title": "Cavafy Museum",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 31.1975855,
+          "longitude": 29.9012432
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "qaitbay_citadel",
+        "title": "Qaitbay Citadel",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.2136987,
+          "longitude": 29.8853921
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "alroshd_tourism",
+        "title": "Alroshd Tourism",
+        "description": "A popular tourist destination in Alexandria with a rating of 5 stars.",
+        "coordinate": {
+          "latitude": 31.1788926,
+          "longitude": 29.9371714
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cornish_sporting",
+        "title": "Cornish Sporting",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 31.2199985,
+          "longitude": 29.9286598
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "roman_villa_of_the_birds",
+        "title": "Roman Villa of the Birds",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 31.1954085,
+          "longitude": 29.9053826
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "antoniades_palace",
+        "title": "Antoniades Palace",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 31.2022828,
+          "longitude": 29.9507256
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "jewel_sculpture",
+        "title": "Jewel sculpture",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 31.2022911,
+          "longitude": 29.9035882
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "montaza_palace",
+        "title": "Montaza Palace",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.2884642,
+          "longitude": 30.0159916
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "temple_black_head",
+        "title": "temple black head",
+        "description": "A popular tourist destination in Alexandria with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 31.2032194,
+          "longitude": 29.9188081
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "golden_beach",
+        "title": "\u062c\u0648\u0644\u062f\u0646 \u0628\u064a\u062a\u0634",
+        "description": "A popular tourist destination in Alexandria with a rating of 4 stars.",
+        "coordinate": {
+          "latitude": 31.2000924,
+          "longitude": 29.9187387
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "gleem_bay_alexandria",
+        "title": "Gleem Bay, Alexandria",
+        "description": "Restaurant specializing in Cafe / Patisserie cuisine.",
+        "coordinate": {
+          "latitude": 31.2428335,
+          "longitude": 29.9586036
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "portofino",
+        "title": "Portofino",
+        "description": "Restaurant specializing in Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.2523977,
+          "longitude": 29.9724562
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

@@ -1,0 +1,408 @@
+{
+  "prompt_file": "trip_prompt_34_dahab.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: London\nDestination: Dahab\nDates: 2026-07-12 to 2026-07-13\nBudget: Luxury\nParty: Friends\nInterests: Nile Cruise, Photographing, Art Galleries, Eco Tourism",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 3140,
+    "latency": {
+      "time_to_first_token": 73.146,
+      "output_tokens_per_sec": 24.83,
+      "time_to_last_token": 73.146
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan adheres to the expected JSON schema, including all required fields and correct data types."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": false,
+          "reason": "The user requested a 'Luxury' budget, but the plan suggests 'Tranquilo Boutique Hostel' which is described as 'mid-range accommodation' and is a hostel, directly contradicting the luxury preference."
+        },
+        {
+          "assertion": "Activities are varied and match the user's interests (history, culture, food).",
+          "passed": false,
+          "reason": "The plan fails to address several key user interests: 'Nile Cruise' is impossible for Dahab, 'Art Galleries' are not included, and 'Photographing' is only minimally addressed by one explicit photo spot. While 'Eco Tourism' is well-represented through marine activities, the significant omissions lead to a 'fail'."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": false,
+          "reason": "The user specified a 'Luxury' budget. However, the suggested accommodation ('Tranquilo Boutique Hostel') is explicitly labeled 'mid-range', and the total estimated trip cost (EGP 5950 for two days, excluding flights) appears to be more aligned with a mid-range or budget trip rather than luxury."
+        },
+        {
+          "assertion": "Transportation methods are practical and efficient for the region.",
+          "passed": false,
+          "reason": "The plan does not specify transportation methods within Dahab. More critically, the trip summary incorrectly states 'from Cairo to Dahab' while the user's origin was 'London', and the plan completely omits any details for travel from the user's origin to the destination."
+        },
+        {
+          "assertion": "The plan is coherent and easy to follow.",
+          "passed": false,
+          "reason": "While the day-by-day structure is easy to follow, the plan lacks coherence with the user query. It incorrectly assumes an origin of Cairo instead of London, contradicts the 'Luxury' budget with hostel accommodation, and includes an unusual 'Underwater museum' activity from 11 PM to 1 AM. It also completely misses key user interests like a Nile Cruise and Art Galleries."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": false,
+      "reason": "The plan failed to incorporate the correct origin city. The user requested London, but the plan suggests travel from Cairo.",
+      "failed_constraints": [
+        "Origin City"
+      ]
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Dahab Desert & Deep Blue Adventure",
+    "trip_summary": "An exhilarating 2-day trip for friends from Cairo to Dahab, focusing on vibrant underwater ecosystems, unique cultural spots, and scenic beaches. This luxury adventure combines diving, photography, and eco-tourism, offering a blend of relaxation and exploration.",
+    "trip_dates": "July 12 - July 13, 2026",
+    "travelers_type": "Friends",
+    "luxury_level": "Luxury",
+    "itinerary": [
+      {
+        "day": "Day 1: July 12, 2026 - Underwater Wonders & Coastal Charms",
+        "activities": [
+          {
+            "time": "09:00 AM - 10:00 AM",
+            "title": "Hotel Check-in: Tranquilo Boutique Hostel",
+            "description": "Arrive in Dahab and check into your charming accommodation, Tranquilo Boutique Hostel, known for its excellent rating and comfortable setting, ready to kickstart your adventure.",
+            "cost": "EGP 1200",
+            "rating": 4.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "10:00 AM - 12:00 PM",
+            "title": "Explore the Blue Hole of Dahab",
+            "description": "Begin your Dahab journey at the world-famous Blue Hole, a renowned diving and snorkeling site. Marvel at the vibrant marine life and the sheer depth of this natural wonder.",
+            "cost": "EGP 150",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "12:00 PM - 02:00 PM",
+            "title": "Discovery at Mashraba Dive Site",
+            "description": "Continue your underwater exploration at Mashraba dive site, offering another fantastic opportunity to witness Dahab's rich aquatic biodiversity and stunning coral formations.",
+            "cost": "EGP 200",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:00 PM - 03:00 PM",
+            "title": "Lunch at Ena's Table",
+            "description": "Savor a delightful lunch at Ena's Table, a highly-rated local restaurant known for its exquisite Chef's Specials and a fusion of local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "03:00 PM - 05:00 PM",
+            "title": "Visit Ahl Dahab",
+            "description": "Immerse yourselves in the local atmosphere and culture at Ahl Dahab, a popular spot to experience the authentic Dahab vibe.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "05:00 PM - 07:00 PM",
+            "title": "Diving Experience in Dahab",
+            "description": "Embark on an exhilarating diving session, exploring the pristine waters and captivating underwater landscapes that make Dahab a diver's paradise.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0
+          },
+          {
+            "time": "07:00 PM - 09:00 PM",
+            "title": "Relax at Gahaza Beach",
+            "description": "Unwind and enjoy the scenic beauty of Gahaza beach, a perfect spot to watch the sunset or simply relax by the Red Sea.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "09:00 PM - 11:00 PM",
+            "title": "Sharks Dive Center Visit",
+            "description": "Explore the facilities and offerings at Sharks dive center, perfect for enthusiasts looking to learn more about diving or perhaps plan future underwater adventures.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 PM - 01:00 AM",
+            "title": "Discover the Underwater Museum",
+            "description": "Experience the unique Underwater museum, a fascinating site that blends art with marine conservation, offering a memorable and unique perspective.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0
+          },
+          {
+            "time": "01:00 AM - 02:00 AM",
+            "title": "Dinner at Seaduction Dahab",
+            "description": "Conclude your action-packed day with a late-night dinner at Seaduction Dahab, enjoying their Chef's Specials and reflecting on the day's adventures.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 2: July 13, 2026 - Beach Bliss & Iconic Views",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Snorkeling at Coral Reef Redsea",
+            "description": "Start your day with a breathtaking snorkeling or dive experience at the Coral reef redsea, home to an incredibly diverse and colorful marine ecosystem.",
+            "cost": "EGP 200",
+            "rating": 4.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Photo Opportunity at 'I Love Dahab'",
+            "description": "Capture memorable moments at the iconic 'I Love Dahab' sign, a perfect spot for group photos and celebrating your trip.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Bayside Eatery",
+            "description": "Enjoy a delicious lunch at Bayside Eatery, offering a range of local and international dishes with a wonderful view.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Explore Islands Dive Site",
+            "description": "Visit the fascinating Islands dive site, known for its unique underwater topography and vibrant coral gardens, ideal for both divers and snorkelers.",
+            "cost": "EGP 200",
+            "rating": 4.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Relax at Lagoona Sandy Beach",
+            "description": "Spend a relaxing afternoon at Lagoona sandy beach, perfect for sunbathing, swimming, or simply enjoying the peaceful atmosphere.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "Enjoy Rezik Private Beach",
+            "description": "Experience the tranquility of Rezik private beach, offering a more secluded and intimate setting for relaxation by the sea.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "08:00 PM - 10:00 PM",
+            "title": "Stroll along Tidal Beach",
+            "description": "Take an evening stroll along Tidal beach, enjoying the refreshing sea breeze and the unique patterns left by the tides.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "10:00 PM - 11:00 PM",
+            "title": "Dinner at Isfahan Slow-cooked tajines and grill\u2019s",
+            "description": "Indulge in a delicious dinner at Isfahan, famed for its slow-cooked tajines and grilled specialties, a perfect culinary end to your Dahab adventure.",
+            "cost": "EGP 250",
+            "rating": 4.5,
+            "reviews_count": 0
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Estimated Accommodation Cost: EGP 2400 (2 nights at Tranquilo Boutique Hostel)",
+      "Estimated Activities Cost: EGP 2550",
+      "Estimated Food & Dining Cost: EGP 1000",
+      "Total Estimated Trip Cost (excluding flights/transport): EGP 5950"
+    ],
+    "landmarks": [
+      {
+        "id": "tranquilo_boutique_hostel",
+        "title": "Tranquilo Boutique Hostel",
+        "description": "Your charming mid-range accommodation in Dahab.",
+        "coordinate": {
+          "latitude": 28.5026133,
+          "longitude": 34.5158437
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "blue_hole_of_dahab",
+        "title": "Blue Hole of Dahab",
+        "description": "A world-famous diving and snorkeling site.",
+        "coordinate": {
+          "latitude": 28.5722769,
+          "longitude": 34.5372978
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mashraba_dive_site",
+        "title": "Mashraba dive site",
+        "description": "A popular diving spot with rich marine life.",
+        "coordinate": {
+          "latitude": 28.4965258,
+          "longitude": 34.5170464
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "ahl_dahab",
+        "title": "Ahl Dahab",
+        "description": "A popular tourist destination to experience local culture.",
+        "coordinate": {
+          "latitude": 28.4946056,
+          "longitude": 34.5177312
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "diving_spot",
+        "title": "Diving",
+        "description": "An exciting location for diving in Dahab.",
+        "coordinate": {
+          "latitude": 28.4982348,
+          "longitude": 34.5209175
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "gahaza_beach",
+        "title": "Gahaza beach",
+        "description": "A scenic beach for relaxation and enjoyment.",
+        "coordinate": {
+          "latitude": 28.5091355,
+          "longitude": 34.5136344
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sharks_dive_center",
+        "title": "Sharks dive center",
+        "description": "A dive center for marine exploration and activities.",
+        "coordinate": {
+          "latitude": 28.5091355,
+          "longitude": 34.5136344
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "underwater_museum",
+        "title": "Underwater museum",
+        "description": "A unique museum located beneath the sea.",
+        "coordinate": {
+          "latitude": 28.4984894,
+          "longitude": 34.5188492
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "coral_reef_redsea",
+        "title": "Coral reef redsea",
+        "description": "A vibrant coral reef for snorkeling and diving.",
+        "coordinate": {
+          "latitude": 28.4986544,
+          "longitude": 34.520543
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "i_love_dahab",
+        "title": "I Love Dahab",
+        "description": "An iconic spot for memorable photographs.",
+        "coordinate": {
+          "latitude": 28.5181139,
+          "longitude": 34.5113933
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "islands_dive_site",
+        "title": "Islands dive site",
+        "description": "Another fantastic location for divers to explore.",
+        "coordinate": {
+          "latitude": 28.4776125,
+          "longitude": 34.5135659
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "lagoona_sandy_beach",
+        "title": "Lagoona sandy beach",
+        "description": "A beautiful sandy beach perfect for relaxation.",
+        "coordinate": {
+          "latitude": 28.4735401,
+          "longitude": 34.5038436
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "rezik_private_beach",
+        "title": "Rezik private beach",
+        "description": "A secluded private beach for a tranquil experience.",
+        "coordinate": {
+          "latitude": 28.5091355,
+          "longitude": 34.5136344
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "tidal_beach",
+        "title": "Tidal beach",
+        "description": "A picturesque beach with unique tidal patterns.",
+        "coordinate": {
+          "latitude": 28.4952547,
+          "longitude": 34.5173706
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "enas_table",
+        "title": "Ena's Table",
+        "description": "A highly-rated restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 28.5140625,
+          "longitude": 34.5131875
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "seaduction_dahab",
+        "title": "Seaduction Dahab",
+        "description": "A restaurant known for its Chef's Specials and vibrant atmosphere.",
+        "coordinate": {
+          "latitude": 28.5108551,
+          "longitude": 34.5163969
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "bayside_eatery",
+        "title": "Bayside Eatery",
+        "description": "A restaurant offering diverse cuisine with great views.",
+        "coordinate": {
+          "latitude": 28.4991432,
+          "longitude": 34.5191345
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "isfahan_slow_cooked_tajines_and_grills",
+        "title": "Isfahan Slow-cooked tajines and grill\u2019s",
+        "description": "A restaurant specializing in delicious slow-cooked tajines and grills.",
+        "coordinate": {
+          "latitude": 28.5000673,
+          "longitude": 34.519665
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

@@ -168,7 +168,10 @@ async def main():
     print(f"\nQuery: {query}\n")
     print("-" * 50)
 
-    response_text = await generate_plan(query)
+    from AI_Agents.Benchmarking.context_helper import get_contextualized_query
+    contextualized_query = await get_contextualized_query(query)
+
+    response_text = await generate_plan(contextualized_query)
 
     print("-" * 50)
 
@@ -216,7 +219,7 @@ async def main():
     print("  STEP 4: JUDGE AGENT EVALUATION")
     print("=" * 70)
 
-    print("\nRunning judge agent (constraint + spatial)...\n")
+    print("\nRunning judge agent (constraint check)...\n")
 
     judge_data = None
     judge_response = None
@@ -226,12 +229,10 @@ async def main():
         judge_data, _ = extract_json_from_response(judge_response)
 
         if judge_data:
-            print("Judge verdict:")
+            print("Judge verdict (constraints only):")
             print(f"  Passed:             {judge_data.get('passed', 'N/A')}")
             print(f"  Reason:             {judge_data.get('reason', 'N/A')}")
             print(f"  Failed constraints: {judge_data.get('failed_constraints', [])}")
-            print(f"  Spatial issues:     {judge_data.get('spatial_issues', [])}")
-            print(f"  Spatial score:      {judge_data.get('spatial_score', 'N/A')}")
         else:
             print("[WARN] Could not parse judge output as JSON.")
             print(f"Raw judge response:\n{judge_response}")

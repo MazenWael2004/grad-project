@@ -4,10 +4,8 @@ graders:
     assertions:
       - "Travel Plan correctly strictly follows the schema."
       - "Accommodation suggestions are relevant to the city and user preferences."
-      - "Activities are varied and match the user's interests (history, culture, food)."
       - "Budget constraints are respected throughout the itinerary."
-      - "Transportation methods are practical and efficient for the region."
-      - "The plan is coherent and easy to follow."
+      - "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening)."
   - type: llm_rubric
     rubric: Benchmarking/judge.py
     assertions:

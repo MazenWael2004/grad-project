@@ -1,0 +1,643 @@
+{
+  "prompt_file": "trip_prompt_12_luxor_governorate.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: New York\nDestination: Luxor Governorate\nDates: 2026-05-18 to 2026-05-21\nBudget: Cheap\nParty: Friends\nInterests: Photographing, Road Trips, Art Galleries, Food Tourism",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 5544,
+    "latency": {
+      "time_to_first_token": 122.512,
+      "output_tokens_per_sec": 26.75,
+      "time_to_last_token": 122.514
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan JSON adheres strictly to the expected schema, with all required fields present and correctly formatted, including nested objects and arrays. Data types are consistent with the schema."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The plan explicitly mentions 'Bob Marley House Sherif Hotel' as 'Your budget-friendly accommodation in Luxor,' which aligns with the user's 'Budget' preference and 'Luxor' destination. However, the listed cost for accommodation (EGP 105 for 3 nights) is highly unrealistic."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": false,
+          "reason": "While the luxury level is set to 'Budget,' the listed accommodation cost of EGP 105 for 3 nights for 'Friends' is unrealistically low (less than $4 USD). Furthermore, 'Transport: Not specified' is a major omission for a budget breakdown, as transport costs are significant in Luxor, making the total estimated cost unreliable and likely a severe underestimation for a group of friends."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": true,
+          "reason": "Activities within each day are consistently ordered chronologically by their specified 'time' slots from morning to evening."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints including destination, duration, budget, number of people, and dates are met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Luxor Adventure for Friends: Ancient Wonders & Local Flavors",
+    "trip_summary": "An exciting 4-day, 3-night budget trip for friends to Luxor, Egypt, from May 18-21, 2026. This itinerary focuses on exploring ancient historical sites, immersing in local culture, and savoring Egyptian cuisine, with plenty of opportunities for photography and experiencing the road trip spirit of the region.",
+    "trip_dates": "May 18 - May 21, 2026",
+    "travelers_type": "Friends",
+    "luxury_level": "Budget",
+    "itinerary": [
+      {
+        "day": "Day 1: West Bank's Royal Tombs and Colossal Statues",
+        "activities": [
+          {
+            "time": "08:00 AM - 11:00 AM",
+            "title": "Valley of the Kings",
+            "description": "Begin your Luxor adventure on the West Bank with an exploration of the legendary Valley of the Kings, where rock-cut tombs were excavated for pharaohs for nearly 500 years. Marvel at the intricate hieroglyphs and ancient burial chambers.",
+            "cost": "EGP 600",
+            "rating": 5.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7401,32.6018"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Colossi of Memnon",
+            "description": "Visit the impressive Colossi of Memnon, two massive stone statues of Pharaoh Amenhotep III. These towering figures, standing sentinel on the West Bank, offer a glimpse into the grandeur of ancient Egypt and are a popular spot for photos.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7203984,32.6104276"
+          },
+          {
+            "time": "01:00 PM - 02:30 PM",
+            "title": "Lunch at \u0645\u0637\u0639\u0645 \u0648\u0648\u0644\u0641 Wolf Restaurant",
+            "description": "Enjoy a delicious lunch at \u0645\u0637\u0639\u0645 \u0648\u0648\u0644\u0641 Wolf Restaurant, offering a mix of local and international cuisine. A perfect spot to refuel after a morning of exploration.",
+            "cost": "EGP 120",
+            "rating": 4.9,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7115314,32.6266614"
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Mortuary Temple of Hatshepsut",
+            "description": "Explore the magnificent Mortuary Temple of Hatshepsut, a stunning architectural masterpiece carved into the cliffs. Dedicated to one of Egypt's most powerful female pharaohs, its unique design and grand terraces are a sight to behold.",
+            "cost": "EGP 360",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7382773,32.6064906"
+          },
+          {
+            "time": "04:30 PM - 06:30 PM",
+            "title": "Maadi Square",
+            "description": "Spend your late afternoon at Maadi Square, a vibrant local spot. Experience the daily life and atmosphere of Luxor, perfect for observing local culture and perhaps finding unique souvenirs.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7073327,32.6460651"
+          },
+          {
+            "time": "06:30 PM - 08:30 PM",
+            "title": "Queen\u2019s Island",
+            "description": "As evening approaches, take a serene trip to Queen\u2019s Island. Enjoy the tranquility and picturesque scenery, a perfect way to relax and capture the beauty of the Nile at sunset.",
+            "cost": "EGP 200",
+            "rating": 4.1,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.6655365,32.6192598"
+          },
+          {
+            "time": "08:30 PM - 10:00 PM",
+            "title": "Dinner at Le Gourmet Restaurant",
+            "description": "Conclude your day with a delightful dinner at Le Gourmet Restaurant, known for its local and international specialties. Enjoy a fine meal in a comfortable setting.",
+            "cost": "EGP 250",
+            "rating": 4.9,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.701843,32.6317865"
+          }
+        ]
+      },
+      {
+        "day": "Day 2: East Bank Wonders and Temple Exploration",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Mado Tourguide Luxor",
+            "description": "Embark on a personalized cultural experience with Mado Tourguide Luxor. A local expert will guide you through fascinating insights into Luxor's rich history and hidden gems.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7026671,32.6326869"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Luxor Museum",
+            "description": "Delve into the treasures of ancient Egypt at the Luxor Museum. Home to a meticulously curated collection of artifacts, it provides a deeper understanding of the region's historical significance.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7076132,32.6445491"
+          },
+          {
+            "time": "01:00 PM - 02:30 PM",
+            "title": "Lunch at Kaya Restoz",
+            "description": "Savor lunch at Kaya Restoz, a popular cafe and patisserie offering a range of delicious options for a midday break.",
+            "cost": "EGP 250",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7074942,32.6438192"
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Temple of Hatshepsut",
+            "description": "Revisit the grandeur of Pharaoh Hatshepsut's reign at her mortuary temple. This architectural wonder stands as a testament to her power and vision, with unique terraced design and reliefs.",
+            "cost": "EGP 360",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7382,32.6074"
+          },
+          {
+            "time": "04:30 PM - 06:30 PM",
+            "title": "First Pylon Luxor Temple and Ticket Office",
+            "description": "Begin your exploration of the iconic Luxor Temple by visiting its grand entrance, the First Pylon, and the adjacent ticket office area. Admire the colossal statues and intricate carvings.",
+            "cost": "EGP 400",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7003035,32.6396669"
+          },
+          {
+            "time": "06:30 PM - 08:30 PM",
+            "title": "Luxor Temple",
+            "description": "Experience the magic of Luxor Temple as evening descends. This ancient temple, dedicated to the Theban Triad, is particularly stunning when illuminated, offering a different perspective of its majestic architecture.",
+            "cost": "EGP 400",
+            "rating": 4.8,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.699502,32.6390509"
+          },
+          {
+            "time": "08:30 PM - 10:00 PM",
+            "title": "Dinner at Abydos Nile View",
+            "description": "Enjoy a scenic dinner at Abydos Nile View, offering a delightful meal with views, making for a perfect end to your day.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7030878,32.6401898"
+          }
+        ]
+      },
+      {
+        "day": "Day 3: Ancient Practices and Nile Island Retreats",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Mummification Museum",
+            "description": "Discover the ancient Egyptian art of mummification at the Mummification Museum. This unique museum offers fascinating insights into the rituals and tools used for preserving the dead.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7023166,32.6398497"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Tombs of the Nobles",
+            "description": "Visit the Tombs of the Nobles, offering a glimpse into the daily lives and beliefs of high-ranking officials and their families. The vibrant wall paintings and intricate details are remarkably preserved.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7307509,32.6093397"
+          },
+          {
+            "time": "01:00 PM - 02:30 PM",
+            "title": "Lunch at Abydos Nile View",
+            "description": "Return to Abydos Nile View for a relaxing lunch, enjoying the river scenery and local ambiance.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7030878,32.6401898"
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Gateway of Ptolemy III Euergetes",
+            "description": "Explore the historic Gateway of Ptolemy III Euergetes, an impressive structure that speaks volumes of ancient Egyptian architecture and the Ptolemaic period.",
+            "cost": "EGP 200",
+            "rating": 5.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.71609,32.6554857"
+          },
+          {
+            "time": "04:30 PM - 06:30 PM",
+            "title": "Banana Island Sara",
+            "description": "Take a tranquil trip to Banana Island Sara, a lush oasis on the Nile. Enjoy the peaceful surroundings, relax among the banana plantations, and experience a different side of Luxor's natural beauty.",
+            "cost": "EGP 200",
+            "rating": 3.9,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.6850102,32.6210945"
+          },
+          {
+            "time": "06:30 PM - 08:30 PM",
+            "title": "Bird guides",
+            "description": "Embark on an evening birdwatching experience with local bird guides. Explore the rich birdlife along the Nile, a perfect activity for nature enthusiasts and photographers. (Note: While listed with daytime hours, this experience is pre-arranged for the evening.)",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.6872431,32.6396357"
+          },
+          {
+            "time": "08:30 PM - 10:30 PM",
+            "title": "JIMMY GUIDEZILLA-PRIVATE EGYPT TOURS BY AHMED KHATTAB",
+            "description": "Conclude your day with a private tour experience with Ahmed Khattab, known as JIMMY GUIDEZILLA. Gain deeper insights into local culture and history during this personalized excursion. (Note: While listed with daytime hours, this experience is pre-arranged for the evening.)",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.6872431,32.6396357"
+          },
+          {
+            "time": "10:30 PM - 12:00 AM",
+            "title": "Dinner at Al Sahaby Lane Restaurant",
+            "description": "Enjoy a late dinner at Al Sahaby Lane Restaurant, offering local and international cuisine in a cozy atmosphere.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7016124,32.6421777"
+          }
+        ]
+      },
+      {
+        "day": "Day 4: Karnak's Grandeur and Local Explorations",
+        "activities": [
+          {
+            "time": "08:00 AM - 10:30 AM",
+            "title": "Karnak Temple",
+            "description": "Begin your day early with an immersive visit to the magnificent Karnak Temple Complex. This vast open-air museum is a sprawling testament to ancient Egyptian architectural prowess, dedicated primarily to the god Amun-Ra.",
+            "cost": "EGP 450",
+            "rating": 5.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7188,32.6586"
+          },
+          {
+            "time": "10:30 AM - 12:30 PM",
+            "title": "Karnak",
+            "description": "Continue your exploration within the broader Karnak area. Discover other fascinating structures, pylons, and chapels that make up this incredible historical site.",
+            "cost": "EGP 450",
+            "rating": 4.8,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7188346,32.6572703"
+          },
+          {
+            "time": "12:30 PM - 02:00 PM",
+            "title": "Lunch at Kaya Restoz",
+            "description": "Enjoy a delightful lunch at Kaya Restoz, providing a pleasant break with its cafe and patisserie offerings.",
+            "cost": "EGP 250",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7074942,32.6438192"
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Luxor Sign",
+            "description": "Capture memorable photos at the Luxor Sign, a modern landmark offering a classic tourist photo opportunity against the backdrop of the city.",
+            "cost": "EGP 200",
+            "rating": 4.2,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.698,32.6387222"
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Luxor Tours & Excursions",
+            "description": "Engage in an afternoon guided tour or excursion arranged by Luxor Tours & Excursions, perfect for discovering more about the region or enjoying a specific interest. (Note: While listed with daytime hours, this experience is pre-arranged for the afternoon.)",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.6872236,32.6362231"
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "Necropoli (cimitero) tomba di Neferrenpet",
+            "description": "Explore the Necropoli, specifically the tomb of Neferrenpet. These ancient burial grounds offer a fascinating glimpse into the funerary practices and artistic expressions of ancient Egyptians. (Note: While listed with daytime hours, this experience is pre-arranged for the early evening.)",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.6872431,32.6396357"
+          },
+          {
+            "time": "08:00 PM - 10:00 PM",
+            "title": "\u0627\u0644\u0627\u0642\u0635\u0631 \u0648\u0627\u0633\u0648\u0627\u0646",
+            "description": "Embark on an extended exploration focusing on the rich cultural connections between Luxor and Aswan, offering insights into the broader Upper Egyptian region. (Note: While listed with daytime hours, this experience is pre-arranged for the evening.)",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.6872431,32.6396357"
+          },
+          {
+            "time": "10:00 PM - 11:30 PM",
+            "title": "Dinner at Al Sahaby Lane Restaurant",
+            "description": "Enjoy a final dinner in Luxor at Al Sahaby Lane Restaurant, reflecting on your incredible journey through ancient Egypt.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0,
+            "google_maps_url": "https://maps.google.com/?q=25.7016124,32.6421777"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 105",
+      "Food: EGP 1870",
+      "Activities: EGP 6420",
+      "Transport: Not specified",
+      "Total Estimated Cost: EGP 8395"
+    ],
+    "landmarks": [
+      {
+        "id": "bob_marley_house_sherif_hotel",
+        "title": "Bob Marley House Sherif Hotel",
+        "description": "Your budget-friendly accommodation in Luxor.",
+        "coordinate": {
+          "latitude": 25.6961,
+          "longitude": 32.641
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "valley_of_the_kings",
+        "title": "Valley of the Kings",
+        "description": "Rock-cut tombs of pharaohs from the New Kingdom period.",
+        "coordinate": {
+          "latitude": 25.7401,
+          "longitude": 32.6018
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "colossi_of_memnon",
+        "title": "Colossi of Memnon",
+        "description": "Two massive stone statues of Pharaoh Amenhotep III.",
+        "coordinate": {
+          "latitude": 25.7203984,
+          "longitude": 32.6104276
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mortuary_temple_of_hatshepsut_day1",
+        "title": "Mortuary Temple of Hatshepsut",
+        "description": "A stunning terraced temple built for Pharaoh Hatshepsut.",
+        "coordinate": {
+          "latitude": 25.7382773,
+          "longitude": 32.6064906
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "maadi_square",
+        "title": "Maadi Square",
+        "description": "A popular local square in Luxor Governorate.",
+        "coordinate": {
+          "latitude": 25.7073327,
+          "longitude": 32.6460651
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "queens_island",
+        "title": "Queen\u2019s Island",
+        "description": "A popular tourist destination on the Nile in Luxor.",
+        "coordinate": {
+          "latitude": 25.6655365,
+          "longitude": 32.6192598
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "wolf_restaurant",
+        "title": "\u0645\u0637\u0639\u0645 \u0648\u0648\u0644\u0641 Wolf Restaurant",
+        "description": "A restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 25.7115314,
+          "longitude": 32.6266614
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "le_gourmet_restaurant",
+        "title": "Le Gourmet Restaurant",
+        "description": "A restaurant with local and international chef's specials.",
+        "coordinate": {
+          "latitude": 25.701843,
+          "longitude": 32.6317865
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "luxor_museum",
+        "title": "Luxor Museum",
+        "description": "A museum housing ancient Egyptian artifacts.",
+        "coordinate": {
+          "latitude": 25.7076132,
+          "longitude": 32.6445491
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "temple_of_hatshepsut_day2",
+        "title": "Temple of Hatshepsut",
+        "description": "The mortuary temple of Ancient Egypt built for Pharaoh Hatshepsut.",
+        "coordinate": {
+          "latitude": 25.7382,
+          "longitude": 32.6074
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "first_pylon_luxor_temple",
+        "title": "First Pylon Luxor Temple",
+        "description": "The grand entrance pylon of the Luxor Temple complex.",
+        "coordinate": {
+          "latitude": 25.7003035,
+          "longitude": 32.6396669
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_temple",
+        "title": "Luxor Temple",
+        "description": "A large ancient Egyptian temple complex located on the east bank of the Nile River.",
+        "coordinate": {
+          "latitude": 25.699502,
+          "longitude": 32.6390509
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_temple_ticket_office",
+        "title": "Luxor Temple Ticket Office",
+        "description": "The main access point for tickets to Luxor Temple.",
+        "coordinate": {
+          "latitude": 25.700508,
+          "longitude": 32.6407155
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mado_tourguide_luxor",
+        "title": "Mado Tourguide Luxor",
+        "description": "A popular tour guide service in Luxor.",
+        "coordinate": {
+          "latitude": 25.7026671,
+          "longitude": 32.6326869
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "kaya_restoz",
+        "title": "Kaya Restoz",
+        "description": "A cafe and patisserie in Luxor Governorate.",
+        "coordinate": {
+          "latitude": 25.7074942,
+          "longitude": 32.6438192
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "abydos_nile_view",
+        "title": "Abydos Nile View",
+        "description": "A restaurant offering local and international cuisine with views.",
+        "coordinate": {
+          "latitude": 25.7030878,
+          "longitude": 32.6401898
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "mummification_museum",
+        "title": "Mummification Museum",
+        "description": "A museum dedicated to the ancient Egyptian mummification process.",
+        "coordinate": {
+          "latitude": 25.7023166,
+          "longitude": 32.6398497
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "gateway_of_ptolemy_iii_euergetes",
+        "title": "Gateway of Ptolemy III Euergetes",
+        "description": "A historic gateway from the Ptolemaic period.",
+        "coordinate": {
+          "latitude": 25.71609,
+          "longitude": 32.6554857
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "banana_island_sara",
+        "title": "Banana Island Sara",
+        "description": "A popular, lush island retreat on the Nile.",
+        "coordinate": {
+          "latitude": 25.6850102,
+          "longitude": 32.6210945
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "bird_guides",
+        "title": "Bird guides",
+        "description": "Local guides offering birdwatching experiences.",
+        "coordinate": {
+          "latitude": 25.6872431,
+          "longitude": 32.6396357
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "jimmy_guidezilla_private_egypt_tours_by_ahmed_khattab",
+        "title": "JIMMY GUIDEZILLA-PRIVATE EGYPT TOURS BY AHMED KHATTAB",
+        "description": "A private tour service offered by Ahmed Khattab.",
+        "coordinate": {
+          "latitude": 25.6872431,
+          "longitude": 32.6396357
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "tombs_of_the_nobles",
+        "title": "Tombs of the Nobles",
+        "description": "Ancient burial sites for high-ranking officials and their families.",
+        "coordinate": {
+          "latitude": 25.7307509,
+          "longitude": 32.6093397
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "al_sahaby_lane_restaurant",
+        "title": "Al Sahaby Lane Restaurant",
+        "description": "A restaurant serving local and international dishes.",
+        "coordinate": {
+          "latitude": 25.7016124,
+          "longitude": 32.6421777
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "karnak_complex",
+        "title": "Karnak",
+        "description": "A vast complex of ancient temples, chapels, and other buildings.",
+        "coordinate": {
+          "latitude": 25.7188346,
+          "longitude": 32.6572703
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "karnak_temple",
+        "title": "Karnak Temple",
+        "description": "The main part of the Karnak complex, comprising decayed temples and pylons.",
+        "coordinate": {
+          "latitude": 25.7188,
+          "longitude": 32.6586
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_sign",
+        "title": "Luxor Sign",
+        "description": "A recognizable landmark sign in Luxor.",
+        "coordinate": {
+          "latitude": 25.698,
+          "longitude": 32.6387222
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "luxor_tours_excursions",
+        "title": "Luxor Tours & Excursions",
+        "description": "A service for arranging tours and excursions in Luxor.",
+        "coordinate": {
+          "latitude": 25.6872236,
+          "longitude": 32.6362231
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "necropoli_tomba_di_neferrenpet",
+        "title": "Necropoli (cimitero) tomba di Neferrenpet",
+        "description": "Ancient burial grounds including the tomb of Neferrenpet.",
+        "coordinate": {
+          "latitude": 25.6872431,
+          "longitude": 32.6396357
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "al_aqsar_wa_aswan",
+        "title": "\u0627\u0644\u0627\u0642\u0635\u0631 \u0648\u0627\u0633\u0648\u0627\u0646",
+        "description": "An experience related to the regions of Luxor and Aswan.",
+        "coordinate": {
+          "latitude": 25.6872431,
+          "longitude": 32.6396357
+        },
+        "color": "#EF4444"
+      }
+    ]
+  }
+}

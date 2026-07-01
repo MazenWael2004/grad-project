@@ -1,0 +1,578 @@
+{
+  "prompt_file": "trip_prompt_14_giza_governorate.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: London\nDestination: Giza Governorate\nDates: 2026-05-06 to 2026-05-09\nBudget: Cheap\nParty: Only Me\nInterests: Camel Riding, Backpacking, Cultural Tourism, Eco Tourism",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 4998,
+    "latency": {
+      "time_to_first_token": 80.431,
+      "output_tokens_per_sec": 36.28,
+      "time_to_last_token": 80.431
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The Travel Plan is a valid JSON object and adheres to a common schema for travel plans, including trip details, itinerary, budget breakdown, and landmarks."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The suggested accommodation, Barcelo Cairo Pyramids, is located in Giza Governorate. The allocated budget for accommodation (EGP 3600 for 3 nights, approximately $40 USD/night) aligns with a 'cheap' preference for a backpacker, assuming achievable rates."
+        },
+        {
+          "assertion": "Activities are varied and match the user's interests (history, culture, food).",
+          "passed": false,
+          "reason": "While 'Cultural Tourism' is excellently covered with numerous historical sites, the plan explicitly misses two key user interests: 'Camel Riding' and 'Eco Tourism'. The 'Backpacking' interest is mentioned in the summary but not translated into specific activities beyond standard sightseeing."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": true,
+          "reason": "The plan clearly outlines a detailed budget breakdown for accommodation, food, activities, and local transport, totaling EGP 12250 (approximately $400 USD) for 4 days. This equates to about $100 USD per day, which is genuinely 'cheap' for a solo traveler covering major attractions in Giza. The itemized activity and meal costs within the itinerary accurately sum up to the allocated budget for these categories."
+        },
+        {
+          "assertion": "Transportation methods are practical and efficient for the region.",
+          "passed": false,
+          "reason": "The travel plan includes a budget for 'Local Transport' but does not specify any transportation methods within the itinerary. Without this information, it's impossible to determine if the methods are practical or efficient, especially for a backpacker moving between spread-out locations."
+        },
+        {
+          "assertion": "The plan is coherent and easy to follow.",
+          "passed": false,
+          "reason": "While the day-by-day structure is clear, the itinerary on several days includes activities that are geographically quite spread out (e.g., Day 1 and Day 3). The plan does not account for the significant travel time required between these distant locations, which could make it difficult and inefficient for a traveler to follow as scheduled."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": false,
+      "reason": "The travel plan does not mention London as the origin city, which was specified in the user's query.",
+      "failed_constraints": [
+        "Origin City"
+      ]
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Giza Governorate Adventure",
+    "trip_summary": "A focused 4-day solo backpacking journey through Giza Governorate, exploring ancient wonders, cultural sites, and unique local experiences, all while adhering to a budget-friendly approach. From the iconic Pyramids to hidden cultural gems, this trip offers an immersive dive into Egypt's rich history and vibrant local life, with opportunities for eco-tourism and even camel riding.",
+    "trip_dates": "May 06 - May 09, 2026",
+    "travelers_type": "Only Me (Backpacker)",
+    "luxury_level": "Cheap",
+    "itinerary": [
+      {
+        "day": "Day 1: Ancient Wonders & Cultural Immersion",
+        "activities": [
+          {
+            "time": "09:00 AM - 12:00 PM",
+            "title": "Pyramids of Giza",
+            "description": "Begin your Giza adventure at the legendary Pyramids of Giza. Marvel at these colossal ancient structures, a highlight for cultural tourism enthusiasts. This extended visit allows you to fully appreciate their grandeur, consistent with the recommended morning visit time.",
+            "cost": "EGP 700",
+            "rating": 5
+          },
+          {
+            "time": "12:00 PM - 02:00 PM",
+            "title": "Giza Necropolis",
+            "description": "Continue your journey through history at the Giza Necropolis, home to the Pyramids, Sphinx, and ancient tombs. This site is a popular tourist destination, offering deep insight into ancient Egyptian culture.",
+            "cost": "EGP 200",
+            "rating": 4.6
+          },
+          {
+            "time": "02:00 PM - 03:00 PM",
+            "title": "Lunch at Khufu's Restaurant",
+            "description": "Enjoy a delicious lunch featuring local and international cuisine with Chef's Specials at Khufu's Restaurant, conveniently located near the Giza Necropolis.",
+            "cost": "EGP 550",
+            "rating": 4.3
+          },
+          {
+            "time": "03:00 PM - 05:00 PM",
+            "title": "Pioneer travel Egypt",
+            "description": "Discover another facet of Giza's cultural landscape at Pioneer travel Egypt, a popular destination that promises an engaging afternoon experience.",
+            "cost": "EGP 200",
+            "rating": 4.5
+          },
+          {
+            "time": "05:00 PM - 07:00 PM",
+            "title": "Cleopatra Museum",
+            "description": "Delve into the mystique of ancient Egypt at the Cleopatra Museum. This popular cultural attraction offers unique insights, best experienced in the afternoon.",
+            "cost": "EGP 200",
+            "rating": 2.7
+          },
+          {
+            "time": "07:00 PM - 09:00 PM",
+            "title": "\u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634",
+            "description": "Conclude your day with a visit to \u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634, another popular cultural destination in Giza, offering a rich historical experience into the evening.",
+            "cost": "EGP 200",
+            "rating": 4.6
+          },
+          {
+            "time": "09:00 PM - 10:00 PM",
+            "title": "Dinner at Rooftop 7000",
+            "description": "Savor dinner at Rooftop 7000, enjoying local and international cuisine with Chef's Specials after a long day of exploration.",
+            "cost": "EGP 250",
+            "rating": 4.5
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Exploring Sphinx & Beyond",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "\u0633\u0631\u0627\u0649 \u0627\u0644\u0625\u0633\u062a\u0642\u0628\u0627\u0644",
+            "description": "Start your day with an early visit to \u0633\u0631\u0627\u0649 \u0627\u0644\u0625\u0633\u062a\u0642\u0628\u0627\u0644, a popular cultural attraction in Giza. Though best in the afternoon, an early start allows for comprehensive sightseeing.",
+            "cost": "EGP 200",
+            "rating": 4.6
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "\u0628\u0631\u062c \u0627\u0644\u0633\u0627\u0639\u0629",
+            "description": "Following \u0633\u0631\u0627\u0649 \u0627\u0644\u0625\u0633\u062a\u0642\u0628\u0627\u0644, visit \u0628\u0631\u062c \u0627\u0644\u0633\u0627\u0639\u0629, another highly-rated cultural site nearby. This provides a compact exploration of this specific cultural cluster.",
+            "cost": "EGP 200",
+            "rating": 4.5
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at The Rooftop",
+            "description": "Enjoy lunch at The Rooftop, offering local and international cuisine with Chef's Specials, ideally situated for your next explorations near the Sphinx.",
+            "cost": "EGP 250",
+            "rating": 3.8
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Great Sphinx of Giza",
+            "description": "Dedicate your afternoon to the majestic Great Sphinx of Giza. Its imposing presence and rich history make it a cornerstone of cultural tourism, perfectly aligned with its best-time recommendation.",
+            "cost": "EGP 200",
+            "rating": 4.7
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Valley Temple of Khafre",
+            "description": "Adjacent to the Sphinx, explore the Valley Temple of Khafre, an integral part of the Giza cultural experience. This provides a deep dive into the rituals of ancient Egypt.",
+            "cost": "EGP 200",
+            "rating": 4.7
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "SPHINX FOUNTAIN (ABOTALEB BRG.)",
+            "description": "As the day progresses, visit the SPHINX FOUNTAIN (ABOTALEB BRG.), another popular cultural site in the Sphinx area, offering a beautiful evening perspective.",
+            "cost": "EGP 200",
+            "rating": 4.7
+          },
+          {
+            "time": "08:00 PM - 10:00 PM",
+            "title": "Sphinx Tours",
+            "description": "Conclude your cultural day with Sphinx Tours, allowing for a unique perspective or further exploration around the iconic monument into the evening.",
+            "cost": "EGP 200",
+            "rating": 1
+          },
+          {
+            "time": "10:00 PM - 11:00 PM",
+            "title": "Dinner at Rooftop 7000",
+            "description": "End your eventful day with a late dinner at Rooftop 7000, enjoying more of their local and international Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 4.5
+          }
+        ]
+      },
+      {
+        "day": "Day 3: Cairo's Views & Pharaonic History",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Cairo Tower",
+            "description": "Ascend the Cairo Tower for panoramic views of Giza and Cairo. This iconic landmark is a popular morning activity, offering breathtaking vistas.",
+            "cost": "EGP 250",
+            "rating": 4.3
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "\u062a\u0645\u062b\u0627\u0644 \u0643\u0644\u064a\u0648\u0628\u0627\u062a\u0631\u0627",
+            "description": "Visit \u062a\u0645\u062b\u0627\u0644 \u0643\u0644\u064a\u0648\u0628\u0627\u062a\u0631\u0627 (Cleopatra Statue), a cultural attraction providing a glimpse into Egyptian history. Although recommended for afternoon, an earlier visit is efficient for sightseeing.",
+            "cost": "EGP 200",
+            "rating": 3.8
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Dahabiya Cairo",
+            "description": "Enjoy a riverside lunch at Dahabiya Cairo, known for its local and international cuisine and Chef's Specials, providing a relaxing break.",
+            "cost": "EGP 250",
+            "rating": 4.7
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Cairo, Egito.",
+            "description": "Explore the designated area of 'Cairo, Egito.', a popular cultural destination that offers further insight into the city's heritage during the afternoon.",
+            "cost": "EGP 200",
+            "rating": 4
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Pharaonic Village",
+            "description": "Immerse yourself in ancient Egyptian life at the Pharaonic Village. This cultural attraction provides a lively and educational experience, best enjoyed in the afternoon.",
+            "cost": "EGP 200",
+            "rating": 4.3
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "Panoramic view",
+            "description": "Conclude your day with a breathtaking panoramic view of Giza, a popular tourist spot that offers a stunning backdrop as the evening sets in.",
+            "cost": "EGP 200",
+            "rating": 4.7
+          },
+          {
+            "time": "08:00 PM - 09:00 PM",
+            "title": "Dinner at Aspero Restaurant & Lounge",
+            "description": "Have dinner at Aspero Restaurant & Lounge, a cafe and patisserie offering delightful Chef's Specials, a perfect way to unwind after a busy day.",
+            "cost": "EGP 250",
+            "rating": 4.4
+          }
+        ]
+      },
+      {
+        "day": "Day 4: Pyramids & River Charms",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Pyramid of Khafre",
+            "description": "Start your final day by visiting the Pyramid of Khafre, an impressive ancient monument and a key part of the Giza plateau. This visit is best in the morning.",
+            "cost": "EGP 700",
+            "rating": 4.7
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "\u0645\u0646\u0637\u0642\u0629 \u0627\u0647\u0631\u0627\u0645\u0627\u062a \u0627\u0644\u062c\u064a\u0632\u0629",
+            "description": "Explore the broader \u0645\u0646\u0637\u0642\u0629 \u0627\u0647\u0631\u0627\u0645\u0627\u062a \u0627\u0644\u062c\u064a\u0632\u0629 (Giza Pyramids Area). This popular cultural site allows for a comprehensive understanding of the pyramid complex. Though afternoon is suggested, an earlier visit enhances the itinerary flow.",
+            "cost": "EGP 200",
+            "rating": 4.6
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Khufu's Restaurant",
+            "description": "Enjoy another meal at Khufu's Restaurant, savoring their local and international Chef's Specials in the vicinity of the pyramids.",
+            "cost": "EGP 550",
+            "rating": 4.3
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Ahmed Shawky Museum",
+            "description": "Visit the Ahmed Shawky Museum, a museum dedicated to culture and history. While morning is recommended, an afternoon visit offers a peaceful cultural experience.",
+            "cost": "EGP 200",
+            "rating": 4.4
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Boat tour",
+            "description": "Embark on a relaxing boat tour, a popular activity providing unique perspectives of Giza from the water. This fits well into the afternoon schedule.",
+            "cost": "EGP 200",
+            "rating": 4.5
+          },
+          {
+            "time": "06:00 PM - 08:00 PM",
+            "title": "\u0645\u064a\u0646\u0627\u0621 \u0627\u0644\u0642\u0631\u064a\u0629",
+            "description": "Explore \u0645\u064a\u0646\u0627\u0621 \u0627\u0644\u0642\u0631\u064a\u0629 (Village Port), a cultural site often linked with boat excursions, offering a pleasant way to spend the late afternoon/early evening.",
+            "cost": "EGP 200",
+            "rating": 4
+          },
+          {
+            "time": "08:00 PM - 09:00 PM",
+            "title": "Dinner at 9 Pyramids Lounge",
+            "description": "Conclude your trip with dinner at the 9 Pyramids Lounge, enjoying their local and international Chef's Specials with a view, if possible.",
+            "cost": "EGP 550",
+            "rating": 4.2
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 3600",
+      "Food: EGP 2900",
+      "Activities: EGP 5250",
+      "Local Transport: EGP 500",
+      "Total Estimated Budget: EGP 12250"
+    ],
+    "landmarks": [
+      {
+        "id": "barcelo_cairo_pyramids",
+        "title": "Barcelo Cairo Pyramids",
+        "description": "Your budget-friendly stay in Giza, offering comfort after days of exploration.",
+        "coordinate": {
+          "latitude": 29.9996657,
+          "longitude": 31.1763313
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "giza_necropolis",
+        "title": "Giza Necropolis",
+        "description": "A popular tourist destination in Giza with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 29.9772962,
+          "longitude": 31.1324955
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "pyramids_of_giza",
+        "title": "Pyramids of Giza",
+        "description": "The Giza Necropolis, including the Pyramids of Giza, the Great Sphinx, several cemeteries, a workers' village and an industrial complex.",
+        "coordinate": {
+          "latitude": 29.9792,
+          "longitude": 31.1342
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "saray_al_arsh",
+        "title": "\u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634",
+        "description": "A popular tourist destination in Giza with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 30.0266743,
+          "longitude": 31.2300227
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "pioneer_travel_egypt",
+        "title": "Pioneer travel Egypt",
+        "description": "A popular tourist destination in Giza with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 29.9624953,
+          "longitude": 31.1821089
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cleopatra_museum",
+        "title": "Cleopatra Museum",
+        "description": "A popular tourist destination in Giza with a rating of 2.7 stars.",
+        "coordinate": {
+          "latitude": 29.9976768,
+          "longitude": 31.2153739
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "khufus_restaurant",
+        "title": "Khufu's Restaurant",
+        "description": "Enjoy local and international cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 29.9783323,
+          "longitude": 31.1242706
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "rooftop_7000",
+        "title": "Rooftop 7000",
+        "description": "A restaurant offering local and international cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 29.97458899999999,
+          "longitude": 31.1410312
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "great_sphinx_of_giza",
+        "title": "Great Sphinx of Giza",
+        "description": "A popular tourist destination in Giza with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 29.9752687,
+          "longitude": 31.1375674
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sphinx_fountain_abotaleb_brg",
+        "title": "SPHINX FOUNTAIN (ABOTALEB BRG.)",
+        "description": "A popular tourist destination in Giza with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 29.9789767,
+          "longitude": 31.1445531
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "valley_temple_of_khafre",
+        "title": "Valley Temple of Khafre",
+        "description": "A popular tourist destination in Giza with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 29.9747367,
+          "longitude": 31.1383572
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "saray_al_isteqbal",
+        "title": "\u0633\u0631\u0627\u0649 \u0627\u0644\u0625\u0633\u062a\u0642\u0628\u0627\u0644",
+        "description": "A popular tourist destination in Giza with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 30.0287043,
+          "longitude": 31.2298051
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "burj_al_saa",
+        "title": "\u0628\u0631\u062c \u0627\u0644\u0633\u0627\u0639\u0629",
+        "description": "A popular tourist destination in Giza with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 30.0286786,
+          "longitude": 31.2296709
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sphinx_tours",
+        "title": "Sphinx Tours",
+        "description": "A popular tourist destination in Giza with a rating of 1 stars.",
+        "coordinate": {
+          "latitude": 29.97530799999999,
+          "longitude": 31.1417362
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "the_rooftop",
+        "title": "The Rooftop",
+        "description": "A restaurant offering local and international cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 29.9750742,
+          "longitude": 31.1416684
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "cairo_tower",
+        "title": "Cairo Tower",
+        "description": "A popular tourist destination in Giza with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 30.046522,
+          "longitude": 31.22429889999999
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "panoramic_view",
+        "title": "Panoramic view",
+        "description": "A popular tourist destination in Giza with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 29.9695817,
+          "longitude": 31.12565279999999
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cairo_egito",
+        "title": "Cairo, Egito.",
+        "description": "A popular tourist destination in Giza with a rating of 4 stars.",
+        "coordinate": {
+          "latitude": 30.0130557,
+          "longitude": 31.2088526
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "pharaonic_village",
+        "title": "Pharaonic Village",
+        "description": "A popular tourist destination in Giza with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 29.9973428,
+          "longitude": 31.2147895
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cleopatra_statue",
+        "title": "\u062a\u0645\u062b\u0627\u0644 \u0643\u0644\u064a\u0648\u0628\u0627\u062a\u0631\u0627",
+        "description": "A popular tourist destination in Giza with a rating of 3.8 stars.",
+        "coordinate": {
+          "latitude": 30.0285069,
+          "longitude": 31.2081171
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "dahabiya_cairo",
+        "title": "Dahabiya Cairo",
+        "description": "Enjoy local and international cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 30.0446422,
+          "longitude": 31.2193938
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "aspero_restaurant_lounge",
+        "title": "Aspero Restaurant & Lounge",
+        "description": "A cafe and patisserie offering Chef's Specials.",
+        "coordinate": {
+          "latitude": 30.0262856,
+          "longitude": 31.21818
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "pyramid_of_khafre",
+        "title": "Pyramid of Khafre",
+        "description": "A popular tourist destination in Giza with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 29.9759954,
+          "longitude": 31.1309285
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "ahmed_shawky_museum",
+        "title": "Ahmed Shawky Museum",
+        "description": "A popular tourist destination in Giza with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 30.0213434,
+          "longitude": 31.2174793
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "giza_pyramids_area",
+        "title": "\u0645\u0646\u0637\u0642\u0629 \u0627\u0647\u0631\u0627\u0645\u0627\u062a \u0627\u0644\u062c\u064a\u0632\u0629",
+        "description": "A popular tourist destination in Giza with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 29.9798375,
+          "longitude": 31.1499942
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "boat_tour",
+        "title": "Boat tour",
+        "description": "A popular tourist destination in Giza with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 29.9971471,
+          "longitude": 31.2168782
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "village_port",
+        "title": "\u0645\u064a\u0646\u0627\u0621 \u0627\u0644\u0642\u0631\u064a\u0629",
+        "description": "A popular tourist destination in Giza with a rating of 4 stars.",
+        "coordinate": {
+          "latitude": 29.9959467,
+          "longitude": 31.2160239
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "nine_pyramids_lounge",
+        "title": "9 Pyramids Lounge",
+        "description": "Enjoy local and international cuisine with Chef's Specials.",
+        "coordinate": {
+          "latitude": 29.9677783,
+          "longitude": 31.1319209
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}
