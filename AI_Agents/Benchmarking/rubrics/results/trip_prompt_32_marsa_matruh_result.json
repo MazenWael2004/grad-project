@@ -1,0 +1,646 @@
+{
+  "prompt_file": "trip_prompt_32_marsa_matruh.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Alexandria\nDestination: Marsa Matruh\nDates: 2026-05-09 to 2026-05-13\nBudget: Balanced\nParty: Family\nInterests: Cultural Tourism, Festivals and Events, Cultural Exploration, Camel Riding",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 4957,
+    "latency": {
+      "time_to_first_token": 91.635,
+      "output_tokens_per_sec": 30.32,
+      "time_to_last_token": 91.636
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan adheres to the expected JSON schema, with correct data types and structure for all fields."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The suggested Semiramis Hotel Royal Palace is located in Marsa Matruh and appears to be a suitable option for a family with a balanced budget."
+        },
+        {
+          "assertion": "Activities are varied and match the user's interests (history, culture, food).",
+          "passed": false,
+          "reason": "While the plan includes many cultural and historical sites and restaurant suggestions, it completely omits activities related to 'Festivals and Events' and 'Camel Riding' which were specified in the user's interests."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": true,
+          "reason": "The estimated costs for activities, meals, and accommodation align with a 'Balanced' budget, presenting reasonable prices for a family trip in the region."
+        },
+        {
+          "assertion": "Transportation methods are practical and efficient for the region.",
+          "passed": false,
+          "reason": "The travel plan incorrectly states the origin city as Cairo and the return to Cairo, whereas the user explicitly requested Alexandria as the origin. Daily intra-city transportation methods are also not detailed."
+        },
+        {
+          "assertion": "The plan is coherent and easy to follow.",
+          "passed": true,
+          "reason": "The itinerary is well-structured by day and time, with clear titles and descriptions for each activity, making it easy to understand and follow."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": false,
+      "reason": "The travel plan failed to meet the origin city requirement. The user requested Alexandria as the origin, but the plan suggests Cairo.",
+      "failed_constraints": [
+        "Origin City"
+      ]
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Marsa Matruh Family Cultural Exploration",
+    "trip_summary": "A 5-day family trip from Cairo to Marsa Matruh, focusing on cultural sites, local experiences, and relaxation, with a balanced budget.",
+    "trip_dates": "May 09 - May 13, 2026",
+    "travelers_type": "Family",
+    "luxury_level": "Balanced",
+    "itinerary": [
+      {
+        "day": "Day 1: May 09, 2026",
+        "activities": [
+          {
+            "time": "Morning",
+            "title": "Arrival and Hotel Check-in",
+            "description": "Arrive in Marsa Matruh and check into your comfortable accommodation at Semiramis Hotel Royal Palace, your base for exploring the city.",
+            "cost": "EGP 0",
+            "rating": 3.3,
+            "reviews_count": 0
+          },
+          {
+            "time": "9:30 AM - 11:30 AM",
+            "title": "Salt Cave Salman \u0643\u0647\u0641 \u0627\u0644\u0645\u0644\u062d \u0633\u0644\u0645\u0627\u0646",
+            "description": "Begin your cultural journey by exploring the unique Salt Cave Salman. Enjoy its calming atmosphere and learn about its interesting history.",
+            "cost": "EGP 200",
+            "rating": 4.2,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:30 AM - 1:30 PM",
+            "title": "Sidi El-Awwam Mosque",
+            "description": "Visit the impressive Sidi El-Awwam Mosque, a significant religious landmark known for its beautiful architecture and tranquil ambiance.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "1:30 PM - 2:30 PM",
+            "title": "Lunch at New Sultana",
+            "description": "Savor a delicious lunch featuring a mix of local and international cuisine at New Sultana Restaurant.",
+            "cost": "EGP 250",
+            "rating": 3.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "3:00 PM - 5:00 PM",
+            "title": "\u0645\u0637\u0631\u0648\u062d \u062c\u0646\u0647 \u0648\u0631\u0648\u062d",
+            "description": "Discover this popular local spot, known for its cultural significance and lively atmosphere.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "5:00 PM - 7:00 PM",
+            "title": "\u0645\u0643\u062a\u0628 \u2693Go Travel\u2693",
+            "description": "Experience another interesting cultural highlight, offering insights into local tourism and services.",
+            "cost": "EGP 200",
+            "rating": 3.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "7:30 PM - 8:30 PM",
+            "title": "Dinner at Rommel House Restaurant",
+            "description": "Conclude your day with a delightful dinner at Rommel House Restaurant, known for its Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 3.9,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 2: May 10, 2026",
+        "activities": [
+          {
+            "time": "9:00 AM - 11:00 AM",
+            "title": "\u0633\u064a\u06a4\u0627\u0646\u0627 \u062a\u0631\u0627\u0641\u064a\u0644",
+            "description": "Start your day exploring this popular cultural destination, offering a glimpse into local life.",
+            "cost": "EGP 200",
+            "rating": 5.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 1:00 PM",
+            "title": "\u0627\u0643\u0648\u0627 \u0628\u0627\u0631\u0643 \u0643\u064a\u0644\u0648\u0628\u0627\u062a\u0631\u0627",
+            "description": "Enjoy some fun and entertainment at this local water park attraction, perfect for family enjoyment.",
+            "cost": "EGP 200",
+            "rating": 3.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "1:00 PM - 2:00 PM",
+            "title": "Lunch at Coco El-Arabi Old Restaurant",
+            "description": "Relish a meal at this well-regarded local restaurant, offering authentic cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "2:30 PM - 4:30 PM",
+            "title": "\u0634\u0627\u0637\u0626 \u0631\u0623\u0633 \u0627\u0644\u062d\u0643\u0645\u0629",
+            "description": "Relax and enjoy the beautiful scenery of Ras El Hekma Beach, known for its clear waters.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "4:30 PM - 6:30 PM",
+            "title": "\u0634\u0627\u0637\u0626 \u0642\u0631\u064a\u0629 \u0627\u0644\u0633\u0648\u064a\u0646\u0627\u062a \u0645\u0648\u0633\u064a \u0646\u0627\u062c\u064a \u062d\u0645\u062f",
+            "description": "Spend your late afternoon at another charming local beach, perfect for unwinding.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "7:00 PM - 8:00 PM",
+            "title": "Dinner at \u0645\u0637\u0639\u0645 \u0646\u064a\u0648 \u0633\u0645\u0643\u0645\u0643 \u0627\u0644\u062c\u062f\u064a\u062f",
+            "description": "Conclude your day with dinner featuring diverse and delicious cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.2,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 3: May 11, 2026",
+        "activities": [
+          {
+            "time": "9:00 AM - 11:00 AM",
+            "title": "Rommel's Cave Museum",
+            "description": "Delve into history at this unique museum, a local favorite telling tales of wartime.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 1:00 PM",
+            "title": "\u0635\u062e\u0631\u0629 \u0634\u0627\u0637\u0626 \u0631\u0648\u0645\u064a\u0644",
+            "description": "Explore the famous Rommel Beach Rock, offering picturesque views and photo opportunities.",
+            "cost": "EGP 200",
+            "rating": 5.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "1:00 PM - 2:00 PM",
+            "title": "Lunch at MR.Chick",
+            "description": "Grab a delicious lunch at MR.Chick, known for its tempting specialties.",
+            "cost": "EGP 250",
+            "rating": 4.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "2:30 PM - 4:30 PM",
+            "title": "Beach",
+            "description": "Enjoy some leisure time by a beautiful beach in Marsa Matrouh, soaking in the sun and sea.",
+            "cost": "EGP 200",
+            "rating": 3.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "4:30 PM - 6:30 PM",
+            "title": "\u062c\u0628\u0644 \u0631\u0648\u0645\u064a\u0644 \u0645\u0637\u0631\u0648\u062d",
+            "description": "Visit Rommel Mountain for scenic views and further cultural exploration of the area.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "7:00 PM - 8:00 PM",
+            "title": "Dinner at MR.HUNGER \u0645\u0637\u0639\u0645 \u0645\u0633\u062a\u0631 \u0647\u0646\u062c\u0631",
+            "description": "Enjoy a satisfying dinner experience at MR.HUNGER, a popular spot for a good meal.",
+            "cost": "EGP 250",
+            "rating": 4.8,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 4: May 12, 2026",
+        "activities": [
+          {
+            "time": "9:00 AM - 11:00 AM",
+            "title": "\u0644\u0633\u0627\u0646 \u0634\u0637 \u0627\u0644\u063a\u0631\u0627\u0645",
+            "description": "Discover this unique stretch of land, a popular local attraction with beautiful coastal scenery.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 1:00 PM",
+            "title": "Cleopatra Bath",
+            "description": "Visit the legendary Cleopatra's Bath, a historical site steeped in ancient tales.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "1:00 PM - 2:00 PM",
+            "title": "Lunch at New Sultana",
+            "description": "Return to New Sultana for another delightful lunch featuring local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 3.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "2:30 PM - 4:30 PM",
+            "title": "\u0645\u0645\u0634\u064a \u0627\u0644\u0627\u0641\u0627\u062a\u0627\u0631 avatar",
+            "description": "Stroll along the Avatar promenade, enjoying the vibrant atmosphere and sea views.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "4:30 PM - 6:30 PM",
+            "title": "\u0645\u0645\u0634\u064a \u0628\u0627\u0628 \u0627\u0644\u0628\u062d\u0631",
+            "description": "Take a leisurely walk along the Bab El Bahr promenade, soaking in the coastal charm.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "7:00 PM - 8:00 PM",
+            "title": "Dinner at \u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648\u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a",
+            "description": "Indulge in grilled specialties and authentic Arabic cuisine for a memorable dinner.",
+            "cost": "EGP 250",
+            "rating": 4.1,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 5: May 13, 2026",
+        "activities": [
+          {
+            "time": "9:00 AM - 11:00 AM",
+            "title": "\u0645\u0645\u0634\u064a \u0627\u0644\u062e\u0645\u0627\u0631\u0649 \u0627\u0644\u0633\u064a\u0627\u062d\u0649",
+            "description": "Begin your final day with a refreshing walk along the scenic El Khamari Tourist Walkway.",
+            "cost": "EGP 200",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "11:00 AM - 1:00 PM",
+            "title": "Ava \u0645\u0645\u0634\u064a \u0645\u0637\u0631\u0648\u062d",
+            "description": "Explore another charming promenade, Ava Marsa Matruh Walkway, offering great views and local ambiance.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "1:00 PM - 2:00 PM",
+            "title": "Lunch at \u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648\u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a",
+            "description": "Enjoy a final taste of grilled specialties and Arabic cuisine for lunch.",
+            "cost": "EGP 250",
+            "rating": 4.1,
+            "reviews_count": 0
+          },
+          {
+            "time": "2:30 PM - 4:30 PM",
+            "title": "\u0634\u0645\u0633\u064a\u0627\u062a \u0634\u0627\u0637\u0626 \u0632\u0645\u0631\u062f\u0647",
+            "description": "Relax under the umbrellas at Zamruda Beach, enjoying the last moments by the sea before heading home.",
+            "cost": "EGP 200",
+            "rating": 3.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "4:30 PM - 6:30 PM",
+            "title": "\u0645\u0635\u064a\u062f koko",
+            "description": "A final cultural stop to cap off your Marsa Matruh experience, exploring this local attraction.",
+            "cost": "EGP 200",
+            "rating": 4.0,
+            "reviews_count": 0
+          },
+          {
+            "time": "7:00 PM - 8:00 PM",
+            "title": "Dinner at \u0643\u0628\u0633\u0629 \u0628\u0631\u0642\u0647",
+            "description": "Indulge in a last delicious meal featuring local and international cuisine at Kabsa Barqa.",
+            "cost": "EGP 250",
+            "rating": 4.1,
+            "reviews_count": 0
+          },
+          {
+            "time": "Evening",
+            "title": "Departure",
+            "description": "After a wonderful trip, depart from Marsa Matruh back to Cairo.",
+            "cost": "EGP 0",
+            "rating": 0.0,
+            "reviews_count": 0
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 4800 (EGP 1200 x 4 nights)",
+      "Activities: EGP 4000 (EGP 200 x 4 attractions/day x 5 days)",
+      "Food: EGP 2500 (EGP 250 x 2 meals/day x 5 days)",
+      "Flights/Transport: Estimated EGP 1500",
+      "Total Estimated Cost: EGP 12800"
+    ],
+    "landmarks": [
+      {
+        "id": "semiramis_hotel_royal_palace",
+        "title": "Semiramis Hotel Royal Palace",
+        "description": "Your family hotel in Marsa Matruh.",
+        "coordinate": {
+          "latitude": 31.356502,
+          "longitude": 27.236696
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "sidi_el_awwam_mosque",
+        "title": "Sidi El-Awwam Mosque",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 31.3573673,
+          "longitude": 27.2276904
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "salt_cave_salman",
+        "title": "Salt Cave Salman \u0643\u0647\u0641 \u0627\u0644\u0645\u0644\u062d \u0633\u0644\u0645\u0627\u0646",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 31.3600059,
+          "longitude": 27.2223092
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "matrouh_janna_w_rouh",
+        "title": "\u0645\u0637\u0631\u0648\u062d \u062c\u0646\u0647 \u0648\u0631\u0648\u062d",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.3543445,
+          "longitude": 27.2373159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "maktab_go_travel",
+        "title": "\u0645\u0643\u062a\u0628 \u2693Go Travel\u2693",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 3.9 stars.",
+        "coordinate": {
+          "latitude": 31.3566875,
+          "longitude": 27.2354375
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "new_sultana",
+        "title": "New Sultana",
+        "description": "Restaurant with Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.3585203,
+          "longitude": 27.225211
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "rommel_house_restaurant",
+        "title": "Rommel House Restaurant",
+        "description": "Restaurant with Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.3534,
+          "longitude": 27.2313221
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "sevana_travel",
+        "title": "\u0633\u064a\u06a4\u0627\u0646\u0627 \u062a\u0631\u0627\u0641\u064a\u0644",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 5 stars.",
+        "coordinate": {
+          "latitude": 31.3543445,
+          "longitude": 27.2373159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "aqua_park_cleopatra",
+        "title": "\u0627\u0643\u0648\u0627 \u0628\u0627\u0631\u0643 \u0643\u064a\u0644\u0648\u0628\u0627\u062a\u0631\u0627",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 3.9 stars.",
+        "coordinate": {
+          "latitude": 31.3543445,
+          "longitude": 27.2373159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "ras_el_hekma_beach",
+        "title": "\u0634\u0627\u0637\u0626 \u0631\u0623\u0633 \u0627\u0644\u062d\u0643\u0645\u0629",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 31.3543445,
+          "longitude": 27.2373159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "el_suwaiynaat_moussa_naji_hamad_beach",
+        "title": "\u0634\u0627\u0637\u0626 \u0642\u0631\u064a\u0629 \u0627\u0644\u0633\u0648\u064a\u0646\u0627\u062a \u0645\u0648\u0633\u064a \u0646\u0627\u062c\u064a \u062d\u0645\u062f",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 31.3543445,
+          "longitude": 27.2373159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "coco_el_arabi_old_restaurant",
+        "title": "Coco El-Arabi Old Restaurant",
+        "description": "Restaurant with Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.3536166,
+          "longitude": 27.238126
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "new_samkamak_restaurant",
+        "title": "\u0645\u0637\u0639\u0645 \u0646\u064a\u0648 \u0633\u0645\u0643\u0645\u0643 \u0627\u0644\u062c\u062f\u064a\u062f",
+        "description": "Restaurant with Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.3533057,
+          "longitude": 27.2382602
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "rommels_cave_museum",
+        "title": "Rommel's Cave Museum",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4 stars.",
+        "coordinate": {
+          "latitude": 31.3655942,
+          "longitude": 27.2485317
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "rommel_beach_rock",
+        "title": "\u0635\u062e\u0631\u0629 \u0634\u0627\u0637\u0626 \u0631\u0648\u0645\u064a\u0644",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 5 stars.",
+        "coordinate": {
+          "latitude": 31.366867,
+          "longitude": 27.2500178
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "beach_marsa_matrouh",
+        "title": "Beach",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 3.7 stars.",
+        "coordinate": {
+          "latitude": 31.3601957,
+          "longitude": 27.2555754
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "gabal_rommel_matrouh",
+        "title": "\u062c\u0628\u0644 \u0631\u0648\u0645\u064a\u0644 \u0645\u0637\u0631\u0648\u062d",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.3663691,
+          "longitude": 27.2553484
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mr_chick",
+        "title": "MR.Chick",
+        "description": "Restaurant with Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.3567059,
+          "longitude": 27.2436431
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "mr_hunger",
+        "title": "MR.HUNGER \u0645\u0637\u0639\u0645 \u0645\u0633\u062a\u0631 \u0647\u0646\u062c\u0631",
+        "description": "Restaurant with Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.3557598,
+          "longitude": 27.2464429
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "lisan_shatt_al_gharam",
+        "title": "\u0644\u0633\u0627\u0646 \u0634\u0637 \u0627\u0644\u063a\u0631\u0627\u0645",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 31.3645664,
+          "longitude": 27.2240719
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cleopatra_bath",
+        "title": "Cleopatra Bath",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 31.3746179,
+          "longitude": 27.1895474
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "avatar_promenade",
+        "title": "\u0645\u0645\u0634\u064a \u0627\u0644\u0627\u0641\u0627\u062a\u0627\u0631 avatar",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.3578987,
+          "longitude": 27.236466
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "bab_el_bahr_promenade",
+        "title": "\u0645\u0645\u0634\u064a \u0628\u0627\u0628 \u0627\u0644\u0628\u062d\u0631",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.3588792,
+          "longitude": 27.2274685
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mashawina_restaurant",
+        "title": "\u0645\u0637\u0639\u0645 \u0645\u0634\u0627\u0648\u064a\u0646\u0627 \u0644\u0644\u0645\u0634\u0648\u064a\u0627\u062a \u0648\u0627\u0644\u0627\u0643\u0644 \u0627\u0644\u0639\u0631\u0628\u064a",
+        "description": "Restaurant with Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.3563588,
+          "longitude": 27.2351878
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "el_khamari_tourist_walkway",
+        "title": "\u0645\u0645\u0634\u064a \u0627\u0644\u062e\u0645\u0627\u0631\u0649 \u0627\u0644\u0633\u064a\u0627\u062d\u0649",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 31.3578451,
+          "longitude": 27.2361243
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "ava_marsa_matrouh_walkway",
+        "title": "Ava \u0645\u0645\u0634\u064a \u0645\u0637\u0631\u0648\u062d",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 31.3579141,
+          "longitude": 27.2388722
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "zamruda_beach_umbrellas",
+        "title": "\u0634\u0645\u0633\u064a\u0627\u062a \u0634\u0627\u0637\u0626 \u0632\u0645\u0631\u062f\u0647",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 3.5 stars.",
+        "coordinate": {
+          "latitude": 31.3543445,
+          "longitude": 27.2373159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "masyed_koko",
+        "title": "\u0645\u0635\u064a\u062f koko",
+        "description": "A popular tourist destination in Marsa Matruh with a rating of 4.0 stars.",
+        "coordinate": {
+          "latitude": 31.3543445,
+          "longitude": 27.2373159
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "kabsa_barqa",
+        "title": "\u0643\u0628\u0633\u0629 \u0628\u0631\u0642\u0647",
+        "description": "Restaurant with Local / International cuisine.",
+        "coordinate": {
+          "latitude": 31.3562277,
+          "longitude": 27.2369966
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

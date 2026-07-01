@@ -30,7 +30,7 @@ async def evaluate_plan(query, plan):
         plan (str): The generated travel plan (TripPlan JSON).
 
     Returns:
-        dict: The evaluation result containing 'pass', 'reason', and 'failed_constraints'.
+        dict: The evaluation result containing 'passed', 'reason', and 'failed_constraints'.
     """
 
     prompt = f"""
@@ -46,7 +46,7 @@ Travel Plan:
         response_text = await call_judge(prompt)
     except Exception as e:
         return {
-            "pass": False,
+            "passed": False,
             "reason": f"System Error calling judge agent: {str(e)}",
             "failed_constraints": ["System Error"]
         }
@@ -65,7 +65,7 @@ Travel Plan:
 
     except (json.JSONDecodeError, TypeError) as e:
         return {
-            "pass": False,
+            "passed": False,
             "reason": f"Failed to parse judge output: {response_text} (Error: {str(e)})",
             "failed_constraints": ["Output Format"]
         }

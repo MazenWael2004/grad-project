@@ -26,6 +26,7 @@ class Attraction(models.Model):
     best_time = models.CharField(max_length=20, blank=True, default='morning')
     popularity = models.IntegerField(default=3)
     description = models.TextField(blank=True)
+    image_url = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} ({self.city})"
@@ -40,6 +41,7 @@ class Hotel(models.Model):
     rating = models.FloatField()
     CATEGORY_CHOICES = [("budget","Budget"),("mid-range","Mid-range"),("luxury","Luxury")]
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    image_url = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -54,6 +56,7 @@ class Restaurant(models.Model):
     average_meal_cost = models.IntegerField(help_text="Average cost of a meal in EGP")
     rating = models.FloatField()
     specialty = models.CharField(max_length=200, blank=True)
+    image_url = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.name

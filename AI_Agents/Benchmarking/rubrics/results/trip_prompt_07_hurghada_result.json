@@ -1,0 +1,471 @@
+{
+  "prompt_file": "trip_prompt_07_hurghada.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Alexandria\nDestination: Hurghada\nDates: 2026-07-20 to 2026-07-21\nBudget: Balanced\nParty: Family\nInterests: Cultural Exploration, Camel Riding",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 3942,
+    "latency": {
+      "time_to_first_token": 75.714,
+      "output_tokens_per_sec": 26.64,
+      "time_to_last_token": 75.715
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan JSON is well-formed and adheres to a logical, consistent schema with appropriate data types for all fields."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The Bella Vista Resort Hurghada is located in Hurghada, and its 4.2-star rating and description as 'mid-range hotel accommodation' are suitable for a family with a 'Balanced' budget."
+        },
+        {
+          "assertion": "Activities are varied and match the user's interests (history, culture, food).",
+          "passed": true,
+          "reason": "The plan includes activities like Sand City Hurghada, Mini Egypt Park, and a 'Local Culture Drive' for 'Cultural Exploration'. It also explicitly mentions 'aligning with your interest in camel riding' in the description for Sunset Horse Ranch, even if the activity itself is a horse ranch. Snorkeling, aquariums, and marina visits provide variety."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": true,
+          "reason": "The plan explicitly states a 'Balanced' luxury level and provides a detailed budget breakdown totaling EGP 7370 for a 2-day family trip, which appears reasonable for a balanced budget in Hurghada, considering accommodation, activities, and food."
+        },
+        {
+          "assertion": "Transportation methods are practical and efficient for the region.",
+          "passed": false,
+          "reason": "The plan incorrectly assumes an origin of 'Cairo' for transport estimation ('Flights/Transport: Estimated EGP 500 (from Cairo to Hurghada)') when the user query specified 'Alexandria' as the origin. Inter-activity transport within Hurghada is not specified."
+        },
+        {
+          "assertion": "The plan is coherent and easy to follow.",
+          "passed": true,
+          "reason": "The plan is structured logically day-by-day with clear timings, descriptions, costs, and locations for each activity, making it easy to understand and follow."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": false,
+      "reason": "The travel plan specifies the origin city as Cairo, which contradicts the user's request for Alexandria.",
+      "failed_constraints": [
+        "Origin City"
+      ]
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Hurghada Family Adventure: Islands, Sand & Culture",
+    "trip_summary": "A 2-day family trip from Cairo to Hurghada, focusing on camel riding and cultural exploration, including snorkeling, sand art, and marine life discovery.",
+    "trip_dates": "July 20 - July 21, 2026",
+    "travelers_type": "Family",
+    "luxury_level": "Balanced",
+    "itinerary": [
+      {
+        "day": "Day 1: Island Hopping & Cultural Immersion",
+        "activities": [
+          {
+            "time": "08:00 AM - 02:00 PM",
+            "title": "Giftun Island Snorkeling Adventure",
+            "description": "Embark on an exciting boat trip to Giftun Island, renowned for its crystal-clear waters and vibrant marine life. Spend your morning snorkeling, swimming, and relaxing on the beautiful sandy beaches, a perfect blend of adventure and relaxation.",
+            "cost": "EGP 800",
+            "rating": 5.0,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.2167,33.9333"
+          },
+          {
+            "time": "02:00 PM - 03:00 PM",
+            "title": "Hotel Check-in at Bella Vista Resort Hurghada & Refresh",
+            "description": "Arrive at the Bella Vista Resort Hurghada, check into your comfortable accommodation, and take some time to freshen up after your morning adventure.",
+            "cost": "EGP 1200",
+            "rating": 4.2,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.2132717,33.841192"
+          },
+          {
+            "time": "03:00 PM - 04:00 PM",
+            "title": "Lunch at Caribbean Bar",
+            "description": "Savor a delightful lunch at the Caribbean Bar, offering a selection of Cafe/Patisserie specialties in a relaxed setting, conveniently located near your hotel.",
+            "cost": "EGP 120",
+            "rating": 4.5,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.2143782,33.8425409"
+          },
+          {
+            "time": "04:00 PM - 06:00 PM",
+            "title": "Explore Sand City Hurghada",
+            "description": "Discover the impressive art of sand sculpting at Sand City Hurghada, a unique open-air museum showcasing intricate designs and figures, perfect for family photos.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.099592,33.8230867"
+          },
+          {
+            "time": "06:00 PM - 07:30 PM",
+            "title": "Sunset Horse Ranch & Local Culture Drive",
+            "description": "Embrace the local culture with a visit to Sunset horse ranch hurghada for an authentic experience, aligning with your interest in camel riding. Follow this with a scenic drive or quick stops at Biedronka - Hurghada wycieczki, Happy Hurghada, and Basem to capture the essence of Hurghada's local life.",
+            "cost": "EGP 800",
+            "rating": 5.0,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.2582338,33.8228035"
+          },
+          {
+            "time": "07:30 PM - 08:30 PM",
+            "title": "Coastal Charm: Corniche & Orange Beach",
+            "description": "Enjoy a leisurely evening along the Hurghada corniche, taking in the sea breeze and vibrant atmosphere. Explore Orange beach hurghada for picturesque views and observe local marine tourism opportunities at Arafa Marine Tourism and Dolphin World Egypt.",
+            "cost": "EGP 800",
+            "rating": 4.4,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.2487455,33.8390608"
+          },
+          {
+            "time": "08:30 PM - 09:30 PM",
+            "title": "Dinner at Barry's Hollands Eetcafe",
+            "description": "Conclude your day with a delicious dinner at Barry's Hollands Eetcafe, known for its Local / International cuisine and inviting atmosphere.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.227832,33.8424548"
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Aquatic Wonders & City Exploration",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Dive into Hurghada Grand Aquarium",
+            "description": "Start your day by exploring the mesmerizing underwater world at the Hurghada Grand Aquarium, home to a diverse collection of marine species.",
+            "cost": "EGP 200",
+            "rating": 4.1,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.1343995,33.821875"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "Discover Mini Egypt Park",
+            "description": "Journey through Egypt's iconic landmarks in miniature at Mini Egypt Park. This unique attraction offers a glimpse of the country's rich history and architectural wonders.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=26.9876208,33.8562656"
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Moby Dick Restaurant",
+            "description": "Enjoy a delightful lunch at Moby Dick Restaurant, famous for its Local / International cuisine, located along the scenic Aldau Promenade.",
+            "cost": "EGP 250",
+            "rating": 4.8,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.1624087,33.82431760000001"
+          },
+          {
+            "time": "02:00 PM - 03:00 PM",
+            "title": "Stroll Through El Mamsha Park & Red Sea Aquarium",
+            "description": "Take a relaxing walk through El Mamsha Park and then visit the Red Sea Aquarium for more marine discoveries, offering a different perspective on aquatic life.",
+            "cost": "EGP 400",
+            "rating": 4.3,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.190213,33.8324792"
+          },
+          {
+            "time": "03:00 PM - 05:00 PM",
+            "title": "Hurghada Marina Area & Island Views",
+            "description": "Explore the bustling Hurghada Marina, a hub of activity and beauty. From here, get views of Island Paradise and \u062c\u0632\u064a\u0631\u0647 \u0628\u0631\u0627\u062f\u064a\u0633, and don't miss the Beach Selfie Spot. You might also encounter local tour operators like David Tours Hurghada, Get Go Redsea Tours, or the area known as Urgh.",
+            "cost": "EGP 1400",
+            "rating": 4.6,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.2258669,33.8410361"
+          },
+          {
+            "time": "05:00 PM - 06:00 PM",
+            "title": "Relaxation and Departure Preparation",
+            "description": "Enjoy some free time for last-minute souvenir shopping or simply relax before heading to dinner and preparing for your departure.",
+            "cost": "EGP 0",
+            "rating": 0.0,
+            "reviews_count": 0,
+            "google_maps_url": ""
+          },
+          {
+            "time": "06:00 PM - 07:00 PM",
+            "title": "Dinner at Sky restaurant",
+            "description": "Enjoy your final dinner in Hurghada at Sky restaurant, offering exquisite Local / International cuisine and a delightful dining experience.",
+            "cost": "EGP 250",
+            "rating": 4.9,
+            "reviews_count": 100,
+            "google_maps_url": "https://maps.google.com/?q=27.1624948,33.8230144"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Flights/Transport: Estimated EGP 500 (from Cairo to Hurghada)",
+      "Accommodation: EGP 1200 (1 night at Bella Vista Resort Hurghada)",
+      "Food: EGP 870 (estimated for 2 days)",
+      "Activities: EGP 4800 (estimated for all listed attractions)",
+      "Total Estimated Trip Cost: EGP 7370"
+    ],
+    "landmarks": [
+      {
+        "id": "bella_vista_resort_hurghada",
+        "title": "Bella Vista Resort Hurghada",
+        "description": "Your mid-range hotel accommodation.",
+        "coordinate": {
+          "latitude": 27.2132717,
+          "longitude": 33.841192
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "giftun_island_snorkeling",
+        "title": "Giftun Island Snorkeling",
+        "description": "A boat trip for snorkeling, swimming, and relaxing on sandy beaches.",
+        "coordinate": {
+          "latitude": 27.2167,
+          "longitude": 33.9333
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sand_city_hurghada",
+        "title": "Sand City Hurghada",
+        "description": "A popular tourist destination in Hurghada with sand sculptures.",
+        "coordinate": {
+          "latitude": 27.099592,
+          "longitude": 33.8230867
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "biedronka_hurghada_wycieczki",
+        "title": "Biedronka - Hurghada wycieczki",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2254211,
+          "longitude": 33.8375785
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "sunset_horse_ranch_hurghada",
+        "title": "Sunset horse ranch hurghada",
+        "description": "A popular tourist destination in Hurghada for horse/camel riding.",
+        "coordinate": {
+          "latitude": 27.2582338,
+          "longitude": 33.8228035
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "arafa_marine_tourism",
+        "title": "Arafa Marine Tourism",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2578957,
+          "longitude": 33.8116067
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "dolphin_world_egypt",
+        "title": "Dolphin World Egypt",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 26.9906317,
+          "longitude": 33.8520963
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "happy_hurghada",
+        "title": "Happy Hurghada",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2211674,
+          "longitude": 33.8377134
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "hurghada_corniche",
+        "title": "Hurghada corniche",
+        "description": "A popular tourist destination in Hurghada for strolling.",
+        "coordinate": {
+          "latitude": 27.2487455,
+          "longitude": 33.8390608
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "orange_beach_hurghada",
+        "title": "Orange beach hurghada",
+        "description": "A popular tourist destination in Hurghada with beach access.",
+        "coordinate": {
+          "latitude": 27.2131463,
+          "longitude": 33.8426094
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "basem",
+        "title": "Basem",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2525234,
+          "longitude": 33.8214597
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "caribbean_bar",
+        "title": "Caribbean Bar",
+        "description": "A Cafe / Patisserie for light meals.",
+        "coordinate": {
+          "latitude": 27.2143782,
+          "longitude": 33.8425409
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "barrys_hollands_eetcafe",
+        "title": "Barry's Hollands Eetcafe",
+        "description": "A restaurant serving Local / International cuisine.",
+        "coordinate": {
+          "latitude": 27.227832,
+          "longitude": 33.8424548
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "hurghada_grand_aquarium",
+        "title": "Hurghada Grand Aquarium",
+        "description": "A popular tourist destination in Hurghada with marine exhibits.",
+        "coordinate": {
+          "latitude": 27.1343995,
+          "longitude": 33.821875
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mini_egypt_park",
+        "title": "Mini Egypt Park",
+        "description": "A popular tourist destination in Hurghada featuring miniature Egyptian landmarks.",
+        "coordinate": {
+          "latitude": 26.9876208,
+          "longitude": 33.8562656
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "david_tours_hurghada",
+        "title": "David Tours Hurghada",
+        "description": "A popular tourist destination/tour operator in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2578957,
+          "longitude": 33.8116067
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "get_go_redsea_tours",
+        "title": "Get Go Redsea Tours",
+        "description": "A popular tourist destination/tour operator in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2578957,
+          "longitude": 33.8116067
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "hurghada_marina",
+        "title": "Hurghada Marina",
+        "description": "A popular tourist destination in Hurghada for leisure and dining.",
+        "coordinate": {
+          "latitude": 27.2258669,
+          "longitude": 33.8410361
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "island_paradise",
+        "title": "Island Paradise",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2578957,
+          "longitude": 33.8116067
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "jazirat_baradis",
+        "title": "\u062c\u0632\u064a\u0631\u0647 \u0628\u0631\u0627\u062f\u064a\u0633",
+        "description": "A popular tourist destination in Hurghada, known as Paradise Island.",
+        "coordinate": {
+          "latitude": 27.2578957,
+          "longitude": 33.8116067
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "beach_selfie_spot",
+        "title": "Beach Selfie Spot",
+        "description": "A popular tourist destination in Hurghada for photos.",
+        "coordinate": {
+          "latitude": 27.2578957,
+          "longitude": 33.8116067
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "el_mamsha_park",
+        "title": "El Mamsha Park",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 27.190213,
+          "longitude": 33.8324792
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "red_sea_aquarium",
+        "title": "Red Sea Aquarium",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2615337,
+          "longitude": 33.819046
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "urgh",
+        "title": "Urgh",
+        "description": "A popular tourist destination in Hurghada.",
+        "coordinate": {
+          "latitude": 27.2578957,
+          "longitude": 33.8116067
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "moby_dick_restaurant",
+        "title": "Moby Dick Restaurant, Aldau Promenade, Steigenberger pure lifestyle",
+        "description": "A restaurant serving Local / International cuisine.",
+        "coordinate": {
+          "latitude": 27.1624087,
+          "longitude": 33.82431760000001
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "sky_restaurant",
+        "title": "Sky restaurant",
+        "description": "A restaurant serving Local / International cuisine.",
+        "coordinate": {
+          "latitude": 27.1624948,
+          "longitude": 33.8230144
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

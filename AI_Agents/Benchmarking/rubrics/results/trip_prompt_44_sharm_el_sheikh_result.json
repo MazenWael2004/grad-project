@@ -1,0 +1,346 @@
+{
+  "prompt_file": "trip_prompt_44_sharm_el_sheikh.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: New York\nDestination: Sharm El-Sheikh\nDates: 2026-08-10 to 2026-08-13\nBudget: Luxury\nParty: Couple\nInterests: Art Galleries, Camel Riding, Road Trips, Nile Cruise",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 2562,
+    "latency": {
+      "time_to_first_token": 40.378,
+      "output_tokens_per_sec": 38.63,
+      "time_to_last_token": 40.38
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan is a valid JSON object and adheres to a typical structured travel plan schema, with all expected fields and data types present."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": false,
+          "reason": "The user requested a 'Luxury' budget, but the suggested Falcon Naama Star Hotel has a rating of 3.6, which does not align with a luxury preference."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": false,
+          "reason": "The user requested a 'Luxury' budget. However, the estimated meal costs (EGP 250 per meal, approximately $8 USD) and the total estimated cost (EGP 6600, approximately $210 USD for 4 days for a couple) are far below luxury expectations. The suggested hotel's low rating also contradicts a luxury budget."
+        },
+        {
+          "assertion": "The daily sequence of activities is logically ordered chronologically (morning, afternoon, evening).",
+          "passed": true,
+          "reason": "Activities for each day are clearly listed in chronological order from morning to evening."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": true,
+      "reason": "All specified constraints have been met by the travel plan.",
+      "failed_constraints": []
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Sharm El-Sheikh Luxury Escape",
+    "trip_summary": "An exquisite 4-day, 3-night luxury escape for a couple from Cairo, Egypt, to Sharm El-Sheikh, featuring stunning nature reserves, cultural sites, and a vibrant entertainment complex, complemented by fine dining experiences.",
+    "trip_dates": "Aug 10 - Aug 13, 2026",
+    "travelers_type": "Couple",
+    "luxury_level": "Luxury",
+    "itinerary": [
+      {
+        "day": "Day 1: August 10",
+        "activities": [
+          {
+            "time": "11:00 AM - 12:00 PM",
+            "title": "Arrival and Hotel Check-in",
+            "description": "Arrive in Sharm El-Sheikh and check into the Falcon Naama Star Hotel, your comfortable base for this luxurious getaway. Settle in and prepare for an exciting itinerary.",
+            "cost": "EGP 1200",
+            "rating": 3.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "12:30 PM - 01:30 PM",
+            "title": "Lunch at Verde Basilico",
+            "description": "Indulge in a delightful Italian lunch at Verde Basilico, known for its Chef's Specials and high rating, setting a perfect start to your culinary journey.",
+            "cost": "EGP 250",
+            "rating": 4.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:00 PM - 04:00 PM",
+            "title": "Explore Ras Mohamed Nature Reserve",
+            "description": "Spend your afternoon immersed in the breathtaking beauty of Ras Mohamed Nature Reserve. Discover its diverse marine life, stunning coral reefs, and unique landscapes, a truly popular destination.",
+            "cost": "EGP 200",
+            "rating": 4.8,
+            "reviews_count": 0
+          },
+          {
+            "time": "07:30 PM - 09:00 PM",
+            "title": "Dinner at La cucina degli artisti",
+            "description": "Conclude your first day with a memorable dinner at La cucina degli artisti, offering a range of local and international dishes in a charming setting.",
+            "cost": "EGP 250",
+            "rating": 4.1,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 2: August 11",
+        "activities": [
+          {
+            "time": "09:00 AM - 12:00 PM",
+            "title": "Morning Leisure",
+            "description": "Enjoy a relaxed morning at your leisure. Take advantage of the hotel's amenities or simply unwind by the pool.",
+            "cost": "EGP 0"
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at C'La Vie Sharm",
+            "description": "Savor a delicious lunch at C'La Vie Sharm, known for its exquisite local and international cuisine.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Discover Hollywood Sharm El Sheik",
+            "description": "Spend your afternoon experiencing the vibrant entertainment and attractions at Hollywood Sharm El Sheik, a popular destination for tourists.",
+            "cost": "EGP 200",
+            "rating": 3.9,
+            "reviews_count": 0
+          },
+          {
+            "time": "07:30 PM - 09:00 PM",
+            "title": "Dinner at Dananeer Restaurant Sea Food & Steak House",
+            "description": "Indulge in a sumptuous dinner at Dananeer Restaurant, celebrated for its Chef's Specials in seafood and steak, offering a refined dining experience.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 3: August 12",
+        "activities": [
+          {
+            "time": "09:30 AM - 11:30 AM",
+            "title": "Journey Through King Tut Museum",
+            "description": "Begin your day with a fascinating visit to the King Tut Museum, where you can explore ancient Egyptian history and artifacts, ideally visited in the morning.",
+            "cost": "EGP 200",
+            "rating": 4.3,
+            "reviews_count": 0
+          },
+          {
+            "time": "12:30 PM - 01:30 PM",
+            "title": "Lunch at Mahony Restaurant",
+            "description": "Enjoy a delightful lunch at Mahony Restaurant, known for its excellent local and international menu and warm ambiance.",
+            "cost": "EGP 250",
+            "rating": 4.6,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Explore The Echo Temple",
+            "description": "In the afternoon, visit The Echo Temple, a unique cultural site offering intriguing acoustics and historical insights.",
+            "cost": "EGP 200",
+            "rating": 4.4,
+            "reviews_count": 0
+          },
+          {
+            "time": "07:30 PM - 09:00 PM",
+            "title": "Dinner at Ebn hamido seafood",
+            "description": "Savor an exquisite seafood dinner at Ebn hamido seafood, highly rated for its fresh ingredients and Chef's Specials.",
+            "cost": "EGP 250",
+            "rating": 4.9,
+            "reviews_count": 0
+          }
+        ]
+      },
+      {
+        "day": "Day 4: August 13",
+        "activities": [
+          {
+            "time": "09:00 AM - 12:00 PM",
+            "title": "Morning Relaxation and Preparation",
+            "description": "Enjoy a final leisurely morning in Sharm El-Sheikh, perhaps for some last-minute souvenir shopping or simply relaxing before your departure.",
+            "cost": "EGP 0"
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Fleur De Leis Cajun Steakhouse",
+            "description": "Have a flavorful lunch at Fleur De Leis Cajun Steakhouse, offering unique Cajun-inspired dishes and specialties.",
+            "cost": "EGP 250",
+            "rating": 4.8,
+            "reviews_count": 0
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Visit Peace Square",
+            "description": "Conclude your trip with an afternoon visit to Peace Square, a significant landmark offering a serene environment and scenic views, perfect for a final reflection.",
+            "cost": "EGP 200",
+            "rating": 4.5,
+            "reviews_count": 0
+          },
+          {
+            "time": "07:00 PM - 08:30 PM",
+            "title": "Farewell Dinner at Basilico",
+            "description": "Enjoy a farewell dinner at Basilico, a highly-rated restaurant known for its local and international cuisine, before heading to the airport for your departure.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 0
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation: EGP 3600 (3 nights at EGP 1200/night)",
+      "Activities & Entrance Fees: EGP 1000",
+      "Food & Dining: EGP 2000 (8 meals at EGP 250/meal)",
+      "Total Estimated Cost (Excluding flights/transport): EGP 6600"
+    ],
+    "landmarks": [
+      {
+        "id": "falcon_naama_star_hotel",
+        "title": "Falcon Naama Star Hotel",
+        "description": "Your luxury accommodation in Sharm El-Sheikh.",
+        "coordinate": {
+          "latitude": 27.9096645,
+          "longitude": 34.3202787
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "ras_mohamed_nature_reserve",
+        "title": "Ras Mohamed Nature Reserve",
+        "description": "A stunning natural and cultural attraction in Sharm El-Sheikh.",
+        "coordinate": {
+          "latitude": 27.7937578,
+          "longitude": 34.17803970000001
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "verde_basilico",
+        "title": "Verde Basilico",
+        "description": "An Italian restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 27.8651394,
+          "longitude": 34.2935148
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "la_cucina_degli_artisti",
+        "title": "La cucina degli artisti",
+        "description": "A restaurant serving local and international dishes.",
+        "coordinate": {
+          "latitude": 27.8661403,
+          "longitude": 34.2980445
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "hollywood_sharm_el_sheik",
+        "title": "Hollywood Sharm El Sheik",
+        "description": "A popular entertainment destination in Sharm El-Sheikh.",
+        "coordinate": {
+          "latitude": 27.9263898,
+          "longitude": 34.344056
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cla_vie_sharm",
+        "title": "C'La Vie Sharm",
+        "description": "A restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 27.9186489,
+          "longitude": 34.3361119
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "dananeer_restaurant",
+        "title": "Dananeer Restaurant Sea Food & Steak House",
+        "description": "A restaurant specializing in seafood and steak.",
+        "coordinate": {
+          "latitude": 27.9108788,
+          "longitude": 34.325712
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "king_tut_museum",
+        "title": "King Tut Museum",
+        "description": "A museum dedicated to ancient Egyptian history and artifacts.",
+        "coordinate": {
+          "latitude": 27.908443,
+          "longitude": 34.320323
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "the_echo_temple",
+        "title": "The Echo Temple",
+        "description": "A unique nature and culture attraction with intriguing acoustics.",
+        "coordinate": {
+          "latitude": 27.9610662,
+          "longitude": 34.2834194
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mahony_restaurant",
+        "title": "Mahony Restaurant",
+        "description": "A restaurant offering local and international cuisine.",
+        "coordinate": {
+          "latitude": 27.9113979,
+          "longitude": 34.3212432
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "ebn_hamido_seafood",
+        "title": "Ebn hamido seafood",
+        "description": "A highly-rated seafood restaurant.",
+        "coordinate": {
+          "latitude": 27.9105886,
+          "longitude": 34.316618
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "peace_square",
+        "title": "Peace Square",
+        "description": "A significant cultural landmark in Sharm El-Sheikh.",
+        "coordinate": {
+          "latitude": 27.963774,
+          "longitude": 34.361324
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "fleur_de_leis_cajun_steakhouse",
+        "title": "Fleur De Leis Cajun Steakhouse",
+        "description": "A restaurant offering Cajun-inspired dishes.",
+        "coordinate": {
+          "latitude": 27.9437229,
+          "longitude": 34.3844604
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "basilico_restaurant",
+        "title": "Basilico",
+        "description": "A restaurant known for its local and international cuisine.",
+        "coordinate": {
+          "latitude": 27.9428685,
+          "longitude": 34.3851304
+        },
+        "color": "#10B981"
+      }
+    ]
+  }
+}

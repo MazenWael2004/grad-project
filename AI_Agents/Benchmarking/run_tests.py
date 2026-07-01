@@ -29,21 +29,18 @@ load_dotenv()
 from AI_Agents.Travel_planner.agent import root_agent
 from AI_Agents.Travel_planner.planner_agent import planner_agent
 from AI_Agents.Travel_planner.schema_formatter_agent import schema_formatter_agent
-from AI_Agents.Travel_planner.research_agent import research_agent
 from AI_Agents.Benchmarking.judge import judge_agent
 
 # Override models to gemini-2.5-flash to avoid model availability and stability issues
 MODEL_NAME = "gemini-2.5-flash"
 planner_agent.model = MODEL_NAME
 schema_formatter_agent.model = MODEL_NAME
-research_agent.model = MODEL_NAME
 judge_agent.model = MODEL_NAME
 
 from google.adk.runners import Runner
 from google.adk.sessions.in_memory_session_service import InMemorySessionService
 from google.genai import types
 
-from AI_Agents.Benchmarking.judge import judge_agent
 import AI_Agents.Travel_planner.tools as travel_tools
 from google.adk.agents.llm_agent import Agent
 from pydantic import BaseModel, Field
@@ -51,13 +48,7 @@ from pydantic import BaseModel, Field
 # Global tool call counter
 main_tool_calls = 0
 
-original_search_tool = travel_tools.search_tool
 original_calculate_distance_tool = travel_tools.calculate_distance_tool
-
-def wrapped_search_tool(*args, **kwargs):
-    global main_tool_calls
-    main_tool_calls += 1
-    return original_search_tool(*args, **kwargs)
 
 def wrapped_calculate_distance_tool(*args, **kwargs):
     global main_tool_calls
@@ -65,7 +56,6 @@ def wrapped_calculate_distance_tool(*args, **kwargs):
     return original_calculate_distance_tool(*args, **kwargs)
 
 # Instrument the tools
-travel_tools.search_tool = wrapped_search_tool
 travel_tools.calculate_distance_tool = wrapped_calculate_distance_tool
 
 # Grader LLM Rubric Agent Definition
@@ -86,7 +76,7 @@ Return a structured JSON object with the pass/fail status and a brief reason for
 """
 
 grader_agent = Agent(
-    model="gemini-3-flash-preview",
+    model=MODEL_NAME,
     name="grader_agent",
     description="Grades generated travel plans against a list of assertions.",
     instruction=grader_prompt,
@@ -154,7 +144,7 @@ async def run_travel_planner(query):
     # Count tokens using the model's tokenizer
     try:
         from google import genai
-        client = genai.Client()
+        client = genai.Client(http_options={"timeout": 600.0})
         input_token_count = client.models.count_tokens(
             model=MODEL_NAME, contents=query
         )
@@ -294,14 +284,18 @@ async def main():
         print("=" * 60)
 
         with open(prompt_path, "r", encoding="utf-8") as f:
-            query = f.read().strip()
+            raw_query = f.read().strip()
 
-        print(f"Query: {query}")
+        print(f"Query: {raw_query}")
         
+        # Import dynamically to avoid premature Django initialization issues
+        from AI_Agents.Benchmarking.context_helper import get_contextualized_query
+        contextualized_query = await get_contextualized_query(raw_query)
+
         try:
             # 1. Run Travel Planner
             print("\nGenerating travel plan...")
-            plan_text, metrics = await run_travel_planner(query)
+            plan_text, metrics = await run_travel_planner(contextualized_query)
             plan_data, plan_json_str = extract_json_from_response(plan_text)
             
             if not plan_data:
@@ -310,16 +304,16 @@ async def main():
             
             # 2. Run Grader 1 (LLM Rubric Assertions)
             print("Grading rubric assertions...")
-            llm_rubric_results = await grade_assertions(query, plan_json_str, assertions)
+            llm_rubric_results = await grade_assertions(raw_query, plan_json_str, assertions)
             
-            # 3. Run Grader 2 (Spatial/Constraint Judge)
-            print("Running judge agent...")
-            judge_results = await run_judge(query, plan_json_str)
+            # 3. Run Grader 2 (Constraint Judge)
+            print("Running constraint judge agent...")
+            judge_results = await run_judge(raw_query, plan_json_str)
 
             # Compile results
             result_data = {
                 "prompt_file": prompt_file,
-                "query": query,
+                "query": raw_query,
                 "metrics": metrics,
                 "grading_results": {
                     "llm_rubric_grader": llm_rubric_results,
@@ -339,7 +333,7 @@ async def main():
             print(f"  Tool calls:           {metrics['n_toolcalls']}")
             if judge_results:
                 print(f"  Judge Passed:         {judge_results.get('passed')}")
-                print(f"  Spatial Score:        {judge_results.get('spatial_score')}")
+                print(f"  Failed constraints:   {judge_results.get('failed_constraints', [])}")
 
         except Exception as e:
             print(f"[ERROR] Failed to run test for {prompt_file}: {e}")

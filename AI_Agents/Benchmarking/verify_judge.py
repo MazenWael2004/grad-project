@@ -55,7 +55,7 @@ async def verify_judge():
     result = await evaluate_plan(query, str(plan))
     print(f"Result: {result}")
     
-    if result.get('pass') is True:
+    if result.get('passed') is True:
         print("PASS: Correctly identified valid plan.")
     else:
         print("FAIL: Incorrectly rejected valid plan.")
@@ -71,7 +71,7 @@ async def verify_judge():
     result = await evaluate_plan(query, bad_plan)
     print(f"Result: {result}")
     
-    if result.get('pass') is False:
+    if result.get('passed') is False:
         print("PASS: Correctly identified invalid plan.")
     else:
         print("FAIL: Incorrectly accepted invalid plan.")

@@ -1,70 +1,48 @@
 from google.adk.agents.llm_agent import Agent
-from google.adk.models.lite_llm import LiteLlm
-from google.adk.tools import FunctionTool
-from AI_Agents.schemas import Criterion
-from AI_Agents.Travel_planner.tools import calculate_distance_tool
 import os
 from dotenv import load_dotenv
+from AI_Agents.schemas import ConstraintResult
 
 
 load_dotenv()
 
-# Wrap the distance calculator as an ADK FunctionTool
-distance_tool = FunctionTool(calculate_distance_tool)
-
 judge_prompt = """
-You are an expert travel plan evaluator with expertise in spatial/geographic reasoning.
+You are an expert travel plan evaluator.
 
-Your task is to check if a generated travel plan meets the requirements specified in the user's query,
-AND whether the itinerary makes spatial sense (i.e., locations are reachable in the time allocated).
+Your task is to check if a generated travel plan meets the requirements specified in the user's query.
+You evaluate ONLY constraint satisfaction — spatial/geographic checks are handled separately.
 
 You will be given:
 1. A User Query (containing requirements like Origin, Destination, Budget, Duration, etc.)
 2. A Travel Plan (a structured JSON object containing 'itinerary', 'landmarks', 'trip_summary', etc.)
 
-## Step 1: Constraint Evaluation
+## Constraint Evaluation
 Extract the following constraints from the Query and verify them against the Plan:
-- Origin City
-- Destination City(s)
-- Duration (Days)
-- Budget
-- Number of People
-- Dates
+- Destination City(s): Does the plan cover the requested destination(s)?
+- Duration (Days): Does the itinerary length match the requested number of days?
+- Budget: Is the total estimated cost within the user's stated budget? Check 'budget_breakdown' and individual activity costs.
+- Number of People: Does the plan account for the correct number of travelers?
+- Dates: Do 'trip_dates' align with the requested start date and duration?
 
 Parsing the plan:
 - Look at 'trip_summary' for high-level details.
 - Check 'budget_breakdown' and individual activity costs for budget compliance.
 - Check 'trip_dates' and 'itinerary' length for duration compliance.
 
-## Step 2: Spatial Coherence Evaluation
-For each day in the itinerary:
-1. Identify the locations/landmarks mentioned in the activities.
-2. Use the 'landmarks' list in the plan to find coordinates (latitude, longitude) for each location.
-3. Use the `calculate_distance_tool` to compute the distance (in km) between consecutive activities.
-4. Estimate travel time assuming:
-   - Urban travel: ~30 km/h average speed
-   - Intercity travel: ~80 km/h average speed
-5. Flag any issues where:
-   - Consecutive activities within the same day are more than 50 km apart without enough time gap
-   - Activities in different cities appear on the same day without realistic travel time
-   - The travel time between consecutive activities exceeds 2 hours for within-city travel
-
 ## Output Format
 Return ONLY a JSON object with:
-- "passed": boolean (true if all constraints AND spatial checks pass)
-- "reason": string (explanation covering both constraint and spatial evaluation)
-- "failed_constraints": list of strings (constraint violations)
-- "spatial_issues": list of strings (spatial problems found)
-- "spatial_score": float from 0.0 to 1.0 (1.0 = perfect spatial coherence)
+- "passed": boolean (true if all constraints pass)
+- "reason": string (explanation of constraint evaluation)
+- "failed_constraints": list of strings (specific constraint violations found, empty if all pass)
 
 Do not explain. Do not output markdown.
 """
 
 judge_agent = Agent(
-    model="gemini-3-flash-preview",
+    model="gemini-2.5-flash",
     name="judge_agent",
-    description="Evaluates whether a generated travel plan satisfies user constraints and checks spatial coherence.",
+    description="Evaluates whether a generated travel plan satisfies user constraints (budget, duration, destination, dates, travelers).",
     instruction=judge_prompt,
-    tools=[distance_tool],
-    output_schema=Criterion
+    tools=[],
+    output_schema=ConstraintResult
 )

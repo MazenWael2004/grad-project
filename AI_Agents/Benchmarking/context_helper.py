@@ -2,7 +2,9 @@ import re
 import sys
 import os
 import django
+from asgiref.sync import sync_to_async
 
+@sync_to_async
 def get_contextualized_query(query_text: str) -> str:
     """
     Parses user preferences from query_text, queries Django database for clustered itinerary,
@@ -15,6 +17,13 @@ def get_contextualized_query(query_text: str) -> str:
         if backend_dir not in sys.path:
             sys.path.append(backend_dir)
         
+        from dotenv import load_dotenv
+        load_dotenv(os.path.join(backend_dir, ".env"))
+        
+        # Set a fallback SECRET_KEY if not present in env to allow database setup to proceed
+        if not os.environ.get("SECRET_KEY"):
+            os.environ["SECRET_KEY"] = "dummy_secret_key_for_testing"
+
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
         django.setup()
 
@@ -27,7 +36,7 @@ def get_contextualized_query(query_text: str) -> str:
     # Parse preferences using regex
     dest_match = re.search(r"Destination:\s*(.+)", query_text, re.IGNORECASE)
     budget_match = re.search(r"Budget(?:\s*level)?:\s*(.+)", query_text, re.IGNORECASE)
-    party_match = re.search(r"Party|Travelers:\s*(.+)", query_text, re.IGNORECASE)
+    party_match = re.search(r"(?:Party|Travelers):\s*(.+)", query_text, re.IGNORECASE)
     interests_match = re.search(r"Interests:\s*(.+)", query_text, re.IGNORECASE)
     dates_match = re.search(r"Dates:\s*([\d-]+)\s+to\s+([\d-]+)", query_text, re.IGNORECASE)
 
@@ -43,10 +52,10 @@ def get_contextualized_query(query_text: str) -> str:
         interests_str = "Cultural Tourism, Food Tourism"
         budget_label = "Budget"
     else:
-        dest_val = dest_match.group(1).strip()
-        budget_val = budget_match.group(1).strip()
-        party_val = party_match.group(1).strip() if party_match else "Couple"
-        interests_val = interests_match.group(1).strip() if interests_match else ""
+        dest_val = dest_match.group(1).strip() if dest_match.group(1) else ""
+        budget_val = budget_match.group(1).strip() if budget_match.group(1) else ""
+        party_val = party_match.group(1).strip() if (party_match and party_match.group(1)) else "Couple"
+        interests_val = interests_match.group(1).strip() if (interests_match and interests_match.group(1)) else ""
         
         # Parse dates
         if dates_match:

@@ -1,0 +1,664 @@
+{
+  "prompt_file": "trip_prompt_05_cairo_governorate.md",
+  "query": "Plan a trip with the following preferences:\nOrigin: Paris\nDestination: Cairo Governorate\nDates: 2026-08-19 to 2026-08-22\nBudget: Balanced\nParty: Only Me\nInterests: Photographing, Backpacking, Camel Riding",
+  "metrics": {
+    "n_turns": 1,
+    "n_toolcalls": 0,
+    "n_total_tokens": 5380,
+    "latency": {
+      "time_to_first_token": 70.543,
+      "output_tokens_per_sec": 43.85,
+      "time_to_last_token": 70.543
+    }
+  },
+  "grading_results": {
+    "llm_rubric_grader": {
+      "results": [
+        {
+          "assertion": "Travel Plan correctly strictly follows the schema.",
+          "passed": true,
+          "reason": "The travel plan JSON adheres to the expected schema, including trip details, a daily itinerary with activity specifics, budget breakdown, and landmark information, with all required fields present and correctly formatted."
+        },
+        {
+          "assertion": "Accommodation suggestions are relevant to the city and user preferences.",
+          "passed": true,
+          "reason": "The plan suggests 'Amin Hotel' as mid-range accommodation in Cairo, which aligns with the 'Balanced' budget and 'Only Me' party size requested by the user. The estimated cost of EGP 1200 per night for accommodation seems appropriate for a balanced budget in Cairo."
+        },
+        {
+          "assertion": "Activities are varied and match the user's interests (history, culture, food).",
+          "passed": false,
+          "reason": "The plan includes a good variety of historical, cultural, and food-related activities, and many are suitable for 'Photographing'. However, the user explicitly mentioned 'Camel Riding' as an interest, which is not included or suggested anywhere in the itinerary."
+        },
+        {
+          "assertion": "Budget constraints are respected throughout the itinerary.",
+          "passed": false,
+          "reason": "While the plan states a 'Balanced' luxury level and provides a budget breakdown, the estimated 'Food (estimated): EGP 1660' for 4 days (average EGP 415/day) seems significantly underestimated given that many individual meal activities are listed with costs of EGP 250, suggesting a discrepancy if three meals a day are expected at that price point."
+        },
+        {
+          "assertion": "Transportation methods are practical and efficient for the region.",
+          "passed": true,
+          "reason": "The plan explicitly mentions a 'private English guide + personal driver' for Day 1, which is a practical and efficient mode of transport in Cairo. Although not specified for every day, this choice, combined with the dense itinerary, implies efficient travel between locations, which is feasible using ride-sharing or similar services for a solo traveler with a balanced budget."
+        },
+        {
+          "assertion": "The plan is coherent and easy to follow.",
+          "passed": true,
+          "reason": "The plan is well-structured with clear daily itineraries, time slots, detailed activity descriptions, and Google Maps URLs, making it coherent and easy for a traveler to follow. Activities within each day appear to be logically grouped geographically."
+        }
+      ]
+    },
+    "judge_grader": {
+      "passed": false,
+      "reason": "The travel plan fails to mention the origin city 'Paris' as specified in the user query. All other constraints regarding destination, duration, budget, number of people, and dates are met.",
+      "failed_constraints": [
+        "Origin City"
+      ]
+    }
+  },
+  "generated_plan": {
+    "trip_name": "Cairo Solo Expedition: History, Culture, and the Nile",
+    "trip_summary": "An immersive 4-day solo journey through Cairo, exploring ancient wonders, vibrant souqs, and cultural gems. This trip is tailored for a balanced budget, offering ample opportunities for photography, cultural deep-dives, and leisurely explorations.",
+    "trip_dates": "Aug 19 - Aug 22, 2026",
+    "travelers_type": "Solo Traveler",
+    "luxury_level": "Balanced",
+    "itinerary": [
+      {
+        "day": "Day 1: Ancient Marvels and Nile Breezes",
+        "activities": [
+          {
+            "time": "08:00 AM - 09:00 AM",
+            "title": "Al-Azhar Mosque",
+            "description": "Begin your Cairo adventure with a visit to the historic Al-Azhar Mosque, a significant Islamic temple commissioned in 970. Marvel at its timeless architecture and soak in the serene atmosphere.",
+            "cost": "EGP 0",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0456,31.2633"
+          },
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Citadel of Saladin",
+            "description": "Explore the medieval Islamic fortification, the Citadel of Saladin. Built by Salah ad-Din, this impressive complex offers stunning views of Cairo and a glimpse into its rich history.",
+            "cost": "EGP 550",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0296,31.26"
+          },
+          {
+            "time": "11:30 AM - 12:30 PM",
+            "title": "Lunch at Zeeyara Restaurant",
+            "description": "Enjoy a delicious lunch featuring Local or International cuisine and the chef's specials at Zeeyara Restaurant, a highly-rated spot to refuel after your morning explorations.",
+            "cost": "EGP 250",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0522256,31.2617879"
+          },
+          {
+            "time": "01:00 PM - 03:00 PM",
+            "title": "\"Winds of Change\" = your private English guide + personal driver",
+            "description": "Experience Cairo with the benefit of a private English guide and personal driver, offering insights into the local culture and history, making your exploration truly unique.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0361355,31.2294293"
+          },
+          {
+            "time": "03:00 PM - 05:00 PM",
+            "title": "Cairo cultural exploration",
+            "description": "Continue your cultural immersion in Cairo, discovering more of its vibrant streets and unique atmosphere, guided by your 'Winds of Change' experience.",
+            "cost": "EGP 200",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.05093059999999,31.2615748"
+          },
+          {
+            "time": "05:00 PM - 07:00 PM",
+            "title": "Old House Gallery",
+            "description": "Delve into Cairo's art and cultural scene at the Old House Gallery, a popular destination known for its unique exhibits and local charm.",
+            "cost": "EGP 200",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0616776,31.2177"
+          },
+          {
+            "time": "07:30 PM - 09:30 PM",
+            "title": "Nile River Cruise",
+            "description": "Unwind with a relaxing evening cruise along the iconic Nile River. Enjoy traditional food, music, and dance performances as you take in the city lights from the water.",
+            "cost": "EGP 1500",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0444,31.2357"
+          },
+          {
+            "time": "09:30 PM - 10:30 PM",
+            "title": "Dinner at Eish + Malh",
+            "description": "Conclude your day with dinner at Eish + Malh, a charming Cafe and Patisserie, where you can savor their Chef's Specials in a relaxed setting.",
+            "cost": "EGP 250",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0511726,31.2436457"
+          }
+        ]
+      },
+      {
+        "day": "Day 2: Palaces, Mosques, and Bustling Souqs",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Abdeen Palace Museum",
+            "description": "Start your day at the magnificent Abdeen Palace Museum, a former royal palace that now houses a collection of royal artifacts, weapons, and historical documents.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0432125,31.2472031"
+          },
+          {
+            "time": "11:30 AM - 12:30 PM",
+            "title": "Lunch at Oldish (Restaurant & Cafe)",
+            "description": "Enjoy a delightful lunch at Oldish (Restaurant & Cafe), known for its cozy ambiance and delicious Chef's Specials, conveniently located near the palace.",
+            "cost": "EGP 250",
+            "rating": 4.3,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0432508,31.2383949"
+          },
+          {
+            "time": "01:00 PM - 03:00 PM",
+            "title": "Mosque of Ibn Tulun",
+            "description": "Visit the majestic Mosque of Ibn Tulun, one of the oldest and largest mosques in Cairo, renowned for its unique architecture and spiral minaret.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0288198,31.2495214"
+          },
+          {
+            "time": "03:00 PM - 05:00 PM",
+            "title": "Mosque of Muhammad Ali",
+            "description": "Discover the impressive Mosque of Muhammad Ali, located within the Citadel of Saladin, offering stunning Ottoman architecture and panoramic views of Cairo.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0290456,31.2597966"
+          },
+          {
+            "time": "05:00 PM - 07:00 PM",
+            "title": "Khan el-Khalili (Cultural Exploration)",
+            "description": "Immerse yourself in the bustling atmosphere of Khan el-Khalili, a historic bazaar. Explore its narrow alleys, admire local crafts, and soak in the vibrant culture.",
+            "cost": "EGP 0",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0477386,31.2622538"
+          },
+          {
+            "time": "07:00 PM - 09:00 PM",
+            "title": "Khan El Khalili (Evening Shopping)",
+            "description": "Return to Khan El Khalili as the evening lights illuminate the souq. This is the perfect time for souvenir shopping and experiencing the vibrant night life of this famous bazaar.",
+            "cost": "EGP 0",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0489,31.2622"
+          },
+          {
+            "time": "09:00 PM - 10:00 PM",
+            "title": "Dinner at Abou Tarek",
+            "description": "Savor authentic Egyptian cuisine at Abou Tarek, a renowned restaurant famous for its specialty dish, Koshari.",
+            "cost": "EGP 80",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0509,31.2435"
+          }
+        ]
+      },
+      {
+        "day": "Day 3: Panoramic Views and Royal Estates",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Cairo Tower",
+            "description": "Ascend the iconic Cairo Tower for breathtaking panoramic views of the city. A great spot for photographers to capture the sprawling urban landscape.",
+            "cost": "EGP 250",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.046522,31.22429889999999"
+          },
+          {
+            "time": "11:00 AM - 01:00 PM",
+            "title": "\u062e\u0627\u0646 \u062c\u0639\u0641\u0631",
+            "description": "Visit \u062e\u0627\u0646 \u062c\u0639\u0641\u0631, another cultural highlight in Cairo, offering unique insights and experiences.",
+            "cost": "EGP 200",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0493578,31.2631782"
+          },
+          {
+            "time": "01:00 PM - 02:00 PM",
+            "title": "Lunch at Tree Lounge Cairo Tower Branch",
+            "description": "Enjoy a convenient and delicious lunch at the Tree Lounge, located at the Cairo Tower Branch, offering local and international flavors.",
+            "cost": "EGP 250",
+            "rating": 4.4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0458328,31.2244248"
+          },
+          {
+            "time": "02:30 PM - 04:30 PM",
+            "title": "Ahmed El Badawy R\u00e9ception",
+            "description": "Explore Ahmed El Badawy R\u00e9ception, a popular cultural destination known for its unique offerings and insights into local traditions.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0351701,31.2290606"
+          },
+          {
+            "time": "04:30 PM - 06:30 PM",
+            "title": "Prince Mohamed Ali Palace",
+            "description": "Step back in time at the Prince Mohamed Ali Palace, a stunning example of royal architecture and a treasure trove of historical artifacts.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.027409,31.2277368"
+          },
+          {
+            "time": "06:30 PM - 08:30 PM",
+            "title": "\u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634",
+            "description": "Visit \u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634, another captivating cultural site that promises an enriching experience.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0266743,31.2300227"
+          },
+          {
+            "time": "08:30 PM - 10:30 PM",
+            "title": "New Downtown du Cairo",
+            "description": "Experience the modern pulse of Cairo at the New Downtown, a vibrant area offering a glimpse into the city's contemporary life and attractions.",
+            "cost": "EGP 200",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0473227,31.2382776"
+          },
+          {
+            "time": "10:30 PM - 11:30 PM",
+            "title": "Dinner at Dahabiya Cairo",
+            "description": "Enjoy a late dinner at Dahabiya Cairo, offering a selection of local and international dishes in a highly-rated setting, perfect for a relaxing evening.",
+            "cost": "EGP 250",
+            "rating": 4.7,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0446422,31.2193938"
+          }
+        ]
+      },
+      {
+        "day": "Day 4: Art, History, and City Landmarks",
+        "activities": [
+          {
+            "time": "09:00 AM - 11:00 AM",
+            "title": "Museum of Islamic Art in Cairo",
+            "description": "Delve into the rich heritage of Islamic art at this world-renowned museum, showcasing an impressive collection of artifacts from across the Islamic world.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0446671,31.2526837"
+          },
+          {
+            "time": "11:30 AM - 12:30 PM",
+            "title": "Lunch at Abou Tarek",
+            "description": "Enjoy another meal at Abou Tarek, indulging in their famous Egyptian Koshari before continuing your explorations.",
+            "cost": "EGP 80",
+            "rating": 4.5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0509,31.2435"
+          },
+          {
+            "time": "01:00 PM - 03:00 PM",
+            "title": "El- Tahrir Square",
+            "description": "Visit the historic El-Tahrir Square, a focal point of modern Egyptian history and a significant landmark in downtown Cairo.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0444283,31.2357637"
+          },
+          {
+            "time": "03:00 PM - 05:00 PM",
+            "title": "Mosque-Madrasa of Sultan Hassan",
+            "description": "Explore the grand Mosque-Madrasa of Sultan Hassan, a monumental Mamluk-era complex considered one of the finest examples of Islamic architecture in Cairo.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0321866,31.2566115"
+          },
+          {
+            "time": "05:00 PM - 07:00 PM",
+            "title": "Saladin Citadel",
+            "description": "Revisit or explore another part of the historic Saladin Citadel, soaking in its cultural significance and impressive architecture.",
+            "cost": "EGP 200",
+            "rating": 5,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0287457,31.2597144"
+          },
+          {
+            "time": "07:00 PM - 09:00 PM",
+            "title": "Nile Fountain - Deutschland Technology",
+            "description": "Enjoy the evening ambiance around the Nile Fountain, a popular spot featuring impressive water displays.",
+            "cost": "EGP 200",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.03617599999999,31.2243087"
+          },
+          {
+            "time": "09:00 PM - 10:00 PM",
+            "title": "Dinner at Eish + Malh",
+            "description": "Conclude your Cairo journey with a final dinner at Eish + Malh, enjoying their delightful offerings before your departure.",
+            "cost": "EGP 250",
+            "rating": 4,
+            "reviews_count": 0,
+            "google_maps_url": "https://www.google.com/maps/search/?api=1&query=30.0511726,31.2436457"
+          }
+        ]
+      }
+    ],
+    "budget_breakdown": [
+      "Accommodation (3 nights): EGP 3600",
+      "Food (estimated): EGP 1660",
+      "Activities & Entrance Fees: EGP 5700",
+      "Total Estimated Cost: EGP 10960"
+    ],
+    "landmarks": [
+      {
+        "id": "amin_hotel",
+        "title": "Amin Hotel",
+        "description": "Your mid-range accommodation for the trip.",
+        "coordinate": {
+          "latitude": 30.0453752,
+          "longitude": 31.2396412
+        },
+        "color": "#3B82F6"
+      },
+      {
+        "id": "al_azhar_mosque",
+        "title": "Al-Azhar Mosque",
+        "description": "An Islamic temple in Cairo, Egypt, commissioned in 970.",
+        "coordinate": {
+          "latitude": 30.0456,
+          "longitude": 31.2633
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "citadel_of_saladin",
+        "title": "Citadel of Saladin",
+        "description": "A medieval Islamic-era fortification in Cairo.",
+        "coordinate": {
+          "latitude": 30.0296,
+          "longitude": 31.26
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "winds_of_change",
+        "title": "\"Winds of Change\"",
+        "description": "Private English guide + personal driver service.",
+        "coordinate": {
+          "latitude": 30.0361355,
+          "longitude": 31.2294293
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "cairo_culture_exploration",
+        "title": "Cairo cultural exploration",
+        "description": "A popular tourist destination in Cairo.",
+        "coordinate": {
+          "latitude": 30.05093059999999,
+          "longitude": 31.2615748
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "old_house_gallery",
+        "title": "Old House Gallery",
+        "description": "A popular tourist destination in Cairo.",
+        "coordinate": {
+          "latitude": 30.0616776,
+          "longitude": 31.2177
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "nile_river_cruise",
+        "title": "Nile River Cruise",
+        "description": "A relaxing cruise along the Nile River in Cairo.",
+        "coordinate": {
+          "latitude": 30.0444,
+          "longitude": 31.2357
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "zeeyara_restaurant",
+        "title": "Zeeyara Restaurant",
+        "description": "Local / International cuisine restaurant.",
+        "coordinate": {
+          "latitude": 30.0522256,
+          "longitude": 31.2617879
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "eish_malh",
+        "title": "Eish + Malh",
+        "description": "Cafe / Patisserie serving Chef's Specials.",
+        "coordinate": {
+          "latitude": 30.0511726,
+          "longitude": 31.2436457
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "abdeen_palace_museum",
+        "title": "Abdeen Palace Museum",
+        "description": "A popular tourist destination in Cairo with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 30.0432125,
+          "longitude": 31.2472031
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mosque_of_ibn_tulun",
+        "title": "Mosque of Ibn Tulun",
+        "description": "A popular tourist destination in Cairo with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 30.0288198,
+          "longitude": 31.2495214
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mosque_of_muhammad_ali",
+        "title": "Mosque of Muhammad Ali",
+        "description": "A popular tourist destination in Cairo with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 30.0290456,
+          "longitude": 31.2597966
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "khan_el_khalili_day2_afternoon",
+        "title": "Khan el-Khalili",
+        "description": "A popular tourist destination in Cairo with a rating of 4.4 stars.",
+        "coordinate": {
+          "latitude": 30.0477386,
+          "longitude": 31.2622538
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "\u0628\u0631\u062c_\u0627\u0644\u0633\u0627\u0639\u0629",
+        "title": "\u0628\u0631\u062c \u0627\u0644\u0633\u0627\u0639\u0629",
+        "description": "A popular tourist destination in Cairo with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 30.0286786,
+          "longitude": 31.2296709
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "khan_el_khalili_day2_evening",
+        "title": "Khan El Khalili",
+        "description": "A famous bazaar and souq in the historic center of Cairo, Egypt.",
+        "coordinate": {
+          "latitude": 30.0489,
+          "longitude": 31.2622
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "oldish_restaurant_cafe",
+        "title": "Oldish ( Restaurant & Cafe )",
+        "description": "Cafe / Patisserie serving Chef's Specials.",
+        "coordinate": {
+          "latitude": 30.0432508,
+          "longitude": 31.2383949
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "abou_tarek",
+        "title": "Abou Tarek",
+        "description": "Egyptian cuisine restaurant famous for Koshari.",
+        "coordinate": {
+          "latitude": 30.0509,
+          "longitude": 31.2435
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "cairo_tower",
+        "title": "Cairo Tower",
+        "description": "A popular tourist destination in Cairo with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 30.046522,
+          "longitude": 31.22429889999999
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "\u062e\u0627\u0646_\u062c\u0639\u0641\u0631",
+        "title": "\u062e\u0627\u0646 \u062c\u0639\u0641\u0631",
+        "description": "A popular tourist destination in Cairo with a rating of 4.5 stars.",
+        "coordinate": {
+          "latitude": 30.0493578,
+          "longitude": 31.2631782
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "ahmed_el_badawy_reception",
+        "title": "Ahmed El Badawy R\u00e9ception",
+        "description": "A popular tourist destination in Cairo with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 30.0351701,
+          "longitude": 31.2290606
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "prince_mohamed_ali_palace",
+        "title": "Prince Mohamed Ali Palace",
+        "description": "A popular tourist destination in Cairo with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 30.027409,
+          "longitude": 31.2277368
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "\u0633\u0631\u0627\u064a_\u0627\u0644\u0639\u0631\u0634",
+        "title": "\u0633\u0631\u0627\u064a \u0627\u0644\u0639\u0631\u0634",
+        "description": "A popular tourist destination in Cairo with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 30.0266743,
+          "longitude": 31.2300227
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "new_downtown_du_cairo",
+        "title": "New Downtown du Cairo",
+        "description": "A popular tourist destination in Cairo with a rating of 4.2 stars.",
+        "coordinate": {
+          "latitude": 30.0473227,
+          "longitude": 31.2382776
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "tree_lounge_cairo_tower_branch",
+        "title": "Tree Lounge Cairo Tower Branch",
+        "description": "Local / International cuisine restaurant near Cairo Tower.",
+        "coordinate": {
+          "latitude": 30.0458328,
+          "longitude": 31.2244248
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "dahabiya_cairo",
+        "title": "Dahabiya Cairo",
+        "description": "Local / International cuisine restaurant.",
+        "coordinate": {
+          "latitude": 30.0446422,
+          "longitude": 31.2193938
+        },
+        "color": "#10B981"
+      },
+      {
+        "id": "museum_of_islamic_art",
+        "title": "Museum of Islamic Art in Cairo",
+        "description": "A popular tourist destination in Cairo with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 30.0446671,
+          "longitude": 31.2526837
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "el_tahrir_square",
+        "title": "El- Tahrir Square",
+        "description": "A popular tourist destination in Cairo with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 30.0444283,
+          "longitude": 31.2357637
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "mosque_madrasa_of_sultan_hassan",
+        "title": "Mosque-Madrasa of Sultan Hassan",
+        "description": "A popular tourist destination in Cairo with a rating of 4.7 stars.",
+        "coordinate": {
+          "latitude": 30.0321866,
+          "longitude": 31.2566115
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "saladin_citadel_day4",
+        "title": "Saladin Citadel",
+        "description": "A popular tourist destination in Cairo with a rating of 4.6 stars.",
+        "coordinate": {
+          "latitude": 30.0287457,
+          "longitude": 31.2597144
+        },
+        "color": "#EF4444"
+      },
+      {
+        "id": "nile_fountain_deutschland_technology",
+        "title": "Nile Fountain - Deutschland Technology",
+        "description": "A popular tourist destination in Cairo with a rating of 4.3 stars.",
+        "coordinate": {
+          "latitude": 30.03617599999999,
+          "longitude": 31.2243087
+        },
+        "color": "#EF4444"
+      }
+    ]
+  }
+}
