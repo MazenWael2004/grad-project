@@ -1,54 +1,56 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useRef,useContext } from "react";
+import React, { useRef, useContext } from "react";
 import { router } from "expo-router";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ThemeContext } from "../../theme/ThemeContext";
-import { LIGHT_THEME,DARK_THEME } from "../../constants/themes";
+import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 import api from "../../src/services/api";
 import Constants from "expo-constants";
 const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const Settings = () => {
-  const {theme} = useContext(ThemeContext);
-  const {user,setUser,logout} =useUser();
+  const { theme } = useContext(ThemeContext);
+  const { user, setUser, logout } = useUser();
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   // If you're using TypeScript, prefer: const refRBSheet = useRef<RBSheet | null>(null);
   const refRBSheet = useRef();
 
   console.log(user);
   const handleLogOut = async () => {
-    console.log("user object",user)
-    console.log("Token",user?.token)
-  try {
-    const response = await api.post(
-      `${API_BASE_URL}/api/accounts/logout/`,
-      {}, // empty body
-      {
-        headers: {
-          Authorization: `Bearer ${user.access}`,
+    console.log("user object", user)
+    console.log("Token", user?.token)
+    try {
+      const response = await api.post(
+        `${API_BASE_URL}/api/accounts/logout/`,
+        {
+          "refresh": user.refresh
         },
+        {
+          headers: {
+            Authorization: `Bearer ${user.access}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // optionally clear local storage
+        // await AsyncStorage.removeItem("token");
+        // await AsyncStorage.removeItem("user");
+        await logout();
+
+        router.replace("/authentication/login");
       }
-    );
-
-    if (response.status === 200) {
-      // optionally clear local storage
-      // await AsyncStorage.removeItem("token");
-      // await AsyncStorage.removeItem("user");
-      await logout();
-
-      router.replace("/authentication/login");
+    } catch (error) {
+      console.error(error.response?.data || error.message);
     }
-  } catch (error) {
-    console.error(error.response?.data || error.message);
-  }
-};
+  };
   return (
-    <View style={[styles.container,{backgroundColor:currentTheme.background}]}>
+    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <View style={styles.logoAndSettingsTitle}>
         <Image
           source={require("../../assets/images/Pyramids.png")}
-          style={{ width: 55, height: 55, resizeMode: "contain",tintColor:currentTheme.appIconColor }}
+          style={{ width: 55, height: 55, resizeMode: "contain", tintColor: currentTheme.appIconColor }}
         />
         <Text
           style={{
@@ -70,7 +72,7 @@ const Settings = () => {
       >
         <Image source={require("../../assets/images/badge.png")} style={{ width: 55, height: 55 }} />
         <View style={{ flexDirection: "column" }}>
-          <Text style={{ fontFamily: "Poppins-SemiBold", color: "white",fontSize:13 }}>
+          <Text style={{ fontFamily: "Poppins-SemiBold", color: "white", fontSize: 13 }}>
             Upgrade Plan to Unlock More!
           </Text>
           <Text style={{ fontFamily: "Poppins-Regular", color: "white", fontSize: 8.5 }}>
@@ -85,24 +87,24 @@ const Settings = () => {
           style={[styles.settingItem]}
           onPress={() => router.push("settings/personalInfo")}
         >
-          <Image source={require("../../assets/images/user.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15,color:currentTheme.text }}>Personal Info</Text>
+          <Image source={require("../../assets/images/user.png")} style={{ width: 25, height: 25, tintColor: currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 15, color: currentTheme.text }}>Personal Info</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1, tintColor: currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.settingItem} onPress={()=>{router.push('settings/billingSubscriptions')}}>
-          <Image source={require("../../assets/images/crown.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Billing & Subscriptions</Text>
+        <TouchableOpacity style={styles.settingItem} onPress={() => { router.push('settings/billingSubscriptions') }}>
+          <Image source={require("../../assets/images/crown.png")} style={{ width: 25, height: 25, tintColor: currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16, color: currentTheme.text }}>Billing & Subscriptions</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1, tintColor: currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
-      
+
 
         {/* <TouchableOpacity style={styles.settingItem} onPress={() =>{router.push('currencyConverter')}}>
           <Image source={require("../../assets/images/exchange.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
@@ -119,11 +121,11 @@ const Settings = () => {
             router.push("settings/paymentMethods");
           }}
         >
-          <Image source={require("../../assets/images/credit-card.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Payment Methods</Text>
+          <Image source={require("../../assets/images/credit-card.png")} style={{ width: 25, height: 25, tintColor: currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16, color: currentTheme.text }}>Payment Methods</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1, tintColor: currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
@@ -133,20 +135,20 @@ const Settings = () => {
             router.push("settings/emergencySupport");
           }}
         >
-          <Image source={require("../../assets/images/call.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>Emergency Support</Text>
+          <Image source={require("../../assets/images/call.png")} style={{ width: 25, height: 25, tintColor: currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16, color: currentTheme.text }}>Emergency Support</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1, tintColor: currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.settingItem} onPress={()=>{router.push("/appAppearance")}}>
-          <Image source={require("../../assets/images/eye.png")} style={{ width: 25, height: 25,tintColor:currentTheme.iconColor }} />
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16,color:currentTheme.text }}>App Appearance</Text>
+        <TouchableOpacity style={styles.settingItem} onPress={() => { router.push("/appAppearance") }}>
+          <Image source={require("../../assets/images/eye.png")} style={{ width: 25, height: 25, tintColor: currentTheme.iconColor }} />
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16, color: currentTheme.text }}>App Appearance</Text>
           <Image
             source={require("../../assets/images/right-arrow.png")}
-            style={{ width: 25, height: 25, position: "absolute", right: 1,tintColor:currentTheme.iconColor }}
+            style={{ width: 25, height: 25, position: "absolute", right: 1, tintColor: currentTheme.iconColor }}
           />
         </TouchableOpacity>
 
@@ -173,15 +175,15 @@ const Settings = () => {
               padding: 16,
               backgroundColor: currentTheme.background,
               flexDirection: "column",
-              height:250,
+              height: 250,
             },
             draggableIcon: { backgroundColor: "#aaa" },
           }}
         >
-          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 20, textAlign: "center",color:"#e24646ff",marginBottom:20 }}>
+          <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 20, textAlign: "center", color: "#e24646ff", marginBottom: 20 }}>
             Logout
           </Text>
-          <View style={{ borderWidth:0.25,borderColor:"#c5c2c2ff",marginBottom:20, }} />
+          <View style={{ borderWidth: 0.25, borderColor: "#c5c2c2ff", marginBottom: 20, }} />
           <Text style={{ fontFamily: "Poppins-Medium", fontSize: 20, textAlign: "center", color: currentTheme.text }}>
             Are you sure you want to log out?
           </Text>

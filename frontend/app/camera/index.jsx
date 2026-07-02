@@ -21,16 +21,14 @@ export default function CameraScreen() {
   const [prediction, setPrediction] = useState(null);
 
   const CUSTOM_MODEL_URL =
-  "http://192.168.1.221:8001/api/classify-image/";
+    "http://192.168.1.221:8001/api/classify-image/";
 
   const GEMINI_URL =
     "https://12e1-8-229-115-241.ngrok-free.app/gemini-predict";
 
   // const API_KEY = "secret123";
 
-  const ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgyODM3MDYyLCJpYXQiOjE3ODI4MzUyNjIsImp0aSI6ImViMGVkMTQ4ZDYxYjRmNWFiNmJiOTg3MWE0MjNmYjU5IiwidXNlcl9pZCI6IjE2In0.Cr-pWKgyzvETu8EDTLn9XMJwbhf9vrXK_iFtLM7xNxc";
-  
+
   const flashAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const imageOpacity = useRef(new Animated.Value(0)).current;
@@ -148,10 +146,10 @@ export default function CameraScreen() {
           ? CUSTOM_MODEL_URL
           : GEMINI_URL;
 
-        const res = await fetch(CUSTOM_MODEL_URL, {
+      const res = await fetch(CUSTOM_MODEL_URL, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          Authorization: `Bearer ${user.access}`,
         },
         body: formData,
       });
@@ -161,7 +159,7 @@ export default function CameraScreen() {
       // console.log("Status:", res.status);
       // console.log("Response:", text);
 
-     const data = await res.json();
+      const data = await res.json();
 
       console.log("Status:", res.status);
       console.log("MODEL RESULT:", data);
@@ -208,7 +206,7 @@ export default function CameraScreen() {
             resizeMode="contain"
           />
 
-  
+
           {loading && (
             <Animated.View
               style={{
@@ -222,7 +220,7 @@ export default function CameraScreen() {
             />
           )}
 
-  
+
           {loading && (
             <View
               style={{
@@ -288,7 +286,7 @@ export default function CameraScreen() {
         <>
           <CameraView ref={cameraRef} style={{ flex: 1 }} />
 
-         
+
           <View
             style={{
               position: "absolute",
