@@ -10,8 +10,12 @@ from app.core.config import HOST, PORT, DEBUG
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    state.image_classifier = load_model()
-    print("Model loaded.")
+    try:
+        state.image_classifier = load_model()
+        print("Model loaded.")
+    except Exception as exc:
+        state.image_classifier = None
+        print(f"Image classifier failed to load: {exc}")
 
     yield
 

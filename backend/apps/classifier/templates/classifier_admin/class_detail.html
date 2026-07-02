@@ -1,0 +1,72 @@
+{% extends "classifier_admin/base.html" %}
+
+{% block classifier_breadcrumbs %}
+&rsaquo; {{ artifact_class.name }}
+{% endblock %}
+
+{% block classifier_content %}
+<div class="classifier-header">
+  <div>
+    <h1>{{ artifact_class.name }}</h1>
+    <p>{{ artifact_class.images.count }} image(s), {{ min_images }} required for training.</p>
+  </div>
+  <div class="classifier-actions">
+    <a class="classifier-button" href="{% url 'classifier_admin:dashboard' %}">Dashboard</a>
+    <a class="classifier-button" href="{% url 'classifier_admin:class_edit' artifact_class.pk %}">Edit</a>
+    <form method="post" action="{% url 'classifier_admin:class_delete' artifact_class.pk %}">
+      {% csrf_token %}
+      {{ confirm_form.confirm }}
+      <button type="submit" class="classifier-button classifier-button--danger">Delete</button>
+    </form>
+  </div>
+</div>
+
+<section class="classifier-grid">
+  <div class="classifier-panel">
+    <h2>Upload Images</h2>
+    <form method="post" enctype="multipart/form-data" class="classifier-form">
+      {% csrf_token %}
+      {{ upload_form.non_field_errors }}
+      <div class="classifier-form-field">
+        {{ upload_form.images.errors }}
+        {{ upload_form.images.label_tag }}
+        {{ upload_form.images }}
+      </div>
+      <button type="submit" class="classifier-button classifier-button--primary">Upload</button>
+    </form>
+  </div>
+
+  <div class="classifier-panel">
+    <h2>Class Details</h2>
+    <dl class="classifier-definition-list">
+      <dt>Status</dt>
+      <dd>{% if artifact_class.is_active %}Active{% else %}Inactive{% endif %}</dd>
+      <dt>Description</dt>
+      <dd>{{ artifact_class.description|default:"No description." }}</dd>
+      <dt>Created</dt>
+      <dd>{{ artifact_class.created_at }}</dd>
+    </dl>
+  </div>
+</section>
+
+<section class="classifier-panel">
+  <h2>Recent Images</h2>
+  <div class="classifier-image-grid">
+    {% for image in recent_images %}
+      <figure>
+        <img src="{{ image.image.url }}" alt="{{ image.original_filename }}">
+        <figcaption>
+          <span>{{ image.original_filename|default:"Training image" }}</span>
+          <form method="post" action="{% url 'classifier_admin:image_delete' image.pk %}">
+            {% csrf_token %}
+            {{ confirm_form.confirm }}
+            <button type="submit" class="classifier-link-button classifier-link-button--danger">Delete</button>
+          </form>
+        </figcaption>
+      </figure>
+    {% empty %}
+      <p>No images uploaded.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends "subscriptions_admin/base.html" %}
+
+{% block subscriptions_content %}
+<div class="subscriptions-header">
+  <div>
+    <h1>Analytics Dashboard</h1>
+    <p>Users, subscriptions, plans, payments, and classifier activity.</p>
+  </div>
+  <div class="subscriptions-actions">
+    <a class="subscriptions-button" href="{% url 'subscriptions_admin:plan_list' %}">Plans</a>
+    <a class="subscriptions-button" href="{% url 'classifier_admin:dashboard' %}">Classifier</a>
+  </div>
+</div>
+
+<section class="subscriptions-stats">
+  <div>
+    <strong>{{ total_users }}</strong>
+    <span>Users</span>
+  </div>
+  <div>
+    <strong>{{ active_subscriptions }}</strong>
+    <span>Active Subscriptions</span>
+  </div>
+  <div>
+    <strong>{{ pending_subscriptions }}</strong>
+    <span>Pending Subscriptions</span>
+  </div>
+  <div>
+    <strong>{{ active_revenue }}</strong>
+    <span>Active Plan Value</span>
+  </div>
+  <div>
+    <strong>{{ total_plans }}</strong>
+    <span>Plans</span>
+  </div>
+  <div>
+    <strong>{{ classifier_training_runs }}</strong>
+    <span>Classifier Runs</span>
+  </div>
+</section>
+
+<section class="subscriptions-grid subscriptions-grid--two">
+  <div class="subscriptions-panel">
+    <h2>Subscription Status</h2>
+    <table class="subscriptions-table">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in subscription_status_rows %}
+          <tr>
+            <td><span class="subscriptions-status">{{ row.status|title }}</span></td>
+            <td>{{ row.count }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="2">No subscriptions yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="subscriptions-panel">
+    <h2>Classifier Health</h2>
+    <dl class="subscriptions-definition-list">
+      <dt>Artifact Classes</dt>
+      <dd>{{ classifier_classes }}</dd>
+      <dt>Training Images</dt>
+      <dd>{{ classifier_images }}</dd>
+      <dt>Active Model</dt>
+      <dd>{% if active_classifier_model %}{{ active_classifier_model.version }}{% else %}None{% endif %}</dd>
+    </dl>
+    <table class="subscriptions-table subscriptions-table--compact">
+      <thead>
+        <tr>
+          <th>Run Status</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in classifier_run_rows %}
+          <tr>
+            <td>{{ row.label }}</td>
+            <td>{{ row.count }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="subscriptions-panel">
+  <div class="subscriptions-panel-header">
+    <h2>Plan Performance</h2>
+    <a class="subscriptions-link-button" href="{% url 'subscriptions_admin:plan_create' %}">New Plan</a>
+  </div>
+  <table class="subscriptions-table">
+    <thead>
+      <tr>
+        <th>Plan</th>
+        <th>Price</th>
+        <th>Duration</th>
+        <th>Subscriptions</th>
+        <th>Active</th>
+        <th>Pending</th>
+        <th>Active Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in plan_rows %}
+        <tr>
+          <td><a href="{% url 'subscriptions_admin:plan_detail' row.plan.pk %}">{{ row.plan.name }}</a></td>
+          <td>{{ row.plan.price }}</td>
+          <td>{{ row.plan.duration_months }} month(s)</td>
+          <td>{{ row.subscriptions }}</td>
+          <td>{{ row.active }}</td>
+          <td>{{ row.pending }}</td>
+          <td>{{ row.revenue }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="7">No plans yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="subscriptions-panel">
+  <h2>Recent Subscriptions</h2>
+  <table class="subscriptions-table">
+    <thead>
+      <tr>
+        <th>Owner</th>
+        <th>Plan</th>
+        <th>Status</th>
+        <th>Members</th>
+        <th>Start</th>
+        <th>End</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subscription in recent_subscriptions %}
+        <tr>
+          <td>{{ subscription.owner.email }}</td>
+          <td>{{ subscription.plan.name }}</td>
+          <td><span class="subscriptions-status subscriptions-status--{{ subscription.status }}">{{ subscription.status|default:"Unknown"|title }}</span></td>
+          <td>{{ subscription.members.count }}</td>
+          <td>{{ subscription.start_date|default:"Not started" }}</td>
+          <td>{{ subscription.end_date|default:"Not set" }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6">No subscriptions yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

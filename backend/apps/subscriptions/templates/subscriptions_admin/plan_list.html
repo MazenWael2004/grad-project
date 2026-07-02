@@ -1,0 +1,59 @@
+{% extends "subscriptions_admin/base.html" %}
+
+{% block subscriptions_breadcrumbs %}
+&rsaquo; Plans
+{% endblock %}
+
+{% block subscriptions_content %}
+<div class="subscriptions-header">
+  <div>
+    <h1>Plans</h1>
+    <p>{{ plan_rows|length }} plan(s)</p>
+  </div>
+  <div class="subscriptions-actions">
+    <a class="subscriptions-button" href="{% url 'subscriptions_admin:analytics_dashboard' %}">Analytics</a>
+    <a class="subscriptions-button subscriptions-button--primary" href="{% url 'subscriptions_admin:plan_create' %}">New Plan</a>
+  </div>
+</div>
+
+<section class="subscriptions-panel">
+  <table class="subscriptions-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Max Users</th>
+        <th>Duration</th>
+        <th>Subscriptions</th>
+        <th>Active</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in plan_rows %}
+        <tr>
+          <td><a href="{% url 'subscriptions_admin:plan_detail' row.plan.pk %}">{{ row.plan.name }}</a></td>
+          <td>{{ row.plan.price }}</td>
+          <td>{{ row.plan.max_users }}</td>
+          <td>{{ row.plan.duration_months }} month(s)</td>
+          <td>{{ row.subscriptions }}</td>
+          <td>{{ row.active }}</td>
+          <td>
+            <div class="subscriptions-actions">
+              <a class="subscriptions-link-button" href="{% url 'subscriptions_admin:plan_detail' row.plan.pk %}">Open</a>
+              <a class="subscriptions-link-button" href="{% url 'subscriptions_admin:plan_edit' row.plan.pk %}">Edit</a>
+              <form method="post" action="{% url 'subscriptions_admin:plan_delete' row.plan.pk %}">
+                {% csrf_token %}
+                {{ confirm_form.confirm }}
+                <button type="submit" class="subscriptions-link-button subscriptions-link-button--danger">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="7">No plans yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
