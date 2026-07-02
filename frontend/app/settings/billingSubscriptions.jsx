@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,13 +9,11 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import api from "../../src/services/api";
-import Constants from "expo-constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ThemeContext } from "../../theme/ThemeContext";
 import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
-
-const { API_BASE_URL } = Constants.expoConfig.extra;
 
 const Billing = () => {
   const { theme } = useContext(ThemeContext);
@@ -27,27 +25,22 @@ const Billing = () => {
   const [planStatus, setPlanStatus] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user?.token) {
-      loadCurrentPlan();
-    }
-  }, [user?.token]);
-
-  const loadCurrentPlan = async () => {
+  const loadCurrentPlan = useCallback(async () => {
     try {
       setLoading(true);
 
-      const response = await api.get(
-        `${API_BASE_URL}/api/subscriptions/my-subscription/`,
-        {
-          headers: {
-            Authorization: `Bearer ${user.access}`,
-          },
-        }
-      );
+      const access = user?.access || (await AsyncStorage.getItem("access"));
+
+      if (!access) {
+        setPlan(null);
+        setPlanStatus(null);
+        return;
+      }
+
+      const response = await api.get("/api/subscriptions/my-subscription/");
 
       setPlan(response.data.plan);
-      setPlanStatus(response.data.status);
+      setPlanStatus(response.data.status ?? null);
     } catch (error) {
       console.error(
         "Failed to load subscription:",
@@ -56,7 +49,11 @@ const Billing = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.access]);
+
+  useEffect(() => {
+    loadCurrentPlan();
+  }, [loadCurrentPlan]);
 
   if (loading) {
     return (

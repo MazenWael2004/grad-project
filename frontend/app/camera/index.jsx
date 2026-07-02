@@ -8,10 +8,11 @@ import {
   Animated,
 } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import { useUser } from "../contexts/userContext";
 
 export default function CameraScreen() {
   const cameraRef = useRef(null);
-
+  const { user, setUser } = useUser();
   const [permission, requestPermission] = useCameraPermissions();
 
   const [loading, setLoading] = useState(false);
@@ -160,12 +161,13 @@ export default function CameraScreen() {
       // console.log("Response:", text);
 
       const data = await res.json();
+      const label = data.confidence > 30 ? data.label : "Unknown"
 
       console.log("Status:", res.status);
       console.log("MODEL RESULT:", data);
 
       setPrediction({
-        label: data.label,
+        label: label,
         confidence: data.confidence,
       });
 

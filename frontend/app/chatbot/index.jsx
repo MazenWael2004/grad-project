@@ -359,13 +359,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
+    marginBottom:100,
   },
 
   textInput: {
     flex: 1,
     backgroundColor: "#eee",
     borderRadius: 20,
-    padding: 10,
+    padding: 20,
+
   },
 
   sendButton: {
