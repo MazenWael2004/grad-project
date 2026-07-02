@@ -8,7 +8,7 @@ from django.utils import timezone as django_timezone
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed, PermissionDenied, ValidationError
+from rest_framework.exceptions import APIException, PermissionDenied, ValidationError
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from .content import load_giza_tour
@@ -36,14 +36,25 @@ GIZA_STOP_LOCATIONS = {
 }
 
 
+class TourAPIView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+
+class GuestAuthenticationFailed(APIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = "invalid guest credential"
+    default_code = "guest_authentication_failed"
+
+
 def authenticate_session(request, session_id: str) -> SessionRecord:
     auth_header = request.headers.get("Authorization")
     if not auth_header:
-        raise AuthenticationFailed("missing bearer credential")
+        raise GuestAuthenticationFailed("missing bearer credential")
     
     parts = auth_header.split(" ")
     if len(parts) != 2 or parts[0].lower() != "bearer":
-        raise AuthenticationFailed("invalid bearer credential")
+        raise GuestAuthenticationFailed("invalid bearer credential")
     
     token = parts[1]
     settings = ApiSettings.from_settings()
@@ -52,7 +63,7 @@ def authenticate_session(request, session_id: str) -> SessionRecord:
     repository = DjangoAppRepository()
     session = repository.get_session_by_token_hash(guest_token_hash)
     if session is None:
-        raise AuthenticationFailed("invalid guest credential")
+        raise GuestAuthenticationFailed("invalid guest credential")
     
     now = datetime.now(timezone.utc)
     # Convert session.expires_at to offset-aware if it's naive
@@ -61,7 +72,7 @@ def authenticate_session(request, session_id: str) -> SessionRecord:
         expires_at = expires_at.replace(tzinfo=timezone.utc)
 
     if expires_at <= now:
-        raise AuthenticationFailed("expired guest credential")
+        raise GuestAuthenticationFailed("expired guest credential")
     
     if session.id != session_id:
         raise PermissionDenied("guest/session mismatch")
@@ -106,12 +117,12 @@ def _recognition_response(recognition: RecognitionRecord) -> dict[str, object]:
     }
 
 
-class HealthCheckView(APIView):
+class HealthCheckView(TourAPIView):
     def get(self, request):
         return Response({"status": "ok"})
 
 
-class ToursListView(APIView):
+class ToursListView(TourAPIView):
     def get(self, request):
         graph = load_giza_tour()
         return Response({
@@ -128,7 +139,7 @@ class ToursListView(APIView):
         })
 
 
-class CreateSessionView(APIView):
+class CreateSessionView(TourAPIView):
     parser_classes = [JSONParser]
 
     def post(self, request):
@@ -166,7 +177,7 @@ class CreateSessionView(APIView):
         )
 
 
-class LiveKitTokenView(APIView):
+class LiveKitTokenView(TourAPIView):
     def post(self, request, session_id):
         session = authenticate_session(request, session_id)
         settings = ApiSettings.from_settings()
@@ -182,7 +193,7 @@ class LiveKitTokenView(APIView):
         })
 
 
-class SessionStateView(APIView):
+class SessionStateView(TourAPIView):
     def get(self, request, session_id):
         session = authenticate_session(request, session_id)
         repository = DjangoAppRepository()
@@ -192,7 +203,7 @@ class SessionStateView(APIView):
         return Response(public_state(checkpoint.state_payload))
 
 
-class UploadPhotoView(APIView):
+class UploadPhotoView(TourAPIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, session_id):
@@ -228,7 +239,7 @@ class UploadPhotoView(APIView):
         )
 
 
-class RecognitionStatusView(APIView):
+class RecognitionStatusView(TourAPIView):
     def get(self, request, session_id, recognition_id):
         session = authenticate_session(request, session_id)
         repository = DjangoAppRepository()
@@ -241,7 +252,7 @@ class RecognitionStatusView(APIView):
         return Response(_recognition_response(recognition))
 
 
-class NearbyStopsView(APIView):
+class NearbyStopsView(TourAPIView):
     def get(self, request):
         session_id = request.query_params.get("session_id")
         tour_slug = request.query_params.get("tour_slug")
@@ -286,7 +297,7 @@ class NearbyStopsView(APIView):
         return Response({"suggestions": suggestions[:5]})
 
 
-class RecordEventView(APIView):
+class RecordEventView(TourAPIView):
     parser_classes = [JSONParser]
 
     def post(self, request):

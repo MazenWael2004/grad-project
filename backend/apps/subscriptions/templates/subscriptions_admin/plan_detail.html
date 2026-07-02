@@ -1,0 +1,101 @@
+{% extends "subscriptions_admin/base.html" %}
+
+{% block subscriptions_breadcrumbs %}
+&rsaquo; <a href="{% url 'subscriptions_admin:plan_list' %}">Plans</a>
+&rsaquo; {{ plan.name }}
+{% endblock %}
+
+{% block subscriptions_content %}
+<div class="subscriptions-header">
+  <div>
+    <h1>{{ plan.name }}</h1>
+    <p>{{ subscription_count }} subscription(s)</p>
+  </div>
+  <div class="subscriptions-actions">
+    <a class="subscriptions-button" href="{% url 'subscriptions_admin:plan_list' %}">Plans</a>
+    <a class="subscriptions-button" href="{% url 'subscriptions_admin:plan_edit' plan.pk %}">Edit</a>
+    <form method="post" action="{% url 'subscriptions_admin:plan_delete' plan.pk %}">
+      {% csrf_token %}
+      {{ confirm_form.confirm }}
+      <button type="submit" class="subscriptions-button subscriptions-button--danger">Delete</button>
+    </form>
+  </div>
+</div>
+
+<section class="subscriptions-stats subscriptions-stats--four">
+  <div>
+    <strong>{{ plan.price }}</strong>
+    <span>Price</span>
+  </div>
+  <div>
+    <strong>{{ plan.max_users }}</strong>
+    <span>Max Users</span>
+  </div>
+  <div>
+    <strong>{{ plan.duration_months }}</strong>
+    <span>Duration Months</span>
+  </div>
+  <div>
+    <strong>{{ active_revenue }}</strong>
+    <span>Active Value</span>
+  </div>
+</section>
+
+<section class="subscriptions-grid subscriptions-grid--two">
+  <div class="subscriptions-panel">
+    <h2>Plan Details</h2>
+    <dl class="subscriptions-definition-list">
+      <dt>Name</dt>
+      <dd>{{ plan.name }}</dd>
+      <dt>Price</dt>
+      <dd>{{ plan.price }}</dd>
+      <dt>Max Users</dt>
+      <dd>{{ plan.max_users }}</dd>
+      <dt>Duration</dt>
+      <dd>{{ plan.duration_months }} month(s)</dd>
+    </dl>
+  </div>
+
+  <div class="subscriptions-panel">
+    <h2>Subscription Counts</h2>
+    <dl class="subscriptions-definition-list">
+      <dt>Total</dt>
+      <dd>{{ subscription_count }}</dd>
+      <dt>Active</dt>
+      <dd>{{ active_count }}</dd>
+      <dt>Pending</dt>
+      <dd>{{ pending_count }}</dd>
+      <dt>Delete Status</dt>
+      <dd>{% if subscription_count %}Blocked while subscriptions exist{% else %}Available{% endif %}</dd>
+    </dl>
+  </div>
+</section>
+
+<section class="subscriptions-panel">
+  <h2>Recent Subscriptions</h2>
+  <table class="subscriptions-table">
+    <thead>
+      <tr>
+        <th>Owner</th>
+        <th>Status</th>
+        <th>Members</th>
+        <th>Start</th>
+        <th>End</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subscription in subscriptions %}
+        <tr>
+          <td>{{ subscription.owner.email }}</td>
+          <td><span class="subscriptions-status subscriptions-status--{{ subscription.status }}">{{ subscription.status|default:"Unknown"|title }}</span></td>
+          <td>{{ subscription.members.count }}</td>
+          <td>{{ subscription.start_date|default:"Not started" }}</td>
+          <td>{{ subscription.end_date|default:"Not set" }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">No subscriptions use this plan.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

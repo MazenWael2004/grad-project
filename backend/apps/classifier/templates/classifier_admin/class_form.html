@@ -1,0 +1,43 @@
+{% extends "classifier_admin/base.html" %}
+
+{% block classifier_breadcrumbs %}
+{% if artifact_class %}
+  &rsaquo; <a href="{% url 'classifier_admin:class_detail' artifact_class.pk %}">{{ artifact_class.name }}</a>
+  &rsaquo; Edit
+{% else %}
+  &rsaquo; New Class
+{% endif %}
+{% endblock %}
+
+{% block classifier_content %}
+<div class="classifier-header">
+  <div>
+    <h1>{% if artifact_class %}Edit {{ artifact_class.name }}{% else %}New Class{% endif %}</h1>
+    <p>{% if artifact_class %}Update this artifact label and training availability.{% else %}Create a label for newly discovered artifacts.{% endif %}</p>
+  </div>
+</div>
+
+<section class="classifier-panel classifier-panel--narrow">
+  <form method="post" class="classifier-form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <div class="classifier-form-field">
+        {{ field.errors }}
+        {{ field.label_tag }}
+        {{ field }}
+      </div>
+    {% endfor %}
+    <div class="classifier-actions">
+      <button type="submit" class="classifier-button classifier-button--primary">
+        {% if artifact_class %}Save Class{% else %}Create Class{% endif %}
+      </button>
+      {% if artifact_class %}
+        <a class="classifier-button" href="{% url 'classifier_admin:class_detail' artifact_class.pk %}">Cancel</a>
+      {% else %}
+        <a class="classifier-button" href="{% url 'classifier_admin:dashboard' %}">Cancel</a>
+      {% endif %}
+    </div>
+  </form>
+</section>
+{% endblock %}

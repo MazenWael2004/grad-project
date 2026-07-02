@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
@@ -732,3 +733,152 @@ class PaySubscriptionTests(BaseSubscriptionSetup):
         self.assertEqual(subscription.status, "active")
         self.assertIsNotNone(subscription.start_date)
         self.assertIsNotNone(subscription.end_date)
+
+
+class SubscriptionTemplateAdminTests(TestCase):
+    def setUp(self):
+        self.staff = User.objects.create_user(
+            email="plans-admin@test.com",
+            first_name="Plans",
+            last_name="Admin",
+            password="password123",
+            is_staff=True,
+        )
+        self.user = User.objects.create_user(
+            email="plans-user@test.com",
+            first_name="Plans",
+            last_name="User",
+            password="password123",
+        )
+
+    def test_non_staff_cannot_access_analytics_dashboard(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("subscriptions_admin:analytics_dashboard"))
+
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+
+    def test_staff_can_access_analytics_dashboard(self):
+        self.client.force_login(self.staff)
+        plan = Plan.objects.create(
+            name="Analytics Premium",
+            price=100,
+            max_users=4,
+            duration_months=1,
+        )
+        subscription = Subscription.objects.create(
+            owner=self.user,
+            plan=plan,
+            status="active",
+            start_date=timezone.now(),
+            end_date=timezone.now() + timedelta(days=30),
+        )
+        SubscriptionMember.objects.create(subscription=subscription, user=self.user)
+        PaymentMethod.objects.create(
+            user=self.user,
+            card_holder_name="Plans User",
+            card_number="4111111111111111",
+            expiration_month=12,
+            expiration_year=2030,
+        )
+
+        response = self.client.get(reverse("subscriptions_admin:analytics_dashboard"))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, "Analytics Dashboard")
+        self.assertContains(response, "Analytics Premium")
+        self.assertContains(response, "Active Subscriptions")
+
+    def test_staff_can_create_plan_from_admin_dashboard(self):
+        self.client.force_login(self.staff)
+
+        response = self.client.post(
+            reverse("subscriptions_admin:plan_create"),
+            {
+                "name": "Family",
+                "price": "250.00",
+                "max_users": "5",
+                "duration_months": "3",
+            },
+        )
+
+        plan = Plan.objects.get(name="Family")
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.url, reverse("subscriptions_admin:plan_detail", args=[plan.pk]))
+        self.assertEqual(plan.price, 250)
+        self.assertEqual(plan.max_users, 5)
+        self.assertEqual(plan.duration_months, 3)
+
+    def test_staff_can_read_and_edit_plan_from_admin_dashboard(self):
+        self.client.force_login(self.staff)
+        plan = Plan.objects.create(
+            name="Editable",
+            price=90,
+            max_users=2,
+            duration_months=1,
+        )
+
+        detail_response = self.client.get(
+            reverse("subscriptions_admin:plan_detail", args=[plan.pk])
+        )
+        self.assertEqual(detail_response.status_code, status.HTTP_200_OK)
+        self.assertContains(detail_response, "Editable")
+
+        response = self.client.post(
+            reverse("subscriptions_admin:plan_edit", args=[plan.pk]),
+            {
+                "name": "Edited",
+                "price": "120.00",
+                "max_users": "3",
+                "duration_months": "6",
+            },
+        )
+
+        plan.refresh_from_db()
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.url, reverse("subscriptions_admin:plan_detail", args=[plan.pk]))
+        self.assertEqual(plan.name, "Edited")
+        self.assertEqual(plan.price, 120)
+        self.assertEqual(plan.max_users, 3)
+        self.assertEqual(plan.duration_months, 6)
+
+    def test_staff_can_delete_unused_plan_from_admin_dashboard(self):
+        self.client.force_login(self.staff)
+        plan = Plan.objects.create(
+            name="Unused",
+            price=50,
+            max_users=1,
+            duration_months=1,
+        )
+
+        response = self.client.post(
+            reverse("subscriptions_admin:plan_delete", args=[plan.pk]),
+            {"confirm": "on"},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.url, reverse("subscriptions_admin:plan_list"))
+        self.assertFalse(Plan.objects.filter(pk=plan.pk).exists())
+
+    def test_staff_cannot_delete_plan_with_subscriptions(self):
+        self.client.force_login(self.staff)
+        plan = Plan.objects.create(
+            name="Used",
+            price=75,
+            max_users=1,
+            duration_months=1,
+        )
+        Subscription.objects.create(
+            owner=self.user,
+            plan=plan,
+            status="pending",
+        )
+
+        response = self.client.post(
+            reverse("subscriptions_admin:plan_delete", args=[plan.pk]),
+            {"confirm": "on"},
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.url, reverse("subscriptions_admin:plan_detail", args=[plan.pk]))
+        self.assertTrue(Plan.objects.filter(pk=plan.pk).exists())

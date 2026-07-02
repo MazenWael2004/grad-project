@@ -1,0 +1,179 @@
+{% extends "classifier_admin/base.html" %}
+
+{% block classifier_content %}
+<div class="classifier-header">
+  <div>
+    <h1>Classifier Dashboard</h1>
+    <p>Active model: {% if active_model %}{{ active_model.version }}{% else %}None{% endif %}</p>
+  </div>
+  <div class="classifier-actions">
+    <a class="classifier-button" href="{% url 'subscriptions_admin:analytics_dashboard' %}">Analytics</a>
+    <a class="classifier-button" href="{% url 'classifier_admin:class_create' %}">New Class</a>
+  </div>
+</div>
+
+<section class="classifier-stats">
+  <div>
+    <strong>{{ class_count }}</strong>
+    <span>Classes</span>
+  </div>
+  <div>
+    <strong>{{ image_count }}</strong>
+    <span>Training Images</span>
+  </div>
+  <div>
+    <strong>{{ min_images }}</strong>
+    <span>Minimum per Class</span>
+  </div>
+</section>
+
+<section class="classifier-grid">
+  <div class="classifier-panel">
+    <h2>Classes</h2>
+    <table class="classifier-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Images</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for artifact_class in classes %}
+          <tr>
+            <td><a href="{% url 'classifier_admin:class_detail' artifact_class.pk %}">{{ artifact_class.name }}</a></td>
+            <td>{{ artifact_class.images.count }}</td>
+            <td>{% if artifact_class.is_active %}Active{% else %}Inactive{% endif %}</td>
+            <td>
+              <div class="classifier-actions">
+                <a class="classifier-link-button" href="{% url 'classifier_admin:class_edit' artifact_class.pk %}">Edit</a>
+                <form method="post" action="{% url 'classifier_admin:class_delete' artifact_class.pk %}">
+                  {% csrf_token %}
+                  {{ confirm_form.confirm }}
+                  <button type="submit" class="classifier-link-button classifier-link-button--danger">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4">No classifier classes yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="classifier-panel">
+    <h2>Start Training</h2>
+    <form method="post" action="{% url 'classifier_admin:start_training' %}" class="classifier-form">
+      {% csrf_token %}
+      {{ training_form.non_field_errors }}
+      <div class="classifier-form-field">
+        {{ training_form.classes.errors }}
+        {{ training_form.classes.label_tag }}
+        {{ training_form.classes }}
+      </div>
+      <div class="classifier-inline-fields">
+        <div class="classifier-form-field">
+          {{ training_form.epochs.errors }}
+          {{ training_form.epochs.label_tag }}
+          {{ training_form.epochs }}
+        </div>
+        <div class="classifier-form-field">
+          {{ training_form.batch_size.errors }}
+          {{ training_form.batch_size.label_tag }}
+          {{ training_form.batch_size }}
+        </div>
+        <div class="classifier-form-field">
+          {{ training_form.learning_rate.errors }}
+          {{ training_form.learning_rate.label_tag }}
+          {{ training_form.learning_rate }}
+        </div>
+      </div>
+      <button type="submit" class="classifier-button classifier-button--primary">Start Training</button>
+    </form>
+  </div>
+</section>
+
+<section class="classifier-grid">
+  <div class="classifier-panel">
+    <h2>Latest Runs</h2>
+    <table class="classifier-table">
+      <thead>
+        <tr>
+          <th>Run</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for run in latest_runs %}
+          <tr>
+            <td><a href="{% url 'classifier_admin:training_run_detail' run.pk %}">#{{ run.pk }}</a></td>
+            <td><span class="classifier-status classifier-status--{{ run.status }}">{{ run.get_status_display }}</span></td>
+            <td>{{ run.created_at }}</td>
+            <td>
+              <div class="classifier-actions">
+                <a class="classifier-link-button" href="{% url 'classifier_admin:training_run_detail' run.pk %}">Open</a>
+                <form method="post" action="{% url 'classifier_admin:training_run_delete' run.pk %}">
+                  {% csrf_token %}
+                  {{ confirm_form.confirm }}
+                  <button type="submit" class="classifier-link-button classifier-link-button--danger">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4">No training runs yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="classifier-panel">
+    <h2>Ready Versions</h2>
+    <table class="classifier-table">
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Classes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for version in ready_versions %}
+          <tr>
+            <td>{{ version.version }}</td>
+            <td>{{ version.class_names|length }}</td>
+            <td>
+              <div class="classifier-actions">
+                {% if version.training_run_id %}
+                  <a class="classifier-link-button" href="{% url 'classifier_admin:training_run_detail' version.training_run_id %}">Open</a>
+                {% endif %}
+                <form method="post" action="{% url 'classifier_admin:promote_model_version' version.pk %}">
+                  {% csrf_token %}
+                  {{ confirm_form.confirm }}
+                  <button type="submit" class="classifier-link-button">Promote</button>
+                </form>
+                <form method="post" action="{% url 'classifier_admin:retire_model_version' version.pk %}">
+                  {% csrf_token %}
+                  {{ confirm_form.confirm }}
+                  <button type="submit" class="classifier-link-button">Retire</button>
+                </form>
+                <form method="post" action="{% url 'classifier_admin:delete_model_version' version.pk %}">
+                  {% csrf_token %}
+                  {{ confirm_form.confirm }}
+                  <button type="submit" class="classifier-link-button classifier-link-button--danger">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="3">No ready model versions.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

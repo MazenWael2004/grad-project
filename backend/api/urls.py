@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path("admin/classifier-dashboard/", include("apps.classifier.admin_urls")),
+    path("admin/", include("apps.subscriptions.admin_urls")),
     path("admin/", admin.site.urls),
     path("api/", include("core.urls")), 
     path("", include("apps.accounts.urls")),

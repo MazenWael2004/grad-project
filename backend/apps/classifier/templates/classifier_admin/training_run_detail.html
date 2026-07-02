@@ -1,0 +1,37 @@
+{% extends "classifier_admin/base.html" %}
+{% load static %}
+
+{% block classifier_breadcrumbs %}
+&rsaquo; Training Run #{{ training_run.pk }}
+{% endblock %}
+
+{% block classifier_content %}
+<div class="classifier-header">
+  <div>
+    <h1>Training Run #{{ training_run.pk }}</h1>
+    <p>Job: {{ training_run.model_server_job_id|default:"Not assigned" }}</p>
+  </div>
+  <div class="classifier-actions">
+    <a class="classifier-button" href="{% url 'classifier_admin:dashboard' %}">Dashboard</a>
+    <form method="post" action="{% url 'classifier_admin:training_run_delete' training_run.pk %}">
+      {% csrf_token %}
+      {{ confirm_form.confirm }}
+      <button type="submit" class="classifier-button classifier-button--danger">Delete Run</button>
+    </form>
+  </div>
+</div>
+
+<section
+  id="classifier-training-status"
+  class="classifier-panel"
+  data-status-url="{% url 'classifier_admin:training_status_fragment' training_run.pk %}"
+  data-terminal-statuses="succeeded,failed"
+>
+  {% include "classifier_admin/_training_status.html" %}
+</section>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script defer src="{% static 'classifier_admin/status_poll.js' %}"></script>
+{% endblock %}

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "apps.subscriptions",
     "apps.attractions",
     "apps.tours",
+    "apps.classifier",
     "rest_framework_simplejwt.token_blacklist",
 ]
 
@@ -155,6 +156,11 @@ import os
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+MODEL_SERVER_URL = os.getenv("MODEL_SERVER_URL", "http://127.0.0.1:8001")
+MODEL_SERVER_TIMEOUT_SECONDS = int(os.getenv("MODEL_SERVER_TIMEOUT_SECONDS", 10))
+CLASSIFIER_INTERNAL_API_KEY = os.getenv("CLASSIFIER_INTERNAL_API_KEY", "dev-classifier-internal-key")
+CLASSIFIER_MIN_IMAGES_PER_CLASS = int(os.getenv("CLASSIFIER_MIN_IMAGES_PER_CLASS", 15))
 
 # LiveKit and Guest Token Configuration for AI Tour Guide
 LIVEKIT_URL = os.getenv("LIVEKIT_URL", "")
