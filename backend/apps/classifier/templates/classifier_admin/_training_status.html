@@ -1,0 +1,67 @@
+<div class="classifier-status-header">
+  <h2>Status</h2>
+  <span class="classifier-status classifier-status--{{ training_run.status }}">{{ training_run.get_status_display }}</span>
+</div>
+
+<dl class="classifier-definition-list classifier-definition-list--grid">
+  <dt>Created</dt>
+  <dd>{{ training_run.created_at }}</dd>
+  <dt>Started</dt>
+  <dd>{{ training_run.started_at|default:"Not started" }}</dd>
+  <dt>Finished</dt>
+  <dd>{{ training_run.finished_at|default:"Not finished" }}</dd>
+  <dt>Classes</dt>
+  <dd>
+    {% for artifact_class in training_run.requested_classes.all %}
+      {{ artifact_class.name }}{% if not forloop.last %}, {% endif %}
+    {% empty %}
+      None
+    {% endfor %}
+  </dd>
+</dl>
+
+{% if training_run.error_message %}
+  <div class="classifier-error">{{ training_run.error_message }}</div>
+{% endif %}
+
+{% if training_run.metrics %}
+  <h3>Metrics</h3>
+  <pre class="classifier-code">{{ training_run.metrics }}</pre>
+{% endif %}
+
+{% if model_version %}
+  <h3>Model Version</h3>
+  <dl class="classifier-definition-list classifier-definition-list--grid">
+    <dt>Version</dt>
+    <dd>{{ model_version.version }}</dd>
+    <dt>Status</dt>
+    <dd>{{ model_version.get_status_display }}</dd>
+    <dt>Classes</dt>
+    <dd>{{ model_version.class_names|length }}</dd>
+  </dl>
+  {% if model_version.is_active %}
+    <p class="classifier-note">This model is active.</p>
+  {% else %}
+    <div class="classifier-actions">
+      {% if model_version.status == "ready" %}
+        <form method="post" action="{% url 'classifier_admin:promote_model_version' model_version.pk %}">
+          {% csrf_token %}
+          {{ promote_form.confirm }}
+          <button type="submit" class="classifier-button classifier-button--primary">Promote Model</button>
+        </form>
+      {% endif %}
+      {% if model_version.status != "retired" %}
+        <form method="post" action="{% url 'classifier_admin:retire_model_version' model_version.pk %}">
+          {% csrf_token %}
+          {{ confirm_form.confirm }}
+          <button type="submit" class="classifier-button">Retire Model</button>
+        </form>
+      {% endif %}
+      <form method="post" action="{% url 'classifier_admin:delete_model_version' model_version.pk %}">
+        {% csrf_token %}
+        {{ confirm_form.confirm }}
+        <button type="submit" class="classifier-button classifier-button--danger">Delete Model</button>
+      </form>
+    </div>
+  {% endif %}
+{% endif %}

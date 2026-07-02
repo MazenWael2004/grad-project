@@ -1,0 +1,28 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'classifier_admin/dashboard.css' %}">
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; <a href="{% url 'classifier_admin:dashboard' %}">Classifier Dashboard</a>
+  {% block classifier_breadcrumbs %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block content %}
+<main class="classifier-admin">
+  {% if messages %}
+    <div class="classifier-messages">
+      {% for message in messages %}
+        <div class="classifier-message classifier-message--{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% block classifier_content %}{% endblock %}
+</main>
+{% endblock %}

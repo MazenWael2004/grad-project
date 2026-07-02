@@ -1,8 +1,8 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import httpx
 
-from app.core.config import DJANGO_URL
+from app.core.config import CLASSIFIER_INTERNAL_API_KEY, DJANGO_URL
 from app.core.security import verify_access_token
 from app.schemas.auth import CurrentUser
 
@@ -67,3 +67,13 @@ async def is_subscribed(
         )
 
     return current_user
+
+
+def verify_internal_api_key(
+    x_internal_api_key: str = Header(default=""),
+) -> None:
+    if x_internal_api_key != CLASSIFIER_INTERNAL_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid internal API key.",
+        )

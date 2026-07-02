@@ -1,0 +1,236 @@
+.subscriptions-admin {
+  max-width: 1180px;
+}
+
+.subscriptions-header,
+.subscriptions-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.subscriptions-header h1,
+.subscriptions-panel-header h2 {
+  margin-bottom: 4px;
+}
+
+.subscriptions-header p {
+  margin: 0;
+  color: #5f6b7a;
+}
+
+.subscriptions-stats,
+.subscriptions-grid {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.subscriptions-stats {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.subscriptions-stats--four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.subscriptions-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.subscriptions-stats > div,
+.subscriptions-panel {
+  border: 1px solid #d9dee5;
+  border-radius: 6px;
+  background: #fff;
+  padding: 18px;
+}
+
+.subscriptions-panel {
+  margin-bottom: 18px;
+}
+
+.subscriptions-panel--narrow {
+  max-width: 640px;
+}
+
+.subscriptions-stats strong {
+  display: block;
+  font-size: 26px;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.subscriptions-stats span {
+  color: #5f6b7a;
+}
+
+.subscriptions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subscriptions-table--compact {
+  margin-top: 14px;
+}
+
+.subscriptions-table th,
+.subscriptions-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #edf0f4;
+  text-align: left;
+  vertical-align: top;
+}
+
+.subscriptions-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.subscriptions-form-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.subscriptions-form-field input[type="text"],
+.subscriptions-form-field input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.subscriptions-form-field ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.subscriptions-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.subscriptions-actions form {
+  margin: 0;
+}
+
+.subscriptions-button {
+  display: inline-block;
+  border: 1px solid #c7ced8;
+  border-radius: 5px;
+  background: #fff;
+  color: #1f2937;
+  padding: 8px 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.subscriptions-button--primary {
+  border-color: #205493;
+  background: #205493;
+  color: #fff;
+}
+
+.subscriptions-button--danger {
+  border-color: #b91c1c;
+  background: #b91c1c;
+  color: #fff;
+}
+
+.subscriptions-link-button {
+  display: inline;
+  border: 0;
+  background: transparent;
+  color: #205493;
+  padding: 0;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.subscriptions-link-button--danger {
+  color: #b91c1c;
+}
+
+.subscriptions-status {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 9px;
+  background: #e8edf3;
+  color: #1f2937;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.subscriptions-status--active {
+  background: #dff3e4;
+  color: #14532d;
+}
+
+.subscriptions-status--pending {
+  background: #fff4ce;
+}
+
+.subscriptions-status--cancelled,
+.subscriptions-status--canceled {
+  background: #fde2e1;
+  color: #7f1d1d;
+}
+
+.subscriptions-definition-list {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 10px 16px;
+}
+
+.subscriptions-definition-list dt {
+  font-weight: 700;
+}
+
+.subscriptions-definition-list dd {
+  margin: 0;
+}
+
+.subscriptions-message {
+  border-radius: 5px;
+  padding: 10px 12px;
+}
+
+.subscriptions-message--error {
+  background: #fde2e1;
+  color: #7f1d1d;
+}
+
+.subscriptions-message--success {
+  background: #dff3e4;
+  color: #14532d;
+}
+
+.subscriptions-messages {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1100px) {
+  .subscriptions-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .subscriptions-header,
+  .subscriptions-panel-header {
+    display: block;
+  }
+
+  .subscriptions-stats,
+  .subscriptions-stats--four,
+  .subscriptions-grid--two {
+    grid-template-columns: 1fr;
+  }
+}

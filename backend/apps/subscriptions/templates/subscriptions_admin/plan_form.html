@@ -1,0 +1,44 @@
+{% extends "subscriptions_admin/base.html" %}
+
+{% block subscriptions_breadcrumbs %}
+&rsaquo; <a href="{% url 'subscriptions_admin:plan_list' %}">Plans</a>
+{% if plan %}
+  &rsaquo; <a href="{% url 'subscriptions_admin:plan_detail' plan.pk %}">{{ plan.name }}</a>
+  &rsaquo; Edit
+{% else %}
+  &rsaquo; New
+{% endif %}
+{% endblock %}
+
+{% block subscriptions_content %}
+<div class="subscriptions-header">
+  <div>
+    <h1>{% if plan %}Edit {{ plan.name }}{% else %}New Plan{% endif %}</h1>
+    <p>{% if plan %}Update pricing, duration, and member capacity.{% else %}Create a subscription option for customers.{% endif %}</p>
+  </div>
+</div>
+
+<section class="subscriptions-panel subscriptions-panel--narrow">
+  <form method="post" class="subscriptions-form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <div class="subscriptions-form-field">
+        {{ field.errors }}
+        {{ field.label_tag }}
+        {{ field }}
+      </div>
+    {% endfor %}
+    <div class="subscriptions-actions">
+      <button type="submit" class="subscriptions-button subscriptions-button--primary">
+        {% if plan %}Save Plan{% else %}Create Plan{% endif %}
+      </button>
+      {% if plan %}
+        <a class="subscriptions-button" href="{% url 'subscriptions_admin:plan_detail' plan.pk %}">Cancel</a>
+      {% else %}
+        <a class="subscriptions-button" href="{% url 'subscriptions_admin:plan_list' %}">Cancel</a>
+      {% endif %}
+    </div>
+  </form>
+</section>
+{% endblock %}

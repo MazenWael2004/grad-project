@@ -1,0 +1,271 @@
+.classifier-admin {
+  max-width: 1180px;
+}
+
+.classifier-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.classifier-header h1 {
+  margin-bottom: 4px;
+}
+
+.classifier-header p {
+  margin: 0;
+  color: #5f6b7a;
+}
+
+.classifier-stats,
+.classifier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.classifier-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.classifier-stats > div,
+.classifier-panel {
+  border: 1px solid #d9dee5;
+  border-radius: 6px;
+  background: #fff;
+  padding: 18px;
+}
+
+.classifier-panel--narrow {
+  max-width: 640px;
+}
+
+.classifier-stats strong {
+  display: block;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.classifier-stats span {
+  color: #5f6b7a;
+}
+
+.classifier-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.classifier-table th,
+.classifier-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #edf0f4;
+  text-align: left;
+  vertical-align: top;
+}
+
+.classifier-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.classifier-form--inline {
+  display: block;
+}
+
+.classifier-form-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.classifier-form-field input[type="text"],
+.classifier-form-field input[type="number"],
+.classifier-form-field textarea,
+.classifier-form-field select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.classifier-form-field ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.classifier-inline-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.classifier-button {
+  display: inline-block;
+  border: 1px solid #c7ced8;
+  border-radius: 5px;
+  background: #fff;
+  color: #1f2937;
+  padding: 8px 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.classifier-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.classifier-actions form {
+  margin: 0;
+}
+
+.classifier-button--primary {
+  border-color: #205493;
+  background: #205493;
+  color: #fff;
+}
+
+.classifier-button--danger {
+  border-color: #b91c1c;
+  background: #b91c1c;
+  color: #fff;
+}
+
+.classifier-link-button {
+  display: inline;
+  border: 0;
+  background: transparent;
+  color: #205493;
+  padding: 0;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.classifier-link-button--danger {
+  color: #b91c1c;
+}
+
+.classifier-status {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 9px;
+  background: #e8edf3;
+  color: #1f2937;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.classifier-status--running,
+.classifier-status--queued {
+  background: #fff4ce;
+}
+
+.classifier-status--succeeded {
+  background: #dff3e4;
+  color: #14532d;
+}
+
+.classifier-status--failed {
+  background: #fde2e1;
+  color: #7f1d1d;
+}
+
+.classifier-status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.classifier-definition-list {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 10px 16px;
+}
+
+.classifier-definition-list dt {
+  font-weight: 700;
+}
+
+.classifier-definition-list dd {
+  margin: 0;
+}
+
+.classifier-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.classifier-image-grid figure {
+  margin: 0;
+}
+
+.classifier-image-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #d9dee5;
+}
+
+.classifier-image-grid figcaption {
+  margin-top: 4px;
+  color: #5f6b7a;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.classifier-image-grid figcaption span {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.classifier-code,
+.classifier-error,
+.classifier-note,
+.classifier-message {
+  border-radius: 5px;
+  padding: 10px 12px;
+}
+
+.classifier-code {
+  overflow: auto;
+  background: #f6f8fa;
+}
+
+.classifier-error,
+.classifier-message--error {
+  background: #fde2e1;
+  color: #7f1d1d;
+}
+
+.classifier-message--success,
+.classifier-note {
+  background: #dff3e4;
+  color: #14532d;
+}
+
+.classifier-messages {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 900px) {
+  .classifier-header,
+  .classifier-grid,
+  .classifier-stats,
+  .classifier-inline-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .classifier-header {
+    display: block;
+  }
+}

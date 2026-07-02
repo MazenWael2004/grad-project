@@ -1,0 +1,28 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'subscriptions_admin/dashboard.css' %}">
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; <a href="{% url 'subscriptions_admin:analytics_dashboard' %}">Analytics Dashboard</a>
+  {% block subscriptions_breadcrumbs %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block content %}
+<main class="subscriptions-admin">
+  {% if messages %}
+    <div class="subscriptions-messages">
+      {% for message in messages %}
+        <div class="subscriptions-message subscriptions-message--{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% block subscriptions_content %}{% endblock %}
+</main>
+{% endblock %}
