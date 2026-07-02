@@ -42,7 +42,7 @@ const ChatBot = () => {
   const currentTheme = theme === "Light" ? LIGHT_THEME : DARK_THEME;
   const scrollViewRef = useRef(null);
 
-  const API_URL = "http://192.168.100.17:8001/api/chat/";
+  const API_URL = "http://192.168.1.221:8001/api/chat/";
   const API_KEY = "secret123";
 
   

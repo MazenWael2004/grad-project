@@ -17,6 +17,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { Room, RoomEvent, Track, ConnectionState } from "livekit-client";
 import { AudioSession } from "@livekit/react-native";
 import ApiClient from "../service/ApiClient";
+// import { API_BASE_URL, VOICE_API_URL } from "@env";a
 
 /** Participant attribute key used by the LiveKit Agents SDK */
 const AGENT_STATE_ATTR = "lk.agent.state";
@@ -26,7 +27,7 @@ const AGENT_STATE_ATTR = "lk.agent.state";
  * @param {string} language  — Language code: "en" or "ar-EG"
  */
 export default function useLiveKitVoiceAgent(
-  apiBaseUrl,
+  voiceApiUrl,
   tourSlug = "giza-v1",
   language = "en"
 ) {
@@ -40,11 +41,11 @@ export default function useLiveKitVoiceAgent(
   const [error, setError] = useState(null);
   // ---- Refs ----
   const roomRef = useRef(null);
-  const apiClientRef = useRef(new ApiClient(apiBaseUrl));
+  const apiClientRef = useRef(new ApiClient(voiceApiUrl));
   // Re-create apiClient when URL changes
   useEffect(() => {
-    apiClientRef.current = new ApiClient(apiBaseUrl);
-  }, [apiBaseUrl]);
+    apiClientRef.current = new ApiClient(voiceApiUrl);
+  }, [voiceApiUrl]);
   /* ================================================================== */
   /*  CONNECT                                                            */
   /* ================================================================== */
@@ -103,7 +104,7 @@ export default function useLiveKitVoiceAgent(
       setError(err.message || "Failed to connect");
       setConnectionState("disconnected");
     }
-  }, [tourSlug, language, apiBaseUrl]);
+  }, [tourSlug, language, voiceApiUrl]);
   /* ================================================================== */
   /*  DISCONNECT                                                         */
   /* ================================================================== */

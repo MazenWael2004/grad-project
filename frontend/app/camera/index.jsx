@@ -21,7 +21,7 @@ export default function CameraScreen() {
   const [prediction, setPrediction] = useState(null);
 
   const CUSTOM_MODEL_URL =
-  "http://192.168.100.17:8001/api/classify-image/";
+  "http://192.168.1.221:8001/api/classify-image/";
 
   const GEMINI_URL =
     "https://12e1-8-229-115-241.ngrok-free.app/gemini-predict";
