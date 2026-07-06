@@ -1,18 +1,18 @@
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import { useCallback, useContext, useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  Image,
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Image,
-  ActivityIndicator,
+  View,
 } from "react-native";
-import { router } from "expo-router";
 import api from "../../src/services/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { DARK_THEME, LIGHT_THEME } from "../../constants/themes";
 import { ThemeContext } from "../../theme/ThemeContext";
-import { LIGHT_THEME, DARK_THEME } from "../../constants/themes";
 import { useUser } from "../contexts/userContext";
 
 const Billing = () => {
@@ -54,7 +54,24 @@ const Billing = () => {
   useEffect(() => {
     loadCurrentPlan();
   }, [loadCurrentPlan]);
+  const handleCancelPending = async () => {
+    try {
+      await api.post(
+        "/api/subscriptions/cancel-pending-subscription/"
+      );
 
+      await loadCurrentPlan();
+    } catch (error) {
+      console.error(
+        "Failed to cancel pending subscription:",
+        error.response?.data || error.message
+      );
+    }
+  };
+
+  const handlePay = () => {
+    router.push("paymentProcess/selectPayment");
+  };
   if (loading) {
     return (
       <View
@@ -176,7 +193,54 @@ const Billing = () => {
             marginBottom: 20,
           }}
         />
+        {planStatus === "pending" && (
+          <View
+            style={{
+              width: "100%",
+              paddingHorizontal: 25,
+              marginBottom: 20,
+              gap: 12,
+            }}
+          >
+            <TouchableOpacity
+              onPress={handlePay}
+              style={{
+                backgroundColor: "#D4AF37",
+                paddingVertical: 14,
+                borderRadius: 8,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Poppins-SemiBold",
+                }}
+              >
+                Continue Payment
+              </Text>
+            </TouchableOpacity>
 
+            <TouchableOpacity
+              onPress={handleCancelPending}
+              style={{
+                backgroundColor: "#e24646",
+                paddingVertical: 14,
+                borderRadius: 8,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Poppins-SemiBold",
+                }}
+              >
+                Cancel Subscription
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <View
           style={{
             paddingHorizontal: 25,

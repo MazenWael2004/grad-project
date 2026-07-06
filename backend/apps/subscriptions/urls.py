@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .views import (
+    CancelPendingSubscriptionView,
     IsSubscribedView,
     MySubscriptionView,
     PayPendingSubscriptionView,
@@ -34,6 +35,7 @@ urlpatterns = [
         IsSubscribedView.as_view(),
         name="is-subscribed",
     ),
+    path("cancel-pending-subscription/", CancelPendingSubscriptionView.as_view(), name="cancel-pending-subscription"),
     # ViewSet routes
     path("", include(router.urls)),
 ]
