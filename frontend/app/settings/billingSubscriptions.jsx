@@ -72,6 +72,18 @@ const Billing = () => {
   const handlePay = () => {
     router.push("paymentProcess/selectPayment");
   };
+  const handleUnsubscribe = async () => {
+    try {
+      await api.post("/api/subscriptions/unsubscribe/");
+
+      await loadCurrentPlan();
+    } catch (error) {
+      console.error(
+        "Failed to unsubscribe:",
+        error.response?.data || error.message
+      );
+    }
+  };
   if (loading) {
     return (
       <View
@@ -193,6 +205,34 @@ const Billing = () => {
             marginBottom: 20,
           }}
         />
+        {planStatus === "active" && (
+          <View
+            style={{
+              width: "100%",
+              paddingHorizontal: 25,
+              marginBottom: 20,
+            }}
+          >
+            <TouchableOpacity
+              onPress={handleUnsubscribe}
+              style={{
+                backgroundColor: "#e24646",
+                paddingVertical: 14,
+                borderRadius: 8,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Poppins-SemiBold",
+                }}
+              >
+                Unsubscribe
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
         {planStatus === "pending" && (
           <View
             style={{
